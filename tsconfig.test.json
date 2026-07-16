@@ -1,0 +1,14 @@
+{
+  "//": "Test-only typecheck path. Extends the production config but re-includes the test",
+  "//2": "files and vitest.config.ts (which the base config excludes), and uses bundler",
+  "//3": "module resolution so Vitest 4's exports-map packages ('vitest', 'vitest/config')",
+  "//4": "resolve. Production tsconfig.json is left untouched and stays green on its own.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "bundler"
+  },
+  "include": ["src/**/__tests__/**/*.ts", "vitest.config.ts"],
+  "exclude": ["remotion.config.ts"]
+}
