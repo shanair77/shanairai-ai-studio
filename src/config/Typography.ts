@@ -8,8 +8,9 @@
  * multiply by the format's scale factor (see `useScale`) so type reads correctly in
  * vertical, horizontal, and square formats alike.
  *
- * Fonts are loaded elsewhere (via @remotion/google-fonts). These are the family
- * stacks components reference through `textStyles`.
+ * Fonts are loaded once at the application entry by the provider-based loader in
+ * `config/fonts` (a provider-agnostic manifest + a FontProvider). These are the family
+ * stacks components reference through `textStyles`; the loader registers the actual faces.
  */
 
 export const fontFamilies = {

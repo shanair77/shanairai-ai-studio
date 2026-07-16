@@ -7,6 +7,7 @@
   "private": true,
   "dependencies": {
     "@remotion/cli": "4.0.489",
+    "@remotion/google-fonts": "4.0.489",
     "@remotion/tailwind-v4": "4.0.489",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -33,6 +34,8 @@
     "verify": "npm run lint && npm run test:typecheck && npm run test"
   },
   "sideEffects": [
-    "*.css"
+    "*.css",
+    "**/config/fonts/index.ts",
+    "**/config/fonts/GoogleFontProvider.ts"
   ]
 }
