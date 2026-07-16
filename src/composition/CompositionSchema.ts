@@ -14,6 +14,7 @@ import { staticFile } from "remotion";
 import { type ThemeMode } from "../config/Theme";
 import { type VideoConfigInput } from "./VideoConfig";
 import type { BrandConfig } from "./BrandConfig";
+import type { BuiltinSceneMap, PropsOf, SceneMap } from "./SceneRegistry";
 
 /** How one scene hands off to the next. Extend as richer transitions are added. */
 export type TransitionType = "none" | "fade";
@@ -41,11 +42,13 @@ export type MusicConfig = {
   startFrom?: number;
 };
 
-export type SceneConfig = {
-  /** Registry name of the scene to render (see SceneRegistry). */
-  scene: string;
-  /** Props forwarded verbatim to the scene component. */
-  props?: Record<string, unknown>;
+export type TimingConfig = {
+  /** Fallback scene length in seconds when a scene declares none. */
+  defaultSceneDuration?: number;
+};
+
+/** Timing/transition/label fields every scene config carries, independent of its props. */
+type SceneConfigCommon = {
   /** Length in seconds (overridden by `durationInFrames`). */
   duration?: number;
   /** Length in frames (takes precedence over `duration`). */
@@ -56,13 +59,19 @@ export type SceneConfig = {
   label?: string;
 };
 
-export type TimingConfig = {
-  /** Fallback scene length in seconds when a scene declares none. */
-  defaultSceneDuration?: number;
-};
+/**
+ * A scene config discriminated on `scene`: each registry name accepts exactly that scene's
+ * props. Derived from a scene map, so names and props are compile-checked.
+ */
+export type SceneConfigFor<M extends SceneMap> = {
+  [N in keyof M & string]: SceneConfigCommon & {
+    scene: N;
+    props?: PropsOf<M[N]>;
+  };
+}[keyof M & string];
 
-/** The complete, declarative description of a video. */
-export type CompositionSchema = VideoConfigInput & {
+/** The complete, declarative description of a video, over a given scene map. */
+export type CompositionSchemaFor<M extends SceneMap> = VideoConfigInput & {
   /** Unique composition id (Remotion `<Composition id>`). */
   id: string;
   /** Quick theme-mode select; `brand` takes precedence if both are given. */
@@ -72,12 +81,37 @@ export type CompositionSchema = VideoConfigInput & {
   /** Background music for the whole composition. */
   music?: MusicConfig;
   /** Ordered scenes that make up the video. */
-  scenes: SceneConfig[];
+  scenes: SceneConfigFor<M>[];
   /** Default transition applied between consecutive scenes. Default `{ type: "none" }`. */
   transitions?: TransitionConfig;
   /** Timing fallbacks. */
   timing?: TimingConfig;
   /** Named asset catalog resolvable by scenes and music. */
+  assets?: AssetCatalog;
+};
+
+/** Scene config over the built-in scenes. */
+export type SceneConfig = SceneConfigFor<BuiltinSceneMap>;
+
+/** Composition config over the built-in scenes — the default authoring type. */
+export type CompositionSchema = CompositionSchemaFor<BuiltinSceneMap>;
+
+/** Erased runtime shape the builder/timeline/validation operate on (name is any string). */
+export type SceneConfigBase = SceneConfigCommon & {
+  scene: string;
+  /** Opaque config-supplied props at the erased layer (typed per-scene in `SceneConfigFor`). */
+  props?: unknown;
+};
+
+/** Erased runtime composition shape (any registry). */
+export type CompositionSchemaBase = VideoConfigInput & {
+  id: string;
+  theme?: ThemeMode;
+  brand?: BrandConfig;
+  music?: MusicConfig;
+  scenes: SceneConfigBase[];
+  transitions?: TransitionConfig;
+  timing?: TimingConfig;
   assets?: AssetCatalog;
 };
 
@@ -91,7 +125,7 @@ export const resolveNamedAsset = (catalog: AssetCatalog | undefined, refOrName: 
   resolveAssetRef(catalog?.[refOrName] ?? refOrName);
 
 /** Structural validation of the invariants the builder relies on. Throws on violation. */
-export const validateComposition = (config: CompositionSchema): void => {
+export const validateComposition = (config: CompositionSchemaBase): void => {
   if (!config || typeof config.id !== "string" || config.id.length === 0) {
     throw new Error("CompositionSchema: a non-empty `id` is required.");
   }

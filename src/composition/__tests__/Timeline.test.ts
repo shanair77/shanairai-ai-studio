@@ -1,23 +1,25 @@
 import { describe, expect, it } from "vitest";
 import { theme } from "../../config/Theme";
 import { secondsToFrames } from "../../config/Timing";
-import type { CompositionSchema } from "../CompositionSchema";
-import type { SceneComponent, SceneDefinition, SceneResolver } from "../SceneRegistry";
+import type { CompositionSchemaBase } from "../CompositionSchema";
+import type { SceneComponent, SceneResolver } from "../SceneRegistry";
 import { buildTimeline } from "../Timeline";
 
 const noopScene: SceneComponent = () => null;
 
 /** A fake registry so Timeline is tested in isolation from the real scene components. */
 const fakeRegistry = (defaultDuration = 5): SceneResolver => ({
-  require: (name: string): SceneDefinition => {
+  require: (name: string) => {
     if (name === "missing") throw new Error(`fake: no scene "${name}"`);
-    return { name, component: noopScene, defaultDuration };
+    return { component: noopScene, defaultDuration };
   },
   has: (name: string) => name !== "missing",
-  list: () => [],
+  keys: () => [],
 });
 
-const cfg = (partial: Partial<CompositionSchema> & Pick<CompositionSchema, "scenes">): CompositionSchema => ({
+const cfg = (
+  partial: Partial<CompositionSchemaBase> & Pick<CompositionSchemaBase, "scenes">,
+): CompositionSchemaBase => ({
   id: "test",
   ...partial,
 });

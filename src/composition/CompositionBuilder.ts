@@ -17,11 +17,18 @@
 import React, { createElement } from "react";
 import { AbsoluteFill, Audio, Sequence, interpolate, useCurrentFrame } from "remotion";
 import { secondsToFrames } from "../config/Timing";
-import { resolveNamedAsset, validateComposition, type CompositionSchema } from "./CompositionSchema";
+import { type Registry } from "../registry";
+import {
+  resolveNamedAsset,
+  validateComposition,
+  type CompositionSchema,
+  type CompositionSchemaBase,
+  type CompositionSchemaFor,
+} from "./CompositionSchema";
 import { BrandThemeProvider, resolveBrand } from "./BrandConfig";
 import { resolveVideoConfig } from "./VideoConfig";
 import { buildTimeline, type TimelineEntry } from "./Timeline";
-import { sceneRegistry, type SceneResolver } from "./SceneRegistry";
+import { sceneRegistry, type SceneMap, type SceneResolver } from "./SceneRegistry";
 
 /** A `<Composition>`-ready descriptor produced from configuration. */
 export type BuiltComposition = {
@@ -54,11 +61,17 @@ const renderEntry = (entry: TimelineEntry): React.ReactElement =>
     ),
   );
 
-/** Validate and assemble a composition from its configuration. */
-export const buildComposition = (
-  config: CompositionSchema,
+/** Validate and assemble a composition from its configuration (built-in scenes). */
+export function buildComposition(config: CompositionSchema): BuiltComposition;
+/** Validate and assemble a composition against a custom scene registry. */
+export function buildComposition<M extends SceneMap>(
+  config: CompositionSchemaFor<M>,
+  registry: Registry<M>,
+): BuiltComposition;
+export function buildComposition(
+  config: CompositionSchemaBase,
   registry: SceneResolver = sceneRegistry,
-): BuiltComposition => {
+): BuiltComposition {
   validateComposition(config);
 
   const video = resolveVideoConfig(config);
@@ -97,4 +110,4 @@ export const buildComposition = (
     width: video.width,
     height: video.height,
   };
-};
+}

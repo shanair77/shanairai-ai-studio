@@ -11,7 +11,7 @@
 
 import { theme } from "../config/Theme";
 import { secondsToFrames } from "../config/Timing";
-import { type CompositionSchema, type TransitionType } from "./CompositionSchema";
+import { type CompositionSchemaBase, type TransitionType } from "./CompositionSchema";
 import { sceneRegistry, type SceneComponent, type SceneResolver } from "./SceneRegistry";
 
 export type ResolvedTransition = {
@@ -25,7 +25,8 @@ export type TimelineEntry = {
   name: string;
   label?: string;
   component: SceneComponent;
-  props: Record<string, unknown>;
+  /** Opaque config-supplied props, passed straight to the scene component. */
+  props: unknown;
   /** Absolute start frame. */
   from: number;
   durationInFrames: number;
@@ -42,7 +43,7 @@ export type Timeline = {
 
 /** Resolve a composition's scenes into an absolute, transition-aware timeline. */
 export const buildTimeline = (
-  config: CompositionSchema,
+  config: CompositionSchemaBase,
   fps: number,
   registry: SceneResolver = sceneRegistry,
 ): Timeline => {

@@ -8,18 +8,23 @@
  * from config; music and assets are wired in by the builder.
  *
  *   buildComposition   — validate config → resolved `<Composition>` descriptor.
- *   CompositionSchema  — the declarative shape of a whole video.
- *   sceneRegistry      — name → scene lookup; `registerScene` to add your own.
+ *   CompositionSchema  — the typed, declarative shape of a whole video.
+ *   sceneRegistry      — typed name → scene lookup; `.extend({...})` to add your own.
+ *   createSceneDefinition — bind a component + duration + prop type into a scene definition.
  *   buildTimeline      — scenes + transitions → absolute frame windows.
  *   VideoConfig        — canvas resolution (format / width / height / fps / duration).
  *   BrandConfig        — brand identity + theme resolution + theme context.
  */
 
+export { createRegistry, type Registry, type DefinitionMap } from "../registry";
+
 export { buildComposition, type BuiltComposition } from "./CompositionBuilder";
 
 export {
   type CompositionSchema,
+  type CompositionSchemaFor,
   type SceneConfig,
+  type SceneConfigFor,
   type TransitionConfig,
   type TransitionType,
   type MusicConfig,
@@ -48,10 +53,15 @@ export {
 
 export {
   sceneRegistry,
-  registerScene,
+  createSceneDefinition,
+  builtinScenes,
   type SceneComponent,
   type SceneDefinition,
   type SceneResolver,
+  type SceneMap,
+  type PropsOf,
+  type SceneName,
+  type BuiltinSceneMap,
 } from "./SceneRegistry";
 
 export {
