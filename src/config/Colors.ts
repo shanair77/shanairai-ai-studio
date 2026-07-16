@@ -141,4 +141,10 @@ export const semanticColorsDark = {
 
 export type ColorScale = typeof plum;
 export type Palette = typeof palette;
-export type SemanticColors = typeof semanticColors;
+
+/**
+ * Semantic color contract: the fixed set of role keys, each mapping to any color string.
+ * Keys are derived from `semanticColors` (so autocomplete and the key set stay in sync with
+ * the defaults), while values are `string` — a brand may override a role with any color.
+ */
+export type SemanticColors = Record<keyof typeof semanticColors, string>;

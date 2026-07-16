@@ -49,7 +49,13 @@ export const themes = {
 export { withAlpha };
 
 export type ThemeMode = keyof typeof themes;
-export type Theme = typeof theme;
+
+/**
+ * The active theme. `colors` is exposed through the `SemanticColors` contract (role keys →
+ * string) so a brand-merged theme — whose overridden colors are arbitrary strings — is a
+ * valid `Theme`. All other slices keep their concrete token types.
+ */
+export type Theme = Omit<typeof theme, "colors"> & { colors: SemanticColors };
 
 /**
  * A brand supplies overrides; this is the shape the brand system will produce

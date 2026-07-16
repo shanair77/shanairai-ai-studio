@@ -3,15 +3,17 @@
  *
  * A brand is pure configuration: a name, which theme mode to start from, semantic color
  * overrides to merge on top, and a reference to a mark asset (the engine ships no mark).
- * `resolveBrand` folds that into a concrete `Theme`; `BrandThemeProvider` / `useBrandTheme`
- * expose it via context so scenes (and, in a later phase, the primitives themselves) can
- * read the active brand theme instead of the static default.
+ * `resolveBrand` folds that into a concrete `Theme`, which the builder feeds to the theme
+ * context so primitives recolor to the brand.
  *
- * No brand names or business logic live here — those are supplied per composition.
+ * The context itself lives in the `config` layer (`config/ThemeContext`) so primitives can
+ * read it with a downward import; `BrandThemeProvider` / `useBrandTheme` are kept here as
+ * stable aliases over that shared context. No brand names or business logic live here —
+ * those are supplied per composition.
  */
 
-import React, { createContext, useContext } from "react";
-import { theme as defaultTheme, themes, type Theme, type ThemeMode, type ThemeOverrides } from "../config/Theme";
+import { themes, type Theme, type ThemeMode, type ThemeOverrides } from "../config/Theme";
+import { ThemeProvider, useTheme } from "../config/ThemeContext";
 import type { AssetRef } from "./CompositionSchema";
 
 export type BrandConfig = {
@@ -44,15 +46,8 @@ export const resolveBrand = (brand: BrandConfig = {}): ResolvedBrand => ({
   mark: brand.mark,
 });
 
-const BrandThemeContext = createContext<Theme>(defaultTheme);
-
 /** Provide the active brand theme to everything rendered beneath it. */
-export const BrandThemeProvider: React.FC<{ theme: Theme; children?: React.ReactNode }> = ({ theme, children }) =>
-  createElementProvider(theme, children);
-
-// Kept as a helper so this stays a `.ts` file (no JSX).
-const createElementProvider = (theme: Theme, children?: React.ReactNode): React.ReactElement =>
-  React.createElement(BrandThemeContext.Provider, { value: theme }, children);
+export const BrandThemeProvider = ThemeProvider;
 
 /** Read the active brand theme. Falls back to the default theme outside a provider. */
-export const useBrandTheme = (): Theme => useContext(BrandThemeContext);
+export const useBrandTheme = useTheme;

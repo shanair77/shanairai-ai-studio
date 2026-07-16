@@ -10,7 +10,8 @@
  */
 
 import { type TextStyleToken } from "../config/Typography";
-import { theme } from "../config/Theme";
+import type { theme } from "../config/Theme";
+import { useTheme } from "../config/ThemeContext";
 import { useScale } from "../format";
 
 type ColorToken = keyof typeof theme.colors;
@@ -47,6 +48,7 @@ export const Text: React.FC<TextProps> = ({
   children,
 }) => {
   const { scale } = useScale();
+  const theme = useTheme();
   const base = theme.typography.textStyles[variant];
 
   const composed: React.CSSProperties = {

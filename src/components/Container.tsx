@@ -10,7 +10,8 @@
  */
 
 import { spacing, radii, type SpacingToken, type RadiusToken, type SafeAreaToken } from "../config/Layout";
-import { theme } from "../config/Theme";
+import type { theme } from "../config/Theme";
+import { useTheme } from "../config/ThemeContext";
 import { SafeArea, useScale } from "../format";
 
 type ColorToken = keyof typeof theme.colors;
@@ -86,6 +87,7 @@ export const Container: React.FC<ContainerProps> = ({
   children,
 }) => {
   const { scale } = useScale();
+  const theme = useTheme();
   const dim = (v: Dimension): number | string => (typeof v === "number" ? scale(v) : v);
   const useFlex = flex || center || centerX || centerY;
 

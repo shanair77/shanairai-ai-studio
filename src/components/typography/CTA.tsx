@@ -11,7 +11,7 @@
  * Renders in normal document flow, so it sits correctly inside `<SafeArea>` / `<Container>`.
  */
 
-import { theme } from "../../config/Theme";
+import { useTheme } from "../../config/ThemeContext";
 import { Text, type TextProps } from "../Text";
 
 export type CTAProps = TextProps & {
@@ -25,16 +25,19 @@ export const CTA: React.FC<CTAProps> = ({
   uppercase = false,
   style,
   ...rest
-}) => (
-  <Text
-    variant={variant}
-    color={color}
-    style={{
-      fontWeight: theme.typography.fontWeights.semibold,
-      letterSpacing: theme.typography.letterSpacing.wide,
-      ...(uppercase ? { textTransform: "uppercase" } : {}),
-      ...style,
-    }}
-    {...rest}
-  />
-);
+}) => {
+  const theme = useTheme();
+  return (
+    <Text
+      variant={variant}
+      color={color}
+      style={{
+        fontWeight: theme.typography.fontWeights.semibold,
+        letterSpacing: theme.typography.letterSpacing.wide,
+        ...(uppercase ? { textTransform: "uppercase" } : {}),
+        ...style,
+      }}
+      {...rest}
+    />
+  );
+};

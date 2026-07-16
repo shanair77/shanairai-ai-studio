@@ -16,7 +16,8 @@
 
 import { AbsoluteFill } from "remotion";
 import { safeAreas, type SafeAreaToken } from "../config/Layout";
-import { theme, withAlpha } from "../config/Theme";
+import { withAlpha } from "../config/Theme";
+import { useTheme } from "../config/ThemeContext";
 import { useFormat } from "./useFormat";
 
 type SafeAreaProps = {
@@ -36,6 +37,7 @@ export const SafeArea: React.FC<SafeAreaProps> = ({
   debug = false,
 }) => {
   const { width, height } = useFormat();
+  const theme = useTheme();
   const insets = safeAreas[preset];
 
   const paddingTop = insets.top * height;
