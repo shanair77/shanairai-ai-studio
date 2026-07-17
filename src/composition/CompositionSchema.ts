@@ -15,14 +15,32 @@ import { type ThemeMode } from "../config/Theme";
 import { type VideoConfigInput } from "./VideoConfig";
 import type { BrandConfig } from "./BrandConfig";
 import type { BuiltinSceneMap, PropsOf, SceneMap } from "./SceneRegistry";
+import type { BuiltinTransitionMap, OptionsOf, TransitionMap } from "../transitions";
 
-/** How one scene hands off to the next. Extend as richer transitions are added. */
-export type TransitionType = "none" | "fade";
+/**
+ * A transition config discriminated on `type`: each registered transition accepts exactly
+ * its options. Derived from a transition map, so names and options are compile-checked.
+ */
+export type TransitionConfigFor<M extends TransitionMap> = {
+  [N in keyof M & string]: {
+    type: N;
+    /** Overlap length in seconds. Defaults to the theme's base duration. */
+    duration?: number;
+    options?: OptionsOf<M[N]>;
+  };
+}[keyof M & string];
 
-export type TransitionConfig = {
-  type: TransitionType;
-  /** Overlap/crossfade length in seconds. Defaults to the theme's base duration. */
+/** Transition config over the built-in transitions. */
+export type TransitionConfig = TransitionConfigFor<BuiltinTransitionMap>;
+
+/** The built-in transition names. */
+export type TransitionType = keyof BuiltinTransitionMap & string;
+
+/** Erased runtime transition shape the resolver operates on (type is any string). */
+export type TransitionConfigBase = {
+  type: string;
   duration?: number;
+  options?: unknown;
 };
 
 /** A reference to a media asset: a `public/`-relative path or an absolute http(s) URL. */
@@ -47,16 +65,19 @@ export type TimingConfig = {
   defaultSceneDuration?: number;
 };
 
-/** Timing/transition/label fields every scene config carries, independent of its props. */
-type SceneConfigCommon = {
+/** Fields every scene config carries besides its name, props, and transition. */
+type SceneConfigMeta = {
   /** Length in seconds (overridden by `durationInFrames`). */
   duration?: number;
   /** Length in frames (takes precedence over `duration`). */
   durationInFrames?: number;
-  /** Transition INTO this scene — overrides the composition default. */
-  transition?: TransitionConfig;
   /** Optional instance label shown in the Studio timeline. */
   label?: string;
+  /**
+   * Override the scene's opacity for this instance (feeds the transition opacity contract).
+   * Defaults to the scene definition's `opaque`, then `true`.
+   */
+  opaque?: boolean;
 };
 
 /**
@@ -64,9 +85,11 @@ type SceneConfigCommon = {
  * props. Derived from a scene map, so names and props are compile-checked.
  */
 export type SceneConfigFor<M extends SceneMap> = {
-  [N in keyof M & string]: SceneConfigCommon & {
+  [N in keyof M & string]: SceneConfigMeta & {
     scene: N;
     props?: PropsOf<M[N]>;
+    /** Transition INTO this scene — overrides the composition default. */
+    transition?: TransitionConfig;
   };
 }[keyof M & string];
 
@@ -97,10 +120,12 @@ export type SceneConfig = SceneConfigFor<BuiltinSceneMap>;
 export type CompositionSchema = CompositionSchemaFor<BuiltinSceneMap>;
 
 /** Erased runtime shape the builder/timeline/validation operate on (name is any string). */
-export type SceneConfigBase = SceneConfigCommon & {
+export type SceneConfigBase = SceneConfigMeta & {
   scene: string;
   /** Opaque config-supplied props at the erased layer (typed per-scene in `SceneConfigFor`). */
   props?: unknown;
+  /** Transition INTO this scene (erased). */
+  transition?: TransitionConfigBase;
 };
 
 /** Erased runtime composition shape (any registry). */
@@ -110,7 +135,7 @@ export type CompositionSchemaBase = VideoConfigInput & {
   brand?: BrandConfig;
   music?: MusicConfig;
   scenes: SceneConfigBase[];
-  transitions?: TransitionConfig;
+  transitions?: TransitionConfigBase;
   timing?: TimingConfig;
   assets?: AssetCatalog;
 };

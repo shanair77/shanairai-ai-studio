@@ -49,6 +49,12 @@ export type SceneDefinition<P> = {
   component: ComponentType<P>;
   /** Default length in seconds when a scene config declares none. */
   defaultDuration: number;
+  /**
+   * Whether the scene fully covers the frame opaquely (its default surface does). Default
+   * `true`. Feeds the transition opacity contract; a scene used transparently (translucent
+   * surface / overlay) can override per-instance via `SceneConfig.opaque`.
+   */
+  opaque?: boolean;
 };
 
 /**
@@ -64,20 +70,22 @@ export type PropsOf<D> = D extends SceneDefinition<infer P> ? P : never;
 
 /** Minimal erased contract the Timeline/builder depend on (satisfied by any scene Registry). */
 export type SceneResolver = {
-  require(name: string): { component: SceneComponent; defaultDuration: number };
+  require(name: string): { component: SceneComponent; defaultDuration: number; opaque?: boolean };
   has(name: string): boolean;
   keys(): string[];
 };
 
 const DEFAULT_SCENE_DURATION = theme.timing.scene.base;
 
-/** Bind a scene component (+ optional default duration) into a typed definition. */
+/** Bind a scene component (+ optional default duration / opacity) into a typed definition. */
 export const createSceneDefinition = <P>(spec: {
   component: ComponentType<P>;
   defaultDuration?: number;
+  opaque?: boolean;
 }): SceneDefinition<P> => ({
   component: spec.component,
   defaultDuration: spec.defaultDuration ?? DEFAULT_SCENE_DURATION,
+  ...(spec.opaque !== undefined ? { opaque: spec.opaque } : {}),
 });
 
 /** The built-in scenes — the single definition site (replaces the old registration array). */

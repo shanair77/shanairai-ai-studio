@@ -10,8 +10,9 @@
  *   buildComposition   — validate config → resolved `<Composition>` descriptor.
  *   CompositionSchema  — the typed, declarative shape of a whole video.
  *   sceneRegistry      — typed name → scene lookup; `.extend({...})` to add your own.
- *   createSceneDefinition — bind a component + duration + prop type into a scene definition.
- *   buildTimeline      — scenes + transitions → absolute frame windows.
+ *   transitionRegistry — typed transition lookup (fade/dissolve/slide/wipe/clockWipe/iris).
+ *   createSceneDefinition / createTransitionDefinition — bind definitions for each registry.
+ *   resolveTimeline    — scenes + transitions → durations + boundaries + total.
  *   VideoConfig        — canvas resolution (format / width / height / fps / duration).
  *   BrandConfig        — brand identity + theme resolution + theme context.
  */
@@ -26,6 +27,7 @@ export {
   type SceneConfig,
   type SceneConfigFor,
   type TransitionConfig,
+  type TransitionConfigFor,
   type TransitionType,
   type MusicConfig,
   type TimingConfig,
@@ -35,6 +37,19 @@ export {
   resolveNamedAsset,
   validateComposition,
 } from "./CompositionSchema";
+
+export {
+  transitionRegistry,
+  builtinTransitions,
+  createTransitionDefinition,
+  type TransitionDefinition,
+  type TransitionCapabilities,
+  type TransitionMap,
+  type TransitionName,
+  type BuiltinTransitionMap,
+  type SlideOptions,
+  type WipeOptions,
+} from "../transitions";
 
 export {
   resolveVideoConfig,
@@ -65,8 +80,8 @@ export {
 } from "./SceneRegistry";
 
 export {
-  buildTimeline,
+  resolveTimeline,
   type Timeline,
-  type TimelineEntry,
-  type ResolvedTransition,
+  type ResolvedScene,
+  type ResolvedBoundary,
 } from "./Timeline";
