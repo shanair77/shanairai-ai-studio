@@ -23,11 +23,20 @@ import { secondsToFrames } from "../config/Timing";
 import { type Registry } from "../registry";
 import { transitionRegistry, type TransitionContext, type TransitionResolver } from "../transitions";
 import {
+  AssetRegistryProvider,
+  assetRegistry,
+  assertCategory,
+  audioVolume,
+  resolveAsset,
+  type AssetRegistry,
+} from "../assets";
+import {
   resolveNamedAsset,
   validateComposition,
   type CompositionSchema,
   type CompositionSchemaBase,
   type CompositionSchemaFor,
+  type MusicConfig,
 } from "./CompositionSchema";
 import { BrandThemeProvider, resolveBrand } from "./BrandConfig";
 import { resolveVideoConfig } from "./VideoConfig";
@@ -120,6 +129,39 @@ const assembleRuns = (timeline: Timeline, ctx: TransitionContext): React.ReactNo
   return runs;
 };
 
+/** Resolve music into `<Audio>` props: a named audio asset (preferred) or a legacy raw ref. */
+const resolveMusicProps = (
+  music: MusicConfig,
+  catalog: Record<string, string> | undefined,
+  assets: AssetRegistry,
+  fps: number,
+  durationInFrames: number,
+): Record<string, unknown> => {
+  let src: string;
+  if (music.asset) {
+    const def = assets.require(music.asset); // throws with a clear message if missing
+    assertCategory(music.asset, def, ["audio"]);
+    const resolved = resolveAsset(music.asset, def);
+    if (resolved.kind !== "file") {
+      throw new Error(`Music asset "${music.asset}" did not resolve to a file-backed source.`);
+    }
+    src = resolved.src;
+  } else if (music.src !== undefined) {
+    src = resolveNamedAsset(catalog, music.src); // legacy path
+  } else {
+    throw new Error("MusicConfig: either `asset` or `src` is required.");
+  }
+
+  const trimBeforeSeconds = music.trimBefore ?? music.startFrom;
+  return {
+    src,
+    volume: audioVolume(music.volume ?? 1, secondsToFrames(music.fadeIn ?? 0, fps), secondsToFrames(music.fadeOut ?? 0, fps), durationInFrames),
+    loop: music.loop ?? true,
+    ...(trimBeforeSeconds !== undefined ? { trimBefore: secondsToFrames(trimBeforeSeconds, fps) } : {}),
+    ...(music.trimAfter !== undefined ? { trimAfter: secondsToFrames(music.trimAfter, fps) } : {}),
+  };
+};
+
 /** Validate and assemble a composition from its configuration (built-in scenes). */
 export function buildComposition(config: CompositionSchema): BuiltComposition;
 /** Validate and assemble a composition against a custom scene registry. */
@@ -127,10 +169,18 @@ export function buildComposition<M extends SceneMap>(
   config: CompositionSchemaFor<M>,
   scenes: Registry<M>,
 ): BuiltComposition;
+/** Full control: custom scene / transition / asset registries. */
+export function buildComposition(
+  config: CompositionSchemaBase,
+  scenes: SceneResolver,
+  transitions: TransitionResolver,
+  assets?: AssetRegistry,
+): BuiltComposition;
 export function buildComposition(
   config: CompositionSchemaBase,
   scenes: SceneResolver = sceneRegistry,
   transitions: TransitionResolver = transitionRegistry,
+  assets: AssetRegistry = assetRegistry,
 ): BuiltComposition {
   validateComposition(config);
 
@@ -139,28 +189,25 @@ export function buildComposition(
   const timeline = resolveTimeline(config, video.fps, scenes, transitions);
   const durationInFrames = Math.max(1, Math.round(video.durationInFrames ?? timeline.durationInFrames));
 
-  const { music, assets } = config;
+  const { music } = config;
   const { fps } = video;
   const ctx: TransitionContext = { width: video.width, height: video.height };
+  const musicProps = music ? resolveMusicProps(music, config.assets, assets, fps, durationInFrames) : undefined;
 
   const Root: React.FC = () => {
     const layers: React.ReactNode[] = [];
 
-    if (music) {
-      layers.push(
-        createElement(Audio, {
-          key: "music",
-          src: resolveNamedAsset(assets, music.src),
-          volume: music.volume ?? 1,
-          loop: music.loop ?? true,
-          trimBefore: music.startFrom !== undefined ? secondsToFrames(music.startFrom, fps) : undefined,
-        }),
-      );
+    if (musicProps) {
+      layers.push(createElement(Audio, { key: "music", ...musicProps }));
     }
 
     assembleRuns(timeline, ctx).forEach((run) => layers.push(run));
 
-    return createElement(BrandThemeProvider, { theme: brand.theme }, createElement(AbsoluteFill, null, layers));
+    return createElement(
+      AssetRegistryProvider,
+      { registry: assets },
+      createElement(BrandThemeProvider, { theme: brand.theme }, createElement(AbsoluteFill, null, layers)),
+    );
   };
 
   return {

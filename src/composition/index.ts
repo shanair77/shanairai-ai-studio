@@ -52,6 +52,29 @@ export {
 } from "../transitions";
 
 export {
+  createAssetKit,
+  createAssetDefinition,
+  assetRegistry,
+  AssetRegistryProvider,
+  useAssetRegistry,
+  LocalAssetResolver,
+  RemoteAssetResolver,
+  resolveAsset,
+  audioVolume,
+  type AssetKit,
+  type AssetDefinition,
+  type AssetMap,
+  type AssetCategory,
+  type AssetSource,
+  type AssetMetadata,
+  type ResolvedAsset,
+  type AssetSourceResolver,
+  type AssetRegistry,
+  type NamesOfCategory,
+  type CategoryOf,
+} from "../assets";
+
+export {
   resolveVideoConfig,
   DEFAULT_FORMAT,
   type VideoConfig,

@@ -50,14 +50,24 @@ export type AssetRef = string;
 export type AssetCatalog = Record<string, AssetRef>;
 
 export type MusicConfig = {
-  /** Asset reference or catalog key for the audio track. */
-  src: AssetRef;
+  /** Named audio asset, resolved from the asset registry (preferred). */
+  asset?: string;
+  /** Legacy raw ref or catalog key for the audio track. Kept for backward compatibility. */
+  src?: AssetRef;
   /** 0–1 playback volume. Default 1. */
   volume?: number;
   /** Loop the track for the whole composition. Default true. */
   loop?: boolean;
-  /** Seconds to trim from the start of the track. Default 0. */
+  /** Seconds to trim from the start of the track. Default 0. (Alias of `trimBefore`.) */
   startFrom?: number;
+  /** Seconds to trim from the start of the track. */
+  trimBefore?: number;
+  /** Seconds to trim from the end of the track. */
+  trimAfter?: number;
+  /** Fade-in duration in seconds (frame-driven volume envelope). */
+  fadeIn?: number;
+  /** Fade-out duration in seconds (frame-driven volume envelope). */
+  fadeOut?: number;
 };
 
 export type TimingConfig = {
