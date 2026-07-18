@@ -82,12 +82,23 @@ export {
 } from "./VideoConfig";
 
 export {
-  resolveBrand,
   BrandThemeProvider,
   useBrandTheme,
   type BrandConfig,
-  type ResolvedBrand,
 } from "./BrandConfig";
+
+export {
+  createBrandDefinition,
+  brandRegistry,
+  resolveBrand,
+  BrandProvider,
+  useBrand,
+  type BrandDefinition,
+  type ResolvedBrand,
+  type BrandMap,
+  type BrandRegistry,
+  type BrandTransition,
+} from "../brand";
 
 export {
   sceneRegistry,

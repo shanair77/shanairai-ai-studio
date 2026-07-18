@@ -38,7 +38,8 @@ import {
   type CompositionSchemaFor,
   type MusicConfig,
 } from "./CompositionSchema";
-import { BrandThemeProvider, resolveBrand } from "./BrandConfig";
+import { type BrandConfig } from "./BrandConfig";
+import { BrandProvider, brandRegistry, resolveBrand, type BrandDefinition, type BrandRegistry } from "../brand";
 import { resolveVideoConfig } from "./VideoConfig";
 import { resolveTimeline, type ResolvedBoundary, type ResolvedScene, type Timeline } from "./Timeline";
 import { sceneRegistry, type SceneMap, type SceneResolver } from "./SceneRegistry";
@@ -169,24 +170,36 @@ export function buildComposition<M extends SceneMap>(
   config: CompositionSchemaFor<M>,
   scenes: Registry<M>,
 ): BuiltComposition;
-/** Full control: custom scene / transition / asset registries. */
+/** Full control: custom scene / transition / asset / brand registries. */
 export function buildComposition(
   config: CompositionSchemaBase,
   scenes: SceneResolver,
   transitions: TransitionResolver,
   assets?: AssetRegistry,
+  brands?: BrandRegistry,
 ): BuiltComposition;
 export function buildComposition(
   config: CompositionSchemaBase,
   scenes: SceneResolver = sceneRegistry,
   transitions: TransitionResolver = transitionRegistry,
   assets: AssetRegistry = assetRegistry,
+  brands: BrandRegistry = brandRegistry,
 ): BuiltComposition {
   validateComposition(config);
 
   const video = resolveVideoConfig(config);
-  const brand = resolveBrand(config.brand ?? (config.theme ? { mode: config.theme } : {}));
-  const timeline = resolveTimeline(config, video.fps, scenes, transitions);
+  // Select a brand pack by name, or fold an inline BrandConfig (legacy), or none.
+  const brandInput: BrandDefinition | undefined =
+    typeof config.brand === "string"
+      ? brands.require(config.brand)
+      : config.brand
+        ? { name: (config.brand as BrandConfig).name ?? "inline", mode: config.brand.mode, theme: config.brand.theme }
+        : undefined;
+  const brand = resolveBrand(brandInput, config.theme);
+
+  // The default transition falls back to the brand's default when the composition omits one.
+  const mergedConfig: CompositionSchemaBase = { ...config, transitions: config.transitions ?? brand.transition };
+  const timeline = resolveTimeline(mergedConfig, video.fps, scenes, transitions);
   const durationInFrames = Math.max(1, Math.round(video.durationInFrames ?? timeline.durationInFrames));
 
   const { music } = config;
@@ -206,7 +219,7 @@ export function buildComposition(
     return createElement(
       AssetRegistryProvider,
       { registry: assets },
-      createElement(BrandThemeProvider, { theme: brand.theme }, createElement(AbsoluteFill, null, layers)),
+      createElement(BrandProvider, { brand }, createElement(AbsoluteFill, null, layers)),
     );
   };
 

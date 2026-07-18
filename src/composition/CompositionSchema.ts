@@ -110,7 +110,7 @@ export type CompositionSchemaFor<M extends SceneMap> = VideoConfigInput & {
   /** Quick theme-mode select; `brand` takes precedence if both are given. */
   theme?: ThemeMode;
   /** Brand identity + theme overrides. */
-  brand?: BrandConfig;
+  brand?: BrandConfig | string;
   /** Background music for the whole composition. */
   music?: MusicConfig;
   /** Ordered scenes that make up the video. */
@@ -142,7 +142,7 @@ export type SceneConfigBase = SceneConfigMeta & {
 export type CompositionSchemaBase = VideoConfigInput & {
   id: string;
   theme?: ThemeMode;
-  brand?: BrandConfig;
+  brand?: BrandConfig | string;
   music?: MusicConfig;
   scenes: SceneConfigBase[];
   transitions?: TransitionConfigBase;

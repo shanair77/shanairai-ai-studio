@@ -1,12 +1,10 @@
 /**
- * branding/ — Brand marks & identity components.
+ * branding/ — brand identity components.
  *
- * Logos, wordmarks, watermarks, endcards, and lockups for each brand
- * (Shanair.AI, Shanair Sells Homes, Jet Set Adventures, InfluenceWorld Studio,
- * Left on Read…). Components are theme-aware so a mark recolors per brand.
- *
- * Static logo image files live in `public/`; reference them with `staticFile()`.
- * This module holds the React components and placement logic, not the raw assets.
+ * `BrandLogo` and `Watermark` render the active brand's marks (read from the brand context) as
+ * nodes, so authors drop them into scene slots or overlays. They own placement, not content —
+ * the brand supplies the assets.
  */
 
-export {};
+export { BrandLogo, type BrandLogoProps } from "./BrandLogo";
+export { Watermark, type WatermarkProps } from "./Watermark";
