@@ -32,6 +32,7 @@ that ends green on `npm run verify`. Architectural decisions are captured as
 | 15 | Asset Engine MVP | Typed `assetRegistry` + `createAssetKit` + renderers ([ADR-003](./adr/ADR-003-asset-engine.md)) |
 | 17 | Brand System Core | Typed `brandRegistry` + `createBrandDefinition` + `BrandProvider` ([ADR-004](./adr/ADR-004-brand-system.md)) |
 | 19 | Template Engine Core | Typed `templateRegistry` + `createTemplateDefinition` + `buildFromTemplate` ([ADR-005](./adr/ADR-005-template-engine.md)) |
+| 21 | Parameter Engine Core | Declarative `ParameterSchema` + `parameterTypeRegistry` + `resolveParameters` (Result) ([ADR-006](./adr/ADR-006-parameter-engine.md)) |
 
 All architecture-review "fix now" findings (T1, T3, Q1, E1, E3, E4, X3) are resolved.
 

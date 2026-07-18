@@ -108,8 +108,8 @@ buildComposition({ id, scenes: [{ scene: "testimonialWall", props: { … } }] },
 
 ## Future registries
 
-Each follows the identical recipe (ADR-001 §6). Scenes, Transitions, Assets, Brands, and Templates
-are implemented; Effects remains future.
+Each follows the identical recipe (ADR-001 §6). Scenes, Transitions, Assets, Brands, Templates, and
+Parameter Types are implemented; Effects remains future.
 
 | Family | Definition + factory | Default instance | Config discriminant |
 |---|---|---|---|
@@ -118,7 +118,15 @@ are implemented; Effects remains future.
 | **Assets** | `AssetDefinition` / `createAssetDefinition` | `assetRegistry` | `asset` |
 | **Brands** | `BrandDefinition` / `createBrandDefinition` | `brandRegistry` | `brand` |
 | **Templates** | `TemplateDefinition` / `createTemplateDefinition` | `templateRegistry` | `template` |
+| **Parameter Types** | `ParameterTypeDefinition` / `createParameterTypeDefinition` | `parameterTypeRegistry` | `type` |
 | Effects _(future)_ | `EffectDefinition` / `createEffectDefinition` | `effectRegistry` | `effect` |
+
+The **Parameter Types** family (ADR-006) is the type *vocabulary* for the Parameter Engine —
+`parameterTypeRegistry` ships the built-in types (string/number/color/image/brand/…), extended with
+`.extend(...)`. A parameter type owns **behavior** (`parse`/`validate`/`serialize`); a template's
+per-parameter **policy** (required/default/constraints/…) lives in an embedded `ParameterSchema`,
+not the registry. The empty `validatorRegistry` holds named custom validators. See
+[ADR-006](./adr/ADR-006-parameter-engine.md).
 
 The **Templates** family is the fifth instance of the recipe but operates one level up: a
 `TemplateDefinition<P>` is a pure `params → TemplateOutput` producer selected by a

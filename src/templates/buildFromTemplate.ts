@@ -35,6 +35,7 @@ import {
   type VideoConfigInput,
 } from "../composition";
 import { type FormatName } from "../config/Layout";
+import { resolveParametersOrThrow, type ParameterValue } from "../parameters";
 import { templateRegistry } from "./TemplateRegistry";
 import {
   type TemplateCompositionBase,
@@ -148,6 +149,8 @@ export const resolveTemplateDefaults = (
 export function resolveTemplateComposition(
   spec: TemplateCompositionBase,
   templates: TemplateResolver = templateRegistry,
+  assets?: AssetRegistry,
+  brands?: BrandRegistry,
 ): CompositionSchemaBase {
   // 1–2. Resolve the template by name (clear error for an unknown template).
   validateSpec(spec);
@@ -178,10 +181,18 @@ export function resolveTemplateComposition(
 
   // 4. Evaluate static capabilities before build.
   checkCapabilitiesBeforeBuild(template, spec);
-  // 5. Run the template's param validation hook, if any.
-  template.validate?.(spec.params);
+  // 5. Resolve params: schema-based validation first (defaults + coercion + validation), then the
+  //    imperative validate() hook. Templates without a schema keep the legacy raw-params path.
+  const params = template.parameters
+    ? (resolveParametersOrThrow(template.parameters, spec.params as Record<string, ParameterValue>, {
+        assets,
+        brands,
+        format: videoInput.format,
+      }) as unknown as typeof spec.params)
+    : spec.params;
+  template.validate?.(params);
   // 6. Call the pure build (configuration only).
-  const output = template.build(spec.params, ctx);
+  const output = template.build(params, ctx);
   // 7. Validate the output shape + scene-count bounds.
   validateOutput(template, output);
 
@@ -224,6 +235,7 @@ export function buildFromTemplate(
   brands: BrandRegistry = brandRegistry,
 ): BuiltComposition {
   // Pure producer → the single assembly/render pipeline. buildFromTemplate adds no assembly logic.
-  const schema = resolveTemplateComposition(spec, templates);
+  // assets/brands are forwarded so a parameter schema can validate asset/brand NAME references.
+  const schema = resolveTemplateComposition(spec, templates, assets, brands);
   return buildComposition(schema, scenes, transitions, assets, brands);
 }

@@ -124,6 +124,53 @@ const built = buildFromTemplate({ id: "P", template: "promo", params: { title: "
 
 ---
 
+## `parameters` (the Parameter Engine barrel)
+
+Declarative, serializable, **React-free** validation of a template's inputs (ADR-006). A parameter
+**type** owns behavior (`parse`/`validate`/`serialize`) and is the registry family; a template's
+per-parameter **policy** (required/default/constraints/conditions/metadata/ui) is an embedded
+`ParameterSchema`. No Context, no Provider, no Hooks — parameters are pre-render data.
+
+```ts
+createParameterTypeDefinition<V>(spec): ParameterTypeDefinition<V>       // identity; captures V
+parameterTypeRegistry: Registry<…>                                       // built-in types (string…group)
+validatorRegistry: Registry<ValidatorMap>                                // empty; named custom validators
+
+validateParameters(schema, values, ctx?): ParameterIssue[]                                   // non-throwing
+resolveParameters(schema, values, ctx?): Result<DeepReadonly<ResolvedParameters>, ParameterIssue[]>
+resolveParametersOrThrow(schema, values, ctx?): DeepReadonly<ResolvedParameters>              // build path
+```
+
+**Pipeline:** `parse → type-validate → defaults → constraints → named validators → conditional rules`.
+**Precedence:** `caller > parameter default > type default`. Resolved params are deeply frozen.
+
+```ts
+type ParameterDefinition = { key; type: ParameterTypeName; required?; default?;
+  validators?: string[]; constraints?; conditions?; metadata?; ui?; capabilities? };
+type ParameterSchema = { version?; parameters: ParameterDefinition[]; groups?; capabilities? };
+type ParameterIssue = { path; code; severity: "error" | "warning"; message; expected?; actual? };
+```
+
+Built-in types: `string`, `text`, `number`, `boolean`, `enum`, `color`, `image`, `video`, `audio`,
+`brand`, `date`, `url`, `list`, `group`. Asset/brand types validate **names only** (existence +
+category) — never resolving or loading. Attach a schema to a template via `TemplateDefinition.parameters`.
+
+### Example
+```ts
+import { createTemplateDefinition } from "./templates";
+const promo = createTemplateDefinition({
+  name: "promo",
+  parameters: { parameters: [
+    { key: "title", type: "string", required: true, constraints: { min: 1, max: 80 } },
+    { key: "cta", type: "string", default: "Get started" },
+  ] },
+  build: (p) => ({ scenes: [{ scene: "hero", duration: 2, props: { title: p.title } }, { scene: "outro", duration: 2 }] }),
+});
+// buildFromTemplate resolves + validates params (applying defaults) before build().
+```
+
+---
+
 ## `registry`
 
 ```ts

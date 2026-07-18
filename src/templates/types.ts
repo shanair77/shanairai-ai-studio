@@ -13,6 +13,7 @@
 
 import { type FormatName } from "../config/Layout";
 import { type ThemeMode } from "../config/Theme";
+import { type ParameterSchema } from "../parameters";
 import {
   type AssetCatalog,
   type BrandConfig,
@@ -89,7 +90,13 @@ export type TemplateDefinition<P extends TemplateParams = TemplateParams> = {
   format?: FormatName;
   /** Machine-readable capabilities (checked before/after `build`). */
   capabilities?: TemplateCapabilities;
-  /** Optional structural param validation (throws on invalid params). No Zod. */
+  /**
+   * Optional declarative parameter schema (ADR-006). When present, `buildFromTemplate` resolves +
+   * validates the caller's params against it (applying defaults) BEFORE `build` runs. Independent
+   * of `P`, which stays the author's static type. Additive — templates without a schema are unchanged.
+   */
+  parameters?: ParameterSchema;
+  /** Optional imperative param validation (throws). Runs AFTER schema resolution when both exist. */
   validate?: (params: P) => void;
   /** PURE: typed params + context → configuration. MUST NOT return React. */
   build: (params: P, ctx: TemplateContext) => TemplateOutput;
