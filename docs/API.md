@@ -68,6 +68,62 @@ const built = buildComposition({ id: "Demo", format: "horizontal",
 
 ---
 
+## `templates` (the Template Engine barrel)
+
+A template is a **pure** `params → configuration` producer selected by name; `buildFromTemplate`
+merges its output and delegates to `buildComposition` (the single assembly pipeline). Templates
+**never** return React. See [ADR-005](./adr/ADR-005-template-engine.md).
+
+```ts
+createTemplateDefinition<P>(spec: TemplateDefinition<P>): TemplateDefinition<P>   // identity; captures P
+templateRegistry: Registry<TemplateMap>                                          // empty default (ships none)
+
+buildFromTemplate<M extends TemplateMap>(spec: TemplateCompositionFor<M>, templates: Registry<M>): BuiltComposition
+buildFromTemplate(spec: TemplateCompositionBase, templates, scenes, transitions?, assets?, brands?): BuiltComposition
+```
+
+```ts
+type TemplateDefinition<P> = {
+  name: string;
+  format?: FormatName;
+  capabilities?: TemplateCapabilities;          // machine-readable; checked before/after build
+  validate?: (params: P) => void;               // structural param validation (no Zod)
+  build: (params: P, ctx: TemplateContext) => TemplateOutput;   // PURE — configuration, never React
+  meta?: TemplateMetadata<P>;                    // human-facing; inert
+};
+type TemplateOutput = { scenes: SceneConfigBase[]; transitions?; timing?; music?; assets? };
+type TemplateCapabilities = { formats?; variableLength?; requiresBrand?; providesTransitions?; providesMusic?; minScenes?; maxScenes? };
+type TemplateContext = { width: number; height: number; fps: number; brand?: string };
+```
+
+**Precedence** — transition: `scene > caller > template > brand > framework`; music:
+`caller > template > brand audio > none`; timing: `caller > template > framework`.
+`resolveTemplateDefaults(spec, output, brandMusic?)` exposes the caller/template/brand merge.
+
+**Types:** `TemplateParams`, `TemplateContext`, `TemplateOutput`, `TemplateCapabilities`,
+`TemplateMetadata`, `TemplateDefinition<P>`, `TemplateMap`, `TemplateResolver`,
+`TemplateComposition<P>`, `TemplateCompositionFor<M>`, `TemplateCompositionBase`, `ParamsOf<D>`.
+
+### Example
+```ts
+import { createRegistry } from "./registry";
+import { buildFromTemplate, createTemplateDefinition } from "./templates";
+
+const promo = createTemplateDefinition({
+  name: "promo",
+  capabilities: { formats: ["horizontal"], providesTransitions: true, minScenes: 2 },
+  validate: (p: { title: string }) => { if (!p.title) throw new Error("promo: `title` required."); },
+  build: (p: { title: string }) => ({
+    scenes: [{ scene: "hero", duration: 2, props: { title: p.title } }, { scene: "outro", duration: 2 }],
+    transitions: { type: "dissolve", duration: 0.5 },
+  }),
+});
+const templates = createRegistry({ promo });
+const built = buildFromTemplate({ id: "P", template: "promo", params: { title: "Nova" } }, templates);
+```
+
+---
+
 ## `registry`
 
 ```ts

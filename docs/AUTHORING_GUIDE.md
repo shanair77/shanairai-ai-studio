@@ -131,6 +131,48 @@ buildComposition({
 
 Files live under `public/`; `resolveAssetRef` wraps local paths in `staticFile()`.
 
+## 7. Create a template
+
+A **template** packages a reusable *kind* of video as a pure function from typed `params` to
+configuration. It never returns React — `buildFromTemplate` merges its output and delegates to
+`buildComposition`. Select a template by name and supply its params via a `TemplateComposition`
+(kept separate from `CompositionSchema`).
+
+```ts
+import { createRegistry } from "./registry";
+import { buildFromTemplate, createTemplateDefinition } from "./templates";
+
+const promo = createTemplateDefinition({
+  name: "promo",
+  format: "horizontal",
+  capabilities: { formats: ["horizontal", "square"], providesTransitions: true, minScenes: 2, maxScenes: 4 },
+  validate: (p: { productName: string; tagline?: string }) => {
+    if (!p.productName) throw new Error("promo: `productName` is required.");
+  },
+  build: (p) => ({
+    scenes: [
+      { scene: "hero", duration: 2, props: { title: p.productName, subtitle: p.tagline } },
+      { scene: "outro", duration: 2 },
+    ],
+    transitions: { type: "dissolve", duration: 0.5 },   // the template's default choreography
+  }),
+  meta: { description: "Hero → outro promo.", category: "marketing" },
+});
+
+const templates = createRegistry({ promo });
+const built = buildFromTemplate(
+  { id: "LaunchQ3", template: "promo", brand: "midnight", params: { productName: "Nova", tagline: "Ship faster" } },
+  templates,
+);
+```
+
+Templates provide **defaults, never policy** — a caller can always override the transition, music,
+and timing. Precedence: transition `scene > caller > template > brand > framework`; music
+`caller > template > brand audio > none`; timing `caller > template > framework`. `capabilities`
+are machine-readable and enforced before/after `build` (unsupported format, missing required
+brand, scene-count bounds); `meta` is human-facing and never affects rendering. The framework
+ships **no** templates — author your own pack. See [ADR-005](./adr/ADR-005-template-engine.md).
+
 ## Examples
 
 The shipped `src/demo/DemoConfig.ts` is a complete four-scene example with fade transitions.
@@ -153,4 +195,4 @@ The shipped `src/demo/DemoConfig.ts` is a complete four-scene example with fade 
 ## Extension points
 
 - New scene/transition → the two "Building custom …" guides.
-- New brand pack / asset registry → [REGISTRIES.md](./REGISTRIES.md#future-registries).
+- New brand pack / asset registry / template pack → [REGISTRIES.md](./REGISTRIES.md#future-registries).

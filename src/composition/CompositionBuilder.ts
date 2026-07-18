@@ -202,7 +202,10 @@ export function buildComposition(
   const timeline = resolveTimeline(mergedConfig, video.fps, scenes, transitions);
   const durationInFrames = Math.max(1, Math.round(video.durationInFrames ?? timeline.durationInFrames));
 
-  const { music } = config;
+  // Music: the composition's own track wins; otherwise fall back to the brand's default audio
+  // (a brand feature, resolved here where the brand is resolved — not by any upstream producer).
+  const music: MusicConfig | undefined =
+    config.music ?? (brand.audio?.music ? { asset: brand.audio.music } : undefined);
   const { fps } = video;
   const ctx: TransitionContext = { width: video.width, height: video.height };
   const musicProps = music ? resolveMusicProps(music, config.assets, assets, fps, durationInFrames) : undefined;

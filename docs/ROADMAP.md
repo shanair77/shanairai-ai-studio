@@ -29,6 +29,9 @@ that ends green on `npm run verify`. Architectural decisions are captured as
 | 10D | Typed Scene Registration | `createSceneDefinition`, generic registry kernel ([ADR-001](./adr/ADR-001-typed-scene-registration.md)) |
 | 12 | Transition Engine | `TransitionSeries` + typed `transitionRegistry` + opacity contract ([ADR-002](./adr/ADR-002-transition-architecture.md)) |
 | 13 | Developer Platform & Documentation | This documentation set |
+| 15 | Asset Engine MVP | Typed `assetRegistry` + `createAssetKit` + renderers ([ADR-003](./adr/ADR-003-asset-engine.md)) |
+| 17 | Brand System Core | Typed `brandRegistry` + `createBrandDefinition` + `BrandProvider` ([ADR-004](./adr/ADR-004-brand-system.md)) |
+| 19 | Template Engine Core | Typed `templateRegistry` + `createTemplateDefinition` + `buildFromTemplate` ([ADR-005](./adr/ADR-005-template-engine.md)) |
 
 All architecture-review "fix now" findings (T1, T3, Q1, E1, E3, E4, X3) are resolved.
 
@@ -53,7 +56,7 @@ Candidate next phases (not yet scheduled):
 ## Future
 
 - **Effect registry** — post-processing/overlay effects as typed definitions.
-- **Template registry** — reusable, parameterized multi-scene templates.
+- **Template Engine extensions** — the core shipped in Phase 19 ([ADR-005](./adr/ADR-005-template-engine.md)); future work adds lifecycle hooks, nested templates / partials, `calculateMetadata`-driven dynamic duration, and `P`-schema emission for the AI Director.
 - **Audio-aware transitions** — cross-fade scene-embedded audio at boundaries.
 - **AI Director** — generate a validated `CompositionSchema` from a brief, selecting scenes,
   transitions, and a brand from the registries.

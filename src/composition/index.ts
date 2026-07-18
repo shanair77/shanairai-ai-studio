@@ -24,10 +24,13 @@ export { buildComposition, type BuiltComposition } from "./CompositionBuilder";
 export {
   type CompositionSchema,
   type CompositionSchemaFor,
+  type CompositionSchemaBase,
   type SceneConfig,
   type SceneConfigFor,
+  type SceneConfigBase,
   type TransitionConfig,
   type TransitionConfigFor,
+  type TransitionConfigBase,
   type TransitionType,
   type MusicConfig,
   type TimingConfig,

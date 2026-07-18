@@ -108,7 +108,8 @@ buildComposition({ id, scenes: [{ scene: "testimonialWall", props: { … } }] },
 
 ## Future registries
 
-Each follows the identical recipe (ADR-001 §6):
+Each follows the identical recipe (ADR-001 §6). Scenes, Transitions, Assets, Brands, and Templates
+are implemented; Effects remains future.
 
 | Family | Definition + factory | Default instance | Config discriminant |
 |---|---|---|---|
@@ -116,8 +117,14 @@ Each follows the identical recipe (ADR-001 §6):
 | Transitions | `TransitionDefinition` / `createTransitionDefinition` | `transitionRegistry` | `transition` (`type`) |
 | **Assets** | `AssetDefinition` / `createAssetDefinition` | `assetRegistry` | `asset` |
 | **Brands** | `BrandDefinition` / `createBrandDefinition` | `brandRegistry` | `brand` |
-| **Effects** | `EffectDefinition` / `createEffectDefinition` | `effectRegistry` | `effect` |
 | **Templates** | `TemplateDefinition` / `createTemplateDefinition` | `templateRegistry` | `template` |
+| Effects _(future)_ | `EffectDefinition` / `createEffectDefinition` | `effectRegistry` | `effect` |
+
+The **Templates** family is the fifth instance of the recipe but operates one level up: a
+`TemplateDefinition<P>` is a pure `params → TemplateOutput` producer selected by a
+`TemplateComposition` (not `CompositionSchema`), and `buildFromTemplate` merges its output and
+delegates to `buildComposition` — the single assembly pipeline. See
+[ADR-005](./adr/ADR-005-template-engine.md).
 
 ## Examples
 
