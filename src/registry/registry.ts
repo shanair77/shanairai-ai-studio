@@ -12,6 +12,8 @@
  * extension for free.
  */
 
+import { DomainError } from "../errors";
+
 export type DefinitionMap = Record<string, unknown>;
 
 export interface Registry<M extends DefinitionMap> {
@@ -41,7 +43,12 @@ export const createRegistry = <M extends DefinitionMap>(entries: M): Registry<M>
     require: (key) => {
       if (!Object.prototype.hasOwnProperty.call(map, key)) {
         const known = Object.keys(map).join(", ") || "(none)";
-        throw new Error(`Registry: no entry registered as "${key}". Registered: ${known}.`);
+        // Expected configuration failure (unknown scene/transition/asset/brand/template name).
+        throw new DomainError({
+          code: "unknown-entry",
+          message: `Registry: no entry registered as "${key}". Registered: ${known}.`,
+          actual: key,
+        });
       }
       return map[key as keyof M];
     },

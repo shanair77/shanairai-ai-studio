@@ -9,6 +9,7 @@
  * transition requiring an opaque incoming scene is rejected when that scene is non-opaque.
  */
 
+import { DomainError } from "../errors";
 import { theme } from "../config/Theme";
 import { secondsToFrames } from "../config/Timing";
 import { type CompositionSchemaBase } from "./CompositionSchema";
@@ -74,10 +75,13 @@ export const resolveTimeline = (
     // Opacity contract: reject a transition that needs an opaque incoming scene against a
     // non-opaque one. (Never applies to the first scene or a cut.)
     if (i > 0 && !isCut && def.capabilities.requiresOpaqueIncoming && !resolvedScenes[i].opaque) {
-      throw new Error(
-        `Transition "${transition.type}" requires an opaque incoming scene, but scene "${resolvedScenes[i].name}" ` +
+      throw new DomainError({
+        code: "opacity-contract",
+        message:
+          `Transition "${transition.type}" requires an opaque incoming scene, but scene "${resolvedScenes[i].name}" ` +
           `(index ${i}) is declared non-opaque. Use a transparency-safe transition (e.g. "dissolve").`,
-      );
+        path: `scenes[${i}]`,
+      });
     }
 
     if (i === 0 || isCut) {

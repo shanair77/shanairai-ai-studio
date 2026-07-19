@@ -29,4 +29,17 @@ export {
 
 export { createTemplateDefinition } from "./definition";
 export { templateRegistry } from "./TemplateRegistry";
-export { buildFromTemplate, resolveTemplateComposition, resolveTemplateDefaults } from "./buildFromTemplate";
+export {
+  buildFromTemplate,
+  resolveTemplateComposition,
+  resolveTemplateDefaults,
+  // Public stage helpers (ADR-007) — the Execution Engine drives these; templates never imports execution.
+  resolveTemplate,
+  resolveTemplateCanvas,
+  checkTemplateCapabilities,
+  resolveTemplateParameters,
+  runTemplate,
+  validateTemplateOutput,
+  assembleTemplateSchema,
+  type TemplateParameterResolution,
+} from "./buildFromTemplate";

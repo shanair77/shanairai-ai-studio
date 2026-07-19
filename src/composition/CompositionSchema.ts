@@ -11,6 +11,7 @@
  */
 
 import { staticFile } from "remotion";
+import { DomainError } from "../errors";
 import { type ThemeMode } from "../config/Theme";
 import { type VideoConfigInput } from "./VideoConfig";
 import type { BrandConfig } from "./BrandConfig";
@@ -159,17 +160,17 @@ export const resolveAssetRef = (ref: AssetRef): string => (isUrl(ref) ? ref : st
 export const resolveNamedAsset = (catalog: AssetCatalog | undefined, refOrName: AssetRef): string =>
   resolveAssetRef(catalog?.[refOrName] ?? refOrName);
 
-/** Structural validation of the invariants the builder relies on. Throws on violation. */
+/** Structural validation of the invariants the builder relies on. Throws `DomainError` on violation. */
 export const validateComposition = (config: CompositionSchemaBase): void => {
   if (!config || typeof config.id !== "string" || config.id.length === 0) {
-    throw new Error("CompositionSchema: a non-empty `id` is required.");
+    throw new DomainError({ code: "invalid-composition", message: "CompositionSchema: a non-empty `id` is required.", path: "id" });
   }
   if (!Array.isArray(config.scenes) || config.scenes.length === 0) {
-    throw new Error(`CompositionSchema "${config.id}": at least one scene is required.`);
+    throw new DomainError({ code: "invalid-composition", message: `CompositionSchema "${config.id}": at least one scene is required.`, path: "scenes" });
   }
   config.scenes.forEach((scene, i) => {
     if (!scene || typeof scene.scene !== "string" || scene.scene.length === 0) {
-      throw new Error(`CompositionSchema "${config.id}": scenes[${i}] is missing a scene name.`);
+      throw new DomainError({ code: "invalid-composition", message: `CompositionSchema "${config.id}": scenes[${i}] is missing a scene name.`, path: `scenes[${i}].scene` });
     }
   });
 };

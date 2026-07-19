@@ -35,7 +35,15 @@ import {
   type VideoConfigInput,
 } from "../composition";
 import { type FormatName } from "../config/Layout";
-import { resolveParametersOrThrow, type ParameterValue } from "../parameters";
+import { DomainError } from "../errors";
+import {
+  resolveParameters,
+  resolveParametersOrThrow,
+  validateParameters,
+  type ParameterContext,
+  type ParameterIssue,
+  type ParameterValue,
+} from "../parameters";
 import { templateRegistry } from "./TemplateRegistry";
 import {
   type TemplateCompositionBase,
@@ -44,28 +52,72 @@ import {
   type TemplateDefinition,
   type TemplateMap,
   type TemplateOutput,
+  type TemplateParams,
   type TemplateResolver,
 } from "./types";
 
-/** Structural validation of a `TemplateComposition`'s own fields. Throws on violation. */
-const validateSpec = (spec: TemplateCompositionBase): void => {
+/**
+ * Stage 1 (public pure helper) — structural request validation + template lookup. Throws
+ * `DomainError` on an invalid request or an unknown template name.
+ */
+export const resolveTemplate = (
+  spec: TemplateCompositionBase,
+  templates: TemplateResolver = templateRegistry,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): TemplateDefinition<any> => {
   if (!spec || typeof spec.id !== "string" || spec.id.length === 0) {
-    throw new Error("TemplateComposition: a non-empty `id` is required.");
+    throw new DomainError({ code: "invalid-request", message: "TemplateComposition: a non-empty `id` is required.", path: "id" });
   }
   if (typeof spec.template !== "string" || spec.template.length === 0) {
-    throw new Error(`TemplateComposition "${spec.id}": a non-empty \`template\` name is required.`);
+    throw new DomainError({ code: "invalid-request", message: `TemplateComposition "${spec.id}": a non-empty \`template\` name is required.`, path: "template" });
   }
   if (spec.params === null || typeof spec.params !== "object") {
-    throw new Error(`TemplateComposition "${spec.id}": \`params\` must be an object.`);
+    throw new DomainError({ code: "invalid-request", message: `TemplateComposition "${spec.id}": \`params\` must be an object.`, path: "params" });
   }
+  if (!templates.has(spec.template)) {
+    throw new DomainError({
+      code: "unknown-template",
+      message: `buildFromTemplate: no template registered as "${spec.template}". Registered: ${templates.keys().join(", ") || "(none)"}.`,
+      path: "template",
+      actual: spec.template,
+    });
+  }
+  return templates.require(spec.template);
 };
 
 /**
- * Static capability checks that can run BEFORE `build` — plus a declaration-consistency guard.
- * Throws actionable errors for a missing required brand, an unsupported format, or a contradictory
- * scene-count declaration.
+ * Resolve the requested canvas + the `TemplateContext` (canvas dims only — the builder independently
+ * resolves the video config for assembly; no duration logic is duplicated).
  */
-const checkCapabilitiesBeforeBuild = (
+export const resolveTemplateCanvas = (
+  spec: TemplateCompositionBase,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  template: TemplateDefinition<any>,
+): { videoInput: VideoConfigInput; ctx: TemplateContext } => {
+  const videoInput: VideoConfigInput = {
+    format: spec.format ?? template.format,
+    width: spec.width,
+    height: spec.height,
+    fps: spec.fps,
+    duration: spec.duration,
+    durationInFrames: spec.durationInFrames,
+  };
+  const video = resolveVideoConfig(videoInput);
+  const ctx: TemplateContext = {
+    width: video.width,
+    height: video.height,
+    fps: video.fps,
+    brand: typeof spec.brand === "string" ? spec.brand : undefined,
+  };
+  return { videoInput, ctx };
+};
+
+/**
+ * Stage 2 (public pure helper) — static capability checks before build, plus a declaration
+ * consistency guard. Throws `DomainError` for a missing required brand, an unsupported format, or a
+ * contradictory scene-count declaration.
+ */
+export const checkTemplateCapabilities = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   template: TemplateDefinition<any>,
   spec: TemplateCompositionBase,
@@ -74,52 +126,91 @@ const checkCapabilitiesBeforeBuild = (
   if (!caps) return;
 
   if (caps.requiresBrand && spec.brand === undefined) {
-    throw new Error(`Template "${template.name}" requires a brand, but none was provided.`);
+    throw new DomainError({ code: "requires-brand", message: `Template "${template.name}" requires a brand, but none was provided.`, path: "brand" });
   }
 
   if (caps.formats && caps.formats.length > 0) {
     const format: FormatName = spec.format ?? template.format ?? DEFAULT_FORMAT;
     if (!caps.formats.includes(format)) {
-      throw new Error(
-        `Template "${template.name}" does not support format "${format}". Supported: ${caps.formats.join(", ")}.`,
-      );
+      throw new DomainError({
+        code: "unsupported-format",
+        message: `Template "${template.name}" does not support format "${format}". Supported: ${caps.formats.join(", ")}.`,
+        path: "format",
+        expected: [...caps.formats],
+        actual: format,
+      });
     }
   }
 
   if (caps.minScenes !== undefined && caps.maxScenes !== undefined) {
     if (caps.minScenes > caps.maxScenes) {
-      throw new Error(
-        `Template "${template.name}" declares minScenes (${caps.minScenes}) greater than maxScenes (${caps.maxScenes}).`,
-      );
+      throw new DomainError({ code: "capability-declaration", message: `Template "${template.name}" declares minScenes (${caps.minScenes}) greater than maxScenes (${caps.maxScenes}).` });
     }
     if (caps.variableLength === false && caps.minScenes !== caps.maxScenes) {
-      throw new Error(
-        `Template "${template.name}" declares variableLength: false but a scene-count range [${caps.minScenes}, ${caps.maxScenes}]. ` +
+      throw new DomainError({
+        code: "capability-declaration",
+        message:
+          `Template "${template.name}" declares variableLength: false but a scene-count range [${caps.minScenes}, ${caps.maxScenes}]. ` +
           `A fixed-length template must declare an exact count (minScenes === maxScenes).`,
-      );
+      });
     }
   }
 };
 
-/** Validate the shape and scene-count bounds of a template's output. Throws on violation. */
-const validateOutput = (
+/**
+ * Stage 3 (Result form, for the Execution Engine) — resolve + validate the caller's params against
+ * the template's schema, applying defaults; returns errors/warnings rather than throwing. A template
+ * without a schema passes its raw params through. `buildFromTemplate` uses the throwing form.
+ */
+export type TemplateParameterResolution =
+  | { ok: true; params: TemplateParams; warnings: ParameterIssue[] }
+  | { ok: false; issues: ParameterIssue[]; warnings: ParameterIssue[] };
+
+export const resolveTemplateParameters = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  template: TemplateDefinition<any>,
+  rawParams: TemplateParams,
+  ctx: ParameterContext,
+): TemplateParameterResolution => {
+  if (!template.parameters) return { ok: true, params: rawParams, warnings: [] };
+  const all = validateParameters(template.parameters, rawParams as Record<string, ParameterValue>, ctx);
+  const warnings = all.filter((i) => i.severity === "warning");
+  const errors = all.filter((i) => i.severity === "error");
+  if (errors.length > 0) return { ok: false, issues: errors, warnings };
+  const res = resolveParameters(template.parameters, rawParams as Record<string, ParameterValue>, ctx);
+  return { ok: true, params: res.ok ? (res.value as unknown as TemplateParams) : rawParams, warnings };
+};
+
+/** Stage 5 (public pure helper) — run the pure template build (configuration only). */
+export const runTemplate = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  template: TemplateDefinition<any>,
+  params: TemplateParams,
+  ctx: TemplateContext,
+): TemplateOutput => template.build(params, ctx);
+
+/**
+ * Stage 6 (public pure helper) — validate the shape + scene-count bounds of a template's output.
+ * Throws `DomainError` on violation.
+ */
+export const validateTemplateOutput = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   template: TemplateDefinition<any>,
   output: TemplateOutput,
 ): void => {
   if (!output || typeof output !== "object" || !Array.isArray(output.scenes)) {
-    throw new Error(`Template "${template.name}".build() must return a TemplateOutput with a \`scenes\` array.`);
+    throw new DomainError({ code: "invalid-output", message: `Template "${template.name}".build() must return a TemplateOutput with a \`scenes\` array.` });
   }
   if (output.scenes.length === 0) {
-    throw new Error(`Template "${template.name}".build() produced no scenes.`);
+    throw new DomainError({ code: "empty-output", message: `Template "${template.name}".build() produced no scenes.` });
   }
   const caps = template.capabilities;
   const n = output.scenes.length;
   if (caps?.minScenes !== undefined && n < caps.minScenes) {
-    throw new Error(`Template "${template.name}" produced ${n} scenes, fewer than its declared minimum (${caps.minScenes}).`);
+    throw new DomainError({ code: "min-scenes", message: `Template "${template.name}" produced ${n} scenes, fewer than its declared minimum (${caps.minScenes}).`, expected: caps.minScenes, actual: n });
   }
   if (caps?.maxScenes !== undefined && n > caps.maxScenes) {
-    throw new Error(`Template "${template.name}" produced ${n} scenes, more than its declared maximum (${caps.maxScenes}).`);
+    throw new DomainError({ code: "max-scenes", message: `Template "${template.name}" produced ${n} scenes, more than its declared maximum (${caps.maxScenes}).`, expected: caps.maxScenes, actual: n });
   }
 };
 
@@ -138,65 +229,12 @@ export const resolveTemplateDefaults = (
   timing: spec.timing ?? output.timing,
 });
 
-/**
- * Pure producer: resolve a template composition into a normal `CompositionSchema`. It resolves the
- * template, evaluates capabilities, validates + runs the pure `build`, validates the output, and
- * applies the caller-vs-template precedence — NO rendering, and no registries beyond the template
- * lookup. `buildFromTemplate` = this + `buildComposition`, so the schema is independently testable
- * and `buildFromTemplate` stays a pure `CompositionSchema` producer (brand/theme/scene/transition/
- * asset resolution and the brand-audio default all live in `buildComposition`).
- */
-export function resolveTemplateComposition(
+/** Stage 7 (public pure helper) — merge precedence + assemble a normal `CompositionSchema`. */
+export const assembleTemplateSchema = (
   spec: TemplateCompositionBase,
-  templates: TemplateResolver = templateRegistry,
-  assets?: AssetRegistry,
-  brands?: BrandRegistry,
-): CompositionSchemaBase {
-  // 1–2. Resolve the template by name (clear error for an unknown template).
-  validateSpec(spec);
-  if (!templates.has(spec.template)) {
-    throw new Error(
-      `buildFromTemplate: no template registered as "${spec.template}". Registered: ${templates.keys().join(", ") || "(none)"}.`,
-    );
-  }
-  const template = templates.require(spec.template);
-
-  // 3. Resolve the requested canvas + build the TemplateContext (canvas dims only — the builder
-  //    independently resolves the video config for assembly; no duration logic is duplicated).
-  const videoInput: VideoConfigInput = {
-    format: spec.format ?? template.format,
-    width: spec.width,
-    height: spec.height,
-    fps: spec.fps,
-    duration: spec.duration,
-    durationInFrames: spec.durationInFrames,
-  };
-  const video = resolveVideoConfig(videoInput);
-  const ctx: TemplateContext = {
-    width: video.width,
-    height: video.height,
-    fps: video.fps,
-    brand: typeof spec.brand === "string" ? spec.brand : undefined,
-  };
-
-  // 4. Evaluate static capabilities before build.
-  checkCapabilitiesBeforeBuild(template, spec);
-  // 5. Resolve params: schema-based validation first (defaults + coercion + validation), then the
-  //    imperative validate() hook. Templates without a schema keep the legacy raw-params path.
-  const params = template.parameters
-    ? (resolveParametersOrThrow(template.parameters, spec.params as Record<string, ParameterValue>, {
-        assets,
-        brands,
-        format: videoInput.format,
-      }) as unknown as typeof spec.params)
-    : spec.params;
-  template.validate?.(params);
-  // 6. Call the pure build (configuration only).
-  const output = template.build(params, ctx);
-  // 7. Validate the output shape + scene-count bounds.
-  validateOutput(template, output);
-
-  // 8–9. Apply precedence and produce a normal CompositionSchema.
+  videoInput: VideoConfigInput,
+  output: TemplateOutput,
+): CompositionSchemaBase => {
   const defaults = resolveTemplateDefaults(spec, output);
   return {
     ...videoInput,
@@ -209,6 +247,35 @@ export function resolveTemplateComposition(
     timing: defaults.timing,
     assets: output.assets,
   };
+};
+
+/**
+ * Pure producer (convenience): compose the public stage helpers into a normal `CompositionSchema`.
+ * Behaviour is unchanged from prior phases — it validates + runs the pure `build` and applies the
+ * caller-vs-template precedence, with NO rendering. `buildFromTemplate` = this + `buildComposition`;
+ * the Execution Engine drives the same helpers stage-by-stage (ADR-007). Uses the throwing parameter
+ * form; the Execution Engine uses the Result form (`resolveTemplateParameters`).
+ */
+export function resolveTemplateComposition(
+  spec: TemplateCompositionBase,
+  templates: TemplateResolver = templateRegistry,
+  assets?: AssetRegistry,
+  brands?: BrandRegistry,
+): CompositionSchemaBase {
+  const template = resolveTemplate(spec, templates);
+  const { videoInput, ctx } = resolveTemplateCanvas(spec, template);
+  checkTemplateCapabilities(template, spec);
+  const params = template.parameters
+    ? (resolveParametersOrThrow(template.parameters, spec.params as Record<string, ParameterValue>, {
+        assets,
+        brands,
+        format: videoInput.format,
+      }) as unknown as typeof spec.params)
+    : spec.params;
+  template.validate?.(params);
+  const output = runTemplate(template, params, ctx);
+  validateTemplateOutput(template, output);
+  return assembleTemplateSchema(spec, videoInput, output);
 }
 
 // Typed: `template` name + `params` inferred from the concrete template registry.
