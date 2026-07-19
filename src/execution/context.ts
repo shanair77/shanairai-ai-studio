@@ -9,10 +9,11 @@
 import { sceneRegistry, transitionRegistry, assetRegistry, brandRegistry } from "../composition";
 import { parameterTypeRegistry, validatorRegistry } from "../parameters";
 import { templateRegistry } from "../templates";
-import { type ExecutionContext, type ExecutionEnvironment, type ExecutionRegistries } from "./types";
+import { type FrameworkRegistries } from "../contracts";
+import { type ExecutionContext, type ExecutionEnvironment } from "./types";
 
 /** Fill any omitted registry with its framework default. */
-export const resolveRegistries = (registries?: Partial<ExecutionRegistries>): ExecutionRegistries => ({
+export const resolveRegistries = (registries?: Partial<FrameworkRegistries>): FrameworkRegistries => ({
   templates: registries?.templates ?? templateRegistry,
   scenes: registries?.scenes ?? sceneRegistry,
   transitions: registries?.transitions ?? transitionRegistry,
@@ -25,7 +26,7 @@ export const resolveRegistries = (registries?: Partial<ExecutionRegistries>): Ex
 /** Build the frozen execution context (top-level freeze; registries stay live). */
 export const createExecutionContext = (
   environment: ExecutionEnvironment,
-  registries: ExecutionRegistries,
+  registries: FrameworkRegistries,
 ): ExecutionContext => {
   const canvas = Object.freeze({ ...environment.canvas });
   const env = Object.freeze({ ...environment, canvas });

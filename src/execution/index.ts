@@ -25,7 +25,8 @@ export type {
   ExecutionSpan,
   ExecutionReport,
   ExecutionEnvironment,
-  ExecutionRegistries,
   ExecutionContext,
   ExecutionResult,
 } from "./types";
+// The registries bundle is now the canonical `FrameworkRegistries` from `contracts`.
+export type { FrameworkRegistries } from "../contracts";

@@ -1,21 +1,28 @@
 /**
- * execution/types — the Lifecycle & Execution Engine's contracts (ADR-007).
+ * execution/types — the Lifecycle & Execution Engine's types (ADR-007, refactored onto contracts).
  *
  * The execution layer ORCHESTRATES the existing engines and produces diagnostics. It owns no
  * validation rules, defaults, precedence, rendering, or template/composition/parameter semantics.
- * It imports no React. The request/diagnostics contracts are React-free; the terminal
- * `BuiltComposition` is an opaque runtime artifact (§4.8).
+ * It imports no React. The shared protocol (`ExecutionRequest`, `FrameworkRegistries`, the
+ * `Diagnostic`/`Report` generics) lives in `contracts`; this module only parameterizes those
+ * generics with the execution stage vocabulary and adds execution-specific infrastructure.
  */
 
-import { type DiagnosticValue } from "../errors";
 import { type FormatName } from "../config/Layout";
-import { type BuiltComposition, type CompositionSchemaBase, type SceneResolver, type AssetRegistry, type BrandRegistry } from "../composition";
-import { type TransitionResolver } from "../transitions";
-import { type DeepReadonly, type ParameterTypeResolver, type ValidatorResolver } from "../parameters";
-import { type TemplateCompositionBase, type TemplateResolver } from "../templates";
+import { type BuiltComposition, type CompositionSchemaBase } from "../composition";
+import { type DeepReadonly } from "../parameters";
+import {
+  type Diagnostic,
+  type ExecutionRequest as ContractExecutionRequest,
+  type FrameworkRegistries,
+  type Issue,
+  type Report,
+  type Span,
+  type Warning,
+} from "../contracts";
 
-/** The execution request — template-driven ONLY in MVP. JSON-safe by convention, not enforced. */
-export type ExecutionRequest = TemplateCompositionBase;
+/** Re-export the canonical request contract under the execution name (single definition in contracts). */
+export type ExecutionRequest = ContractExecutionRequest;
 
 /** The ordered, real pipeline stages (ADR-007 §4.3). */
 export type ExecutionStage =
@@ -29,50 +36,20 @@ export type ExecutionStage =
   | "build-composition"
   | "complete";
 
-/** A diagnostic — path-addressed, stage-tagged, JSON-safe (`expected`/`actual` are `DiagnosticValue`). */
-export type ExecutionDiagnostic = {
-  stage: ExecutionStage;
-  code: string;
-  message: string;
-  path?: string;
-  expected?: DiagnosticValue;
-  actual?: DiagnosticValue;
-};
-export type ExecutionIssue = ExecutionDiagnostic & { severity: "error" };
-export type ExecutionWarning = ExecutionDiagnostic & { severity: "warning" };
-
-/** A trace span — describes WORK, not warnings. Chronological. */
-export type ExecutionSpan = {
-  stage: ExecutionStage;
-  status: "ok" | "failed" | "skipped";
-  note?: string;
-  counts?: Record<string, number>;
-};
+// Concrete diagnostics = the shared `contracts` generics parameterized by the execution stage.
+export type ExecutionDiagnostic = Diagnostic<ExecutionStage>;
+export type ExecutionIssue = Issue<ExecutionStage>;
+export type ExecutionWarning = Warning<ExecutionStage>;
+export type ExecutionSpan = Span<ExecutionStage>;
 
 /** The append-only, deterministic, JSON-safe diagnostic bundle. */
-export type ExecutionReport = {
-  executionId: string;
-  trace: ExecutionSpan[];
-  issues: ExecutionIssue[];
-  warnings: ExecutionWarning[];
-};
+export type ExecutionReport = Report<ExecutionStage> & { executionId: string };
 
 /** Infrastructure only — environment (ADR-007 §4.5). No feature state accumulates here. */
 export type ExecutionEnvironment = {
   executionId: string;
   canvas: { format?: FormatName; width: number; height: number; fps: number };
   locale?: string; // reserved
-};
-
-/** Infrastructure only — the resolvers the pipeline calls. */
-export type ExecutionRegistries = {
-  templates: TemplateResolver;
-  scenes: SceneResolver;
-  transitions: TransitionResolver;
-  assets: AssetRegistry;
-  brands: BrandRegistry;
-  parameterTypes?: ParameterTypeResolver;
-  validators?: ValidatorResolver;
 };
 
 /**
@@ -83,12 +60,12 @@ export type ExecutionRegistries = {
  */
 export type ExecutionContext = {
   readonly environment: DeepReadonly<ExecutionEnvironment>;
-  readonly registries: Readonly<ExecutionRegistries>;
+  readonly registries: Readonly<FrameworkRegistries>;
 };
 
 /** Caller-facing options: partial registries + a deterministic, overridable execution id. Canvas is derived. */
 export type ExecutionInput = {
-  registries?: Partial<ExecutionRegistries>;
+  registries?: Partial<FrameworkRegistries>;
   executionId?: string;
   locale?: string; // reserved
 };

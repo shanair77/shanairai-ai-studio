@@ -10,7 +10,7 @@
  * build-path convenience. Resolved params are deeply frozen — `build()` must not mutate them.
  */
 
-import { err, ok, type Result } from "./Result";
+import { err, ok, type Result } from "../errors";
 import { parameterTypeRegistry } from "./ParameterTypeRegistry";
 import { validatorRegistry } from "./validators";
 import {

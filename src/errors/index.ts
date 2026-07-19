@@ -9,3 +9,4 @@
 
 export { DomainError, type DiagnosticValue, type DomainErrorInit } from "./DomainError";
 export { sanitize } from "./sanitize";
+export { type Result, ok, err } from "./Result";

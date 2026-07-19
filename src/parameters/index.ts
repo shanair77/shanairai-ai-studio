@@ -37,8 +37,8 @@ export type {
   ValidatorResolver,
 } from "./types";
 
-export type { Result } from "./Result";
-export { ok, err } from "./Result";
+// `Result` now lives in `errors` (the canonical, shared primitive); re-exported here for back-compat.
+export { type Result, ok, err } from "../errors";
 
 export { createParameterTypeDefinition } from "./definition";
 // `parameterTypeRegistry = createRegistry(builtinParameterTypes)` — the built-in vocabulary is the
