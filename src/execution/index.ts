@@ -12,7 +12,7 @@
  */
 
 // Public surface = the two entry points + the result/report/context TYPES. The context/report
-// construction helpers (createExecutionContext, resolveRegistries, deriveExecutionId, createReport,
+// construction helpers (createExecutionContext, deriveExecutionId, createReport,
 // …) are execution-internal and deliberately NOT re-exported.
 export { execute, executeOrThrow } from "./execute";
 export type {

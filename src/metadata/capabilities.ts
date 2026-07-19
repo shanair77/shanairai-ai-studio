@@ -8,13 +8,12 @@
 
 import { type AssetCategory } from "../assets";
 import { type FormatName } from "../config/Layout";
-import { type FrameworkRegistries } from "../contracts";
-import { fill } from "./registries";
+import { type FrameworkRegistries, resolveRegistries } from "../contracts";
 import { type CapabilityReport } from "./types";
 
 /** Aggregate declared capabilities across families. */
 export const getCapabilities = (registries?: Partial<FrameworkRegistries>): CapabilityReport => {
-  const r = fill(registries);
+  const r = resolveRegistries(registries);
 
   const formats = new Set<FormatName>();
   const templatesRequiringBrand: string[] = [];

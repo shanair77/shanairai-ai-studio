@@ -6,7 +6,8 @@ import { transitionRegistry } from "../../transitions";
 import { type ValidatorMap } from "../../parameters";
 import { buildFromTemplate, createTemplateDefinition } from "../../templates";
 import { execute, executeOrThrow } from "..";
-import { createExecutionContext, resolveRegistries } from "../context";
+import { resolveRegistries } from "../../contracts";
+import { createExecutionContext } from "../context";
 import type { ExecutionRequest, ExecutionSpan } from "../types";
 
 // ── Fixtures (test-only) ───────────────────────────────────────────────────────────────────────

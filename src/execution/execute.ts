@@ -20,7 +20,8 @@ import {
   runTemplate,
   validateTemplateOutput,
 } from "../templates";
-import { createExecutionContext, deriveExecutionId, resolveRegistries } from "./context";
+import { resolveRegistries } from "../contracts";
+import { createExecutionContext, deriveExecutionId } from "./context";
 import { createReport, type DiagnosticBody } from "./report";
 import { type ExecutionInput, type ExecutionRequest, type ExecutionResult, type ExecutionStage } from "./types";
 

@@ -14,8 +14,7 @@ import { assetRegistry, type AssetSource } from "../assets";
 import { brandRegistry } from "../brand";
 import { templateRegistry, type TemplateResolver } from "../templates";
 import { parameterTypeRegistry, validatorRegistry, type ParameterTypeResolver, type ValidatorResolver } from "../parameters";
-import { type FrameworkRegistries, type RegistryFamily } from "../contracts";
-import { fill } from "./registries";
+import { type FrameworkRegistries, type RegistryFamily, resolveRegistries } from "../contracts";
 import { getCapabilities } from "./capabilities";
 import { SCHEMA_VERSION } from "./version";
 import {
@@ -116,7 +115,7 @@ export const describeValidators = (validators: ValidatorResolver = validatorRegi
   sortedKeys(validators).map((key) => ({ ...identity("validators", key) }));
 
 export const describeRegistries = (registries?: Partial<FrameworkRegistries>): RegistryDescriptor[] => {
-  const r = fill(registries);
+  const r = resolveRegistries(registries);
   const entries: [RegistryFamily, { keys(): string[] }][] = [
     ["scenes", r.scenes],
     ["transitions", r.transitions],
@@ -137,7 +136,7 @@ export const describeFramework = (
   registries?: Partial<FrameworkRegistries>,
   opts?: { frameworkVersion?: string },
 ): FrameworkDescriptor => {
-  const r = fill(registries);
+  const r = resolveRegistries(registries);
   const d: FrameworkDescriptor = {
     schemaVersion: SCHEMA_VERSION,
     registries: describeRegistries(r),
