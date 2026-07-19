@@ -80,7 +80,15 @@ type DescriptorIdentity = { key: string; qualifiedName: string; name?: string };
 
 type TemplateDescriptor      = DescriptorIdentity & { format?: FormatName; capabilities?: TemplateCapabilities; parameters?: ParameterSchema; meta?: TemplateMetadata };
 type BrandDescriptor         = DescriptorIdentity & { mode?: ThemeMode; hasTheme: boolean; fontFamilies: string[]; logos?: { primary?: string; alternate?: string; watermark?: string }; kitAssets?: string[]; meta?: BrandMeta };
-type AssetDescriptor         = DescriptorIdentity & { category: AssetCategory; roles?: AssetRole[]; metadata?: AssetMetadata };
+type AssetDescriptor         = DescriptorIdentity & { category: AssetCategory; roles?: AssetRole[]; metadata?: AssetMetadata; source?: AssetSourceSummary };
+
+// Accepted refinement — the DECLARED source, reported exactly as authored. Metadata never resolves,
+// loads, validates, imports, hashes, or transforms it (no fs/CDN resolution, no signed URLs, no
+// probing). A bare string source is classified purely syntactically (http(s):// → url, else file).
+type AssetSourceSummary =
+  | { kind: "file"; path: string }   // project-relative path
+  | { kind: "url"; url: string }
+  | { kind: "inline" };              // reserved source kinds (gradient/inline markup)
 type TransitionDescriptor    = DescriptorIdentity & { capabilities: TransitionCapabilities };
 type SceneDescriptor         = DescriptorIdentity & { defaultDuration: number; opaque: boolean };
 type ParameterTypeDescriptor = DescriptorIdentity & { ui?: ParameterUIHints; capabilities?: ParameterCapabilities };
