@@ -24,6 +24,45 @@ typed registries into a deterministic render artifact. Mapped to a compiler:
 Everything up to the terminal `BuiltComposition` is **serializable and React-free**; React is
 confined to the final artifact.
 
+## Framework boundary and foundation completion
+
+**The framework foundation is complete.** [ADR-001](./adr/ADR-001-typed-scene-registration.md) through
+[ADR-009](./adr/ADR-009-metadata-engine.md), implemented through Phase 27, define the **complete
+compiler framework**. No further foundational subsystem is required.
+
+**The framework ends at `BuiltComposition`.** That is its terminal artifact. **Remotion is the native
+host/runtime** — not a pluggable backend — so rendering, registration, and delivery are *host
+integration*, not compiler architecture.
+
+**Framework code owns exactly:** `contracts`, `metadata`, `requests` (Request Processing),
+`execution`, `templates`, `parameters`, `composition`, `scenes`, `transitions`, `assets`, `brand`,
+`registry`, `errors` (plus the presentation primitives they build on: `config`, `format`,
+`components`, `animations`).
+
+**Everything above `BuiltComposition` is a client, integration, or ecosystem layer — not compiler
+foundation.** Clients live under `src/clients/` (e.g. `src/clients/synthesis/`, `src/clients/cli/`,
+`src/clients/rest/`, `src/clients/studio/`).
+
+The test that distinguishes them: **a foundational layer encodes knowledge only the framework can
+have** (how to project each Definition family, the stage pipeline, the envelope grammar). A **client
+encodes none** — it composes the public API and would work unchanged against a different compiler
+exposing the same surface. By that test, Request Synthesis
+([ADR-010](./adr/)) is the **first client**, not a subsystem: it owns intent-to-request search,
+delegates judgment to a replaceable `Proposer`, and contains no framework knowledge.
+
+```
+┌─ CLIENTS — own intent + judgment; zero framework knowledge ──┐
+│  synthesis · cli · rest · studio                             │
+└──────────────────────────┬───────────────────────────────────┘
+                           │  public API only (one direction)
+┌──────────────────────────▼───────────────────────────────────┐
+│ FRAMEWORK (complete) — terminal artifact: BuiltComposition   │
+│   metadata → requests → execution                            │
+│   contracts · templates · parameters · brand · assets ·      │
+│   transitions · scenes · composition · registry · errors     │
+└──────────────────────────────────────────────────────────────┘
+```
+
 ## The layer stack (low → high)
 
 A layer may import only from layers **below** it. `errors`, `registry`, and `config` depend on
@@ -137,6 +176,12 @@ See [REGISTRIES.md](./REGISTRIES.md) for the family recipe and [API.md](./API.md
 7. **Reserve, don't build.** Capabilities and extension points are declared where they clarify intent,
    but inert surface is deferred until a real consumer exists (lifecycle hooks, plugin runtime,
    dependency graphs, consumer-specific projections).
+8. **Clients depend on the framework; never the reverse.** No framework layer may import from
+   `src/clients/`. Clients consume only the framework's **public APIs** (`describeFramework` and the
+   `describe*` family, `processRequest`, `execute`, and their public reports/types) — never registry
+   internals, erased resolvers, or implementation details. This is the same downward-only rule
+   applied across the framework/client boundary, and it will be enforced by a dependency-direction
+   test alongside the existing ones.
 
 ## Why direction never points upward
 
