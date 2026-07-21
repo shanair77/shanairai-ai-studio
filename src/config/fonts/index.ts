@@ -1,34 +1,24 @@
 /**
- * config/fonts — deterministic, provider-based font loading (runs once, at the entry).
+ * config/fonts — deterministic, provider-based font loading.
  *
- * Selecting a provider is the ONLY place a font source is named. Importing this module
- * kicks off loading of every manifest face exactly once; @remotion/google-fonts (via the
- * provider) opens delayRender handles so the renderer blocks until the faces are ready —
- * making rendering deterministic and offline (the fonts are vendored, not fetched at
- * render). The application entry imports this module for its side effect; no visual layer
- * (components / scenes / composition) imports it.
+ * Selecting a provider is the ONLY place a font source is named. This module is PURE on
+ * import: it defines the loading capability but never activates it, so any layer may import
+ * `loadFonts` without performing I/O. The activation lives in `./bootstrap`, which the
+ * application entry imports for its side effect (invariant #9).
  *
  * To swap sources — e.g. self-hosted brand fonts — implement a `FontProvider` and assign it
  * to `provider` below. Nothing else changes.
  */
 
 import { GoogleFontProvider } from "./GoogleFontProvider";
-import { fontManifest } from "./manifest";
 import { type FontFace, type FontProvider } from "./types";
 
 /** The active font provider. */
 const provider: FontProvider = GoogleFontProvider;
 
-/** Loading of every base manifest face, started once on import. */
-export const fontsReady: Promise<void> = provider.load(fontManifest);
-
-/** Await all manifest fonts (for consumers/tests that must block on readiness). */
-export const waitForFonts = (): Promise<void> => fontsReady;
-
 // Faces already requested (base + any brand manifest), so repeat requests are no-ops.
 const requested = new Set<string>();
 const faceKey = (f: FontFace): string => `${f.family}|${[...f.weights].sort().join(",")}|${[...f.styles].sort().join(",")}`;
-fontManifest.forEach((f) => requested.add(faceKey(f)));
 
 /**
  * Load additional font faces on demand (e.g. a brand's manifest), deduplicated against

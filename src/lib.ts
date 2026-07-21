@@ -5,11 +5,12 @@
  * load fonts, mount compositions, touch the DOM, or mutate global state. The application entry
  * (`src/index.ts`, which calls `registerRoot`) is deliberately NOT the package entry.
  *
- * Scope is intentionally MINIMAL for this phase — only the modules that are provably free of
- * import-time side effects: `errors`, `registry`, and the Request Processing front-end. The full
- * public surface (execution, metadata, templates, parameters, composition) is Phase 29 work; those
- * layers currently reach `config/fonts` transitively, whose module scope starts font loading on
- * import, so exposing them here would break the entry-safety guarantee above.
+ * Scope is intentionally MINIMAL for this phase — `errors`, `registry`, and the Request Processing
+ * front-end. The full public surface (execution, metadata, templates, parameters, composition) is
+ * Phase 29 work. Those layers are no longer blocked from export: the font side effect now lives in
+ * `config/fonts/bootstrap`, which only the application entry imports (invariant #9), so no framework
+ * layer performs I/O on import. Widening this entry is a deliberate Phase 29 decision, not an
+ * automatic consequence of that fix.
  */
 
 // ── errors: DomainError + JSON-safe diagnostics + Result (zero dependencies) ──────────────────

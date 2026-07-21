@@ -182,6 +182,13 @@ See [REGISTRIES.md](./REGISTRIES.md) for the family recipe and [API.md](./API.md
    internals, erased resolvers, or implementation details. This is the same downward-only rule
    applied across the framework/client boundary, and it will be enforced by a dependency-direction
    test alongside the existing ones.
+9. **Side effects live at the entry.** Framework modules are pure on import. Any module whose
+   evaluation performs work must be named `bootstrap.ts`, must be listed in
+   `package.json#sideEffects`, and may be imported only by the application entry (`src/index.ts`).
+   Every other module — including every barrel — must be safe to import without performing work, so
+   importing the compiler never performs I/O. This is a structural constraint rather than behavioural
+   detection: whatever side effect is added later, it must live in a `bootstrap` module no framework
+   layer may reach. Enforced by `src/config/fonts/__tests__/import-safety.test.ts`.
 
 ## Why direction never points upward
 

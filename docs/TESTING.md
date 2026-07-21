@@ -73,6 +73,15 @@ For determinism checks, render the same frame twice and `md5` the PNGs — ident
 deterministic. A render-context harness (`document.fonts.check`, snapshot diffs) is a roadmap
 item.
 
+**"Demo byte-identical" is a *relative* claim, never a pinned constant.** The ADRs assert that a
+change leaves the demo byte-identical; that is verified by rendering *before* and *after* the change
+on the **same machine with identical flags** and comparing hashes — e.g. stash the change,
+re-render, compare. Do **not** record an absolute hash as a canonical baseline: output bytes vary
+with render flags (`--scale`, codec, frame range), ffmpeg build, and OS, so a pinned value goes
+stale silently and reads as a regression when nothing regressed. If a baseline hash must be quoted
+in a report, quote the exact command and machine alongside it, and treat it as evidence for that
+comparison only — not as a repository invariant.
+
 ## Configuration
 
 - `vitest.config.ts` — `environment: "node"`, `include: src/**/__tests__/**/*.test.ts`.
