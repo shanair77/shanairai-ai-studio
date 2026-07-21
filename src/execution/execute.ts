@@ -11,6 +11,7 @@
 import { DomainError, sanitize } from "../errors";
 import { buildComposition, type BuiltComposition } from "../composition";
 import { type ParameterContext } from "../parameters";
+import { validateParameterSchema } from "../parameters/schema";
 import {
   assembleTemplateSchema,
   checkTemplateCapabilities,
@@ -78,7 +79,19 @@ export function execute(request: ExecutionRequest, input: ExecutionInput = {}): 
     registries,
   );
 
-  // Stage 2 — check-template-capabilities
+  // The parameter context is built once here and reused by Stage 2 (schema well-formedness) and
+  // Stage 3 (caller-value resolution), so both check against the SAME resolved registries.
+  const paramCtx: ParameterContext = {
+    assets: context.registries.assets,
+    brands: context.registries.brands,
+    format: context.environment.canvas.format,
+    types: context.registries.parameterTypes,
+    validators: context.registries.validators,
+  };
+
+  // Stage 2 — check-template-capabilities (capabilities + schema well-formedness). A default that
+  // violates its own parameter is a TEMPLATE defect, caught here before any caller value is resolved,
+  // so it is attributed to the template rather than the caller (ADR-006 §13.1).
   try {
     checkTemplateCapabilities(template, request);
   } catch (error) {
@@ -86,20 +99,21 @@ export function execute(request: ExecutionRequest, input: ExecutionInput = {}): 
     report.failStage("check-template-capabilities");
     return { ok: false, report: report.build() };
   }
+  const schemaIssues = validateParameterSchema(template.parameters, paramCtx);
+  if (schemaIssues.length > 0) {
+    report.issueParams("check-template-capabilities", schemaIssues);
+    report.failStage("check-template-capabilities");
+    return { ok: false, report: report.build() };
+  }
   report.ok("check-template-capabilities");
 
-  // Stage 3 — resolve-parameters (skipped when the template declares no schema)
+  // Stage 3 — resolve-parameters (skipped when the template declares no schema). Only CALLER-supplied
+  // values are validated here; declared defaults were already validated at Stage 2, so no default is
+  // re-validated on this path.
   let params = request.params;
   if (!template.parameters) {
     report.skipped("resolve-parameters", "no schema");
   } else {
-    const paramCtx: ParameterContext = {
-      assets: context.registries.assets,
-      brands: context.registries.brands,
-      format: context.environment.canvas.format,
-      types: context.registries.parameterTypes,
-      validators: context.registries.validators,
-    };
     const resolved = resolveTemplateParameters(template, request.params, paramCtx);
     if (resolved.warnings.length > 0) report.warnParams("resolve-parameters", resolved.warnings);
     if (!resolved.ok) {
