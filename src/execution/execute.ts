@@ -19,11 +19,19 @@ import {
   resolveTemplateParameters,
   runTemplate,
   validateTemplateOutput,
+  type TemplateCompositionFor,
+  type TemplateMap,
 } from "../templates";
 import { resolveRegistries } from "../contracts";
 import { createExecutionContext, deriveExecutionId } from "./context";
 import { createReport, type DiagnosticBody } from "./report";
-import { type ExecutionInput, type ExecutionRequest, type ExecutionResult, type ExecutionStage } from "./types";
+import {
+  type ExecutionInput,
+  type ExecutionRequest,
+  type ExecutionResult,
+  type ExecutionStage,
+  type TypedExecutionInput,
+} from "./types";
 
 /**
  * Classify a thrown value at a stage. `DomainError` → its own code. A throw at a USER-code stage
@@ -126,12 +134,15 @@ export function execute(request: ExecutionRequest, input: ExecutionInput = {}): 
     report.failStage("run-template");
     return { ok: false, report: report.build() };
   }
-  report.ok("run-template", undefined, { scenes: output.scenes.length });
+  // No metrics here: `output` is still UNVALIDATED, and reading `output.scenes.length` before
+  // stage 6 crashed `execute()` with a raw TypeError for a malformed template. Counts are
+  // reported by stage 6, once the shape is known to be good.
+  report.ok("run-template");
 
   // Stage 6 — validate-template-output
   try {
     validateTemplateOutput(template, output);
-    report.ok("validate-template-output");
+    report.ok("validate-template-output", undefined, { scenes: output.scenes.length });
   } catch (error) {
     report.issue("validate-template-output", classify(error, "validate-template-output"));
     report.failStage("validate-template-output");
@@ -158,7 +169,10 @@ export function execute(request: ExecutionRequest, input: ExecutionInput = {}): 
   return { ok: true, composition, schema, report: report.build() };
 }
 
-/** Throwing convenience for simple callers (mirrors `buildFromTemplate`). */
+/**
+ * Throwing convenience for simple callers — a façade over `execute`, NOT a second orchestrator.
+ * All sequencing lives in `execute`; this only converts a failed report into an exception.
+ */
 export function executeOrThrow(request: ExecutionRequest, input: ExecutionInput = {}): BuiltComposition {
   const result = execute(request, input);
   if (!result.ok) {
@@ -168,4 +182,32 @@ export function executeOrThrow(request: ExecutionRequest, input: ExecutionInput 
     throw new Error(`Execution failed:\n${detail}`);
   }
   return result.composition;
+}
+
+// ── Typed entry points ───────────────────────────────────────────────────────────────────────
+/**
+ * `executeTyped` / `executeTypedOrThrow` are the TYPED views of the two entry points above — the
+ * compile-time inference that previously lived on `buildFromTemplate` (ADR-005 §4.8).
+ *
+ * Supplying a concrete `Registry<M>` as `input.registries.templates` infers `M`, so the request's
+ * `template` name and `params` are checked against that registry. They are declared as separate
+ * functions rather than overloads of `execute` deliberately: an erased overload
+ * (`request: ExecutionRequest`) structurally accepts any `{ template: string; params }`, so a
+ * mismatched call would silently fall through to it instead of failing to compile. With no erased
+ * fallback in scope, a bad template name or param shape is a compile error.
+ *
+ * They add NO sequencing — both delegate straight to the canonical orchestrator.
+ */
+export function executeTyped<M extends TemplateMap>(
+  request: TemplateCompositionFor<M>,
+  input: TypedExecutionInput<M>,
+): ExecutionResult {
+  return execute(request, input);
+}
+
+export function executeTypedOrThrow<M extends TemplateMap>(
+  request: TemplateCompositionFor<M>,
+  input: TypedExecutionInput<M>,
+): BuiltComposition {
+  return executeOrThrow(request, input);
 }

@@ -4,8 +4,8 @@
  * A `TemplateDefinition<P>` is a template pack: a PURE function from typed `params` +
  * `TemplateContext` to a `TemplateOutput` (a `CompositionSchema` fragment — never React), plus a
  * machine-readable `TemplateCapabilities` descriptor and human-facing `TemplateMetadata`. A
- * `TemplateComposition` selects a template by name and supplies its params; `buildFromTemplate`
- * resolves + validates + merges it and delegates to the existing `buildComposition`.
+ * `TemplateComposition` selects a template by name and supplies its params; `execute()` resolves +
+ * validates + merges it and delegates to the existing `buildComposition`.
  *
  * Capabilities and metadata are deliberately separate: capabilities are read (and enforced)
  * BEFORE build and drive validation; metadata is descriptive prose that never affects rendering.
@@ -91,7 +91,7 @@ export type TemplateDefinition<P extends TemplateParams = TemplateParams> = {
   /** Machine-readable capabilities (checked before/after `build`). */
   capabilities?: TemplateCapabilities;
   /**
-   * Optional declarative parameter schema (ADR-006). When present, `buildFromTemplate` resolves +
+   * Optional declarative parameter schema (ADR-006). When present, `execute()` resolves +
    * validates the caller's params against it (applying defaults) BEFORE `build` runs. Independent
    * of `P`, which stays the author's static type. Additive — templates without a schema are unchanged.
    */
@@ -149,7 +149,8 @@ export type TemplateComposition<P extends TemplateParams = TemplateParams> = Vid
 /**
  * A template composition discriminated over a template map `M`: the `template` name selects the
  * entry and `params` is typed to exactly that template's params. Powers the typed
- * `buildFromTemplate(spec, templates)` overload (mirrors `SceneConfigFor` / `CompositionSchemaFor`).
+ * `execute(request, { registries: { templates } })` overload (mirrors `SceneConfigFor` /
+ * `CompositionSchemaFor`).
  */
 export type TemplateCompositionFor<M extends TemplateMap> = VideoConfigInput & {
   id: string;

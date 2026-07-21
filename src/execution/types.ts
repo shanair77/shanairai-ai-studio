@@ -11,6 +11,8 @@
 import { type FormatName } from "../config/Layout";
 import { type BuiltComposition, type CompositionSchemaBase } from "../composition";
 import { type DeepReadonly } from "../parameters";
+import { type Registry } from "../registry";
+import { type TemplateMap } from "../templates";
 import {
   type Diagnostic,
   type ExecutionRequest as ContractExecutionRequest,
@@ -24,17 +26,11 @@ import {
 /** Re-export the canonical request contract under the execution name (single definition in contracts). */
 export type ExecutionRequest = ContractExecutionRequest;
 
-/** The ordered, real pipeline stages (ADR-007 §4.3). */
-export type ExecutionStage =
-  | "resolve-template"
-  | "check-template-capabilities"
-  | "resolve-parameters"
-  | "validate-template-params"
-  | "run-template"
-  | "validate-template-output"
-  | "resolve-template-defaults"
-  | "build-composition"
-  | "complete";
+// The stage vocabulary is DERIVED from the canonical ordered list in `./stages` — one declaration,
+// so the union and the order can never drift apart. Re-exported so the public import path is
+// unchanged for consumers (`ExecutionStage` still comes from `execution`).
+export { type ExecutionStage } from "./stages";
+import { type ExecutionStage } from "./stages";
 
 // Concrete diagnostics = the shared `contracts` generics parameterized by the execution stage.
 export type ExecutionDiagnostic = Diagnostic<ExecutionStage>;
@@ -68,6 +64,18 @@ export type ExecutionInput = {
   registries?: Partial<FrameworkRegistries>;
   executionId?: string;
   locale?: string; // reserved
+};
+
+/**
+ * The typed form of `ExecutionInput` (ADR-005 §4.8 inference, moved onto the canonical entry point).
+ *
+ * Supplying a concrete `Registry<M>` for `templates` lets `execute`/`executeOrThrow` infer `M`, so
+ * the request's `template` name and `params` are checked against that registry at compile time.
+ * `M` is keyed off this one field (rather than intersecting `Partial<FrameworkRegistries>` inline,
+ * which weakens inference in that position); every other family stays optional and erased.
+ */
+export type TypedExecutionInput<M extends TemplateMap> = Omit<ExecutionInput, "registries"> & {
+  registries: Partial<Omit<FrameworkRegistries, "templates">> & { templates: Registry<M> };
 };
 
 /** The result — `composition` is opaque; `schema` is config-shaped and NOT guaranteed serializable. */

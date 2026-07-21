@@ -1,12 +1,17 @@
 /**
- * templates/buildFromTemplate — resolve a template composition into a built composition.
+ * templates/stages — the Template Engine's PURE stage helpers.
  *
- * The public entry point of the Template Engine. It resolves a template by name, evaluates its
- * static capabilities, runs the optional `validate` hook, calls the PURE `build` (which returns
- * configuration, never React), validates the output, applies the fixed precedence, and then
- * delegates to the existing `buildComposition` — the single assembly/render pipeline. It owns NO
- * timeline, scene, transition, brand, asset, provider, or duration logic; it only produces a
- * `CompositionSchema` for `buildComposition` to assemble.
+ * This module owns template *semantics* and nothing else: resolve a template by name, evaluate its
+ * static capabilities, resolve parameters, run the PURE `build` (which returns configuration, never
+ * React), validate the output, and assemble a `CompositionSchema`. Each helper is independently
+ * callable and side-effect free.
+ *
+ * It owns NO sequencing. Ordering these stages, classifying their failures, and reporting are the
+ * Execution Engine's job — `execute()` is the single canonical orchestrator (ADR-007 amendment).
+ * `templates` must never import `execution`; the dependency points one way only.
+ *
+ * It also owns NO timeline, scene, transition, brand, asset, provider, or duration logic — it only
+ * produces a `CompositionSchema` for `buildComposition` to assemble.
  *
  * Precedence (ADR-005 §4.5):
  *   transition: scene > caller > template > brand > framework   (scene/brand handled downstream)
@@ -14,22 +19,11 @@
  *   timing:     caller > template > framework
  */
 
-import { type Registry } from "../registry";
-import { type TransitionResolver } from "../transitions";
 import {
   DEFAULT_FORMAT,
-  assetRegistry,
-  brandRegistry,
-  buildComposition,
   resolveVideoConfig,
-  sceneRegistry,
-  transitionRegistry,
-  type AssetRegistry,
-  type BrandRegistry,
-  type BuiltComposition,
   type CompositionSchemaBase,
   type MusicConfig,
-  type SceneResolver,
   type TimingConfig,
   type TransitionConfigBase,
   type VideoConfigInput,
@@ -38,7 +32,6 @@ import { type FormatName } from "../config/Layout";
 import { DomainError } from "../errors";
 import {
   resolveParameters,
-  resolveParametersOrThrow,
   validateParameters,
   type ParameterContext,
   type ParameterIssue,
@@ -47,10 +40,8 @@ import {
 import { templateRegistry } from "./TemplateRegistry";
 import {
   type TemplateCompositionBase,
-  type TemplateCompositionFor,
   type TemplateContext,
   type TemplateDefinition,
-  type TemplateMap,
   type TemplateOutput,
   type TemplateParams,
   type TemplateResolver,
@@ -77,7 +68,7 @@ export const resolveTemplate = (
   if (!templates.has(spec.template)) {
     throw new DomainError({
       code: "unknown-template",
-      message: `buildFromTemplate: no template registered as "${spec.template}". Registered: ${templates.keys().join(", ") || "(none)"}.`,
+      message: `no template registered as "${spec.template}". Registered: ${templates.keys().join(", ") || "(none)"}.`,
       path: "template",
       actual: spec.template,
     });
@@ -160,7 +151,7 @@ export const checkTemplateCapabilities = (
 /**
  * Stage 3 (Result form, for the Execution Engine) — resolve + validate the caller's params against
  * the template's schema, applying defaults; returns errors/warnings rather than throwing. A template
- * without a schema passes its raw params through. `buildFromTemplate` uses the throwing form.
+ * without a schema passes its raw params through. This Result form is what `execute()` drives.
  */
 export type TemplateParameterResolution =
   | { ok: true; params: TemplateParams; warnings: ParameterIssue[] }
@@ -249,60 +240,8 @@ export const assembleTemplateSchema = (
   };
 };
 
-/**
- * Pure producer (convenience): compose the public stage helpers into a normal `CompositionSchema`.
- * Behaviour is unchanged from prior phases — it validates + runs the pure `build` and applies the
- * caller-vs-template precedence, with NO rendering. `buildFromTemplate` = this + `buildComposition`;
- * the Execution Engine drives the same helpers stage-by-stage (ADR-007). Uses the throwing parameter
- * form; the Execution Engine uses the Result form (`resolveTemplateParameters`).
- */
-export function resolveTemplateComposition(
-  spec: TemplateCompositionBase,
-  templates: TemplateResolver = templateRegistry,
-  assets?: AssetRegistry,
-  brands?: BrandRegistry,
-): CompositionSchemaBase {
-  const template = resolveTemplate(spec, templates);
-  const { videoInput, ctx } = resolveTemplateCanvas(spec, template);
-  checkTemplateCapabilities(template, spec);
-  const params = template.parameters
-    ? (resolveParametersOrThrow(template.parameters, spec.params as Record<string, ParameterValue>, {
-        assets,
-        brands,
-        format: videoInput.format,
-      }) as unknown as typeof spec.params)
-    : spec.params;
-  template.validate?.(params);
-  const output = runTemplate(template, params, ctx);
-  validateTemplateOutput(template, output);
-  return assembleTemplateSchema(spec, videoInput, output);
-}
-
-// Typed: `template` name + `params` inferred from the concrete template registry.
-export function buildFromTemplate<M extends TemplateMap>(
-  spec: TemplateCompositionFor<M>,
-  templates: Registry<M>,
-): BuiltComposition;
-// Full control: erased registries (requires the scene registry as the 3rd arg, so 2-arg calls
-// resolve to the typed overload above).
-export function buildFromTemplate(
-  spec: TemplateCompositionBase,
-  templates: TemplateResolver,
-  scenes: SceneResolver,
-  transitions?: TransitionResolver,
-  assets?: AssetRegistry,
-  brands?: BrandRegistry,
-): BuiltComposition;
-export function buildFromTemplate(
-  spec: TemplateCompositionBase,
-  templates: TemplateResolver = templateRegistry,
-  scenes: SceneResolver = sceneRegistry,
-  transitions: TransitionResolver = transitionRegistry,
-  assets: AssetRegistry = assetRegistry,
-  brands: BrandRegistry = brandRegistry,
-): BuiltComposition {
-  // Pure producer → the single assembly/render pipeline. buildFromTemplate adds no assembly logic.
-  // assets/brands are forwarded so a parameter schema can validate asset/brand NAME references.
-  const schema = resolveTemplateComposition(spec, templates, assets, brands);
-  return buildComposition(schema, scenes, transitions, assets, brands);
-}
+// NOTE: this module deliberately exposes NO function that sequences the stages above.
+// `execute()` (src/execution) is the single canonical orchestrator; `executeOrThrow` is its
+// throwing façade. A second sequencing path here previously diverged from `execute` — it could not
+// accept custom parameter-type/validator registries and silently fell back to the global ones.
+// Enforced by `src/execution/__tests__/single-orchestrator.test.ts`.

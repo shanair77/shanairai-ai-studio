@@ -4,7 +4,7 @@ import { assetRegistry, buildComposition, sceneRegistry, type MusicConfig } from
 import { brandRegistry } from "../../brand";
 import { transitionRegistry } from "../../transitions";
 import { type ValidatorMap } from "../../parameters";
-import { buildFromTemplate, createTemplateDefinition } from "../../templates";
+import { createTemplateDefinition } from "../../templates";
 import { execute, executeOrThrow } from "..";
 import { resolveRegistries } from "../../contracts";
 import { createExecutionContext } from "../context";
@@ -174,12 +174,19 @@ describe("ExecutionContext immutability (ADR-007 §4.5)", () => {
 });
 
 // ── Parity ───────────────────────────────────────────────────────────────────────────────────
-describe("execute — parity with buildFromTemplate", () => {
-  it("executeOrThrow produces the same BuiltComposition as buildFromTemplate", () => {
+describe("execute — executeOrThrow is a facade, not a second orchestrator", () => {
+  it("executeOrThrow returns exactly the composition execute produced", () => {
     const request = { id: "PAR", template: "withSchema", params: { title: "Hi", subtitle: "there" } } as const;
-    const viaExec = executeOrThrow(request, { registries: { templates } });
-    const viaBuild = buildFromTemplate(request, templates, sceneRegistry, transitionRegistry, assetRegistry, brandRegistry);
-    expect([viaExec.durationInFrames, viaExec.width, viaExec.height, viaExec.fps]).toEqual([viaBuild.durationInFrames, viaBuild.width, viaBuild.height, viaBuild.fps]);
+    const viaThrow = executeOrThrow(request, { registries: { templates } });
+    const viaResult = execute(request, { registries: { templates } });
+    expect(viaResult.ok).toBe(true);
+    if (!viaResult.ok) return;
+    expect([viaThrow.durationInFrames, viaThrow.width, viaThrow.height, viaThrow.fps]).toEqual([
+      viaResult.composition.durationInFrames,
+      viaResult.composition.width,
+      viaResult.composition.height,
+      viaResult.composition.fps,
+    ]);
   });
 
   it("execute(...).schema matches buildComposition's expectation (round-trips through the builder)", () => {

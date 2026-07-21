@@ -9,20 +9,8 @@
 
 import { sanitize, type DiagnosticValue } from "../errors";
 import { type ParameterIssue } from "../parameters";
-import { type ExecutionIssue, type ExecutionReport, type ExecutionSpan, type ExecutionStage, type ExecutionWarning } from "./types";
-
-/** Canonical stage order — used to mark stages skipped after a halt. */
-const STAGES: ExecutionStage[] = [
-  "resolve-template",
-  "check-template-capabilities",
-  "resolve-parameters",
-  "validate-template-params",
-  "run-template",
-  "validate-template-output",
-  "resolve-template-defaults",
-  "build-composition",
-  "complete",
-];
+import { EXECUTION_STAGES, type ExecutionStage } from "./stages";
+import { type ExecutionIssue, type ExecutionReport, type ExecutionSpan, type ExecutionWarning } from "./types";
 
 /** A JSON-safe diagnostic body appended to an issue/warning. */
 export type DiagnosticBody = { code: string; message: string; path?: string; expected?: DiagnosticValue; actual?: DiagnosticValue };
@@ -63,8 +51,10 @@ export const createReport = (executionId: string): ReportBuilder => {
     },
     failStage: (stage) => {
       trace.push({ stage, status: "failed" });
-      const from = STAGES.indexOf(stage);
-      for (let i = from + 1; i < STAGES.length; i += 1) trace.push({ stage: STAGES[i], status: "skipped", note: "halted" });
+      const from = EXECUTION_STAGES.indexOf(stage);
+      for (let i = from + 1; i < EXECUTION_STAGES.length; i += 1) {
+        trace.push({ stage: EXECUTION_STAGES[i], status: "skipped", note: "halted" });
+      }
     },
     issue: (stage, body) => {
       issues.push({

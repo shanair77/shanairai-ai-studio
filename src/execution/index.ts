@@ -1,10 +1,15 @@
 /**
  * execution/ — the Lifecycle & Execution Engine (ADR-007, Phase 23 MVP).
  *
- * A single orchestration IMPLEMENTATION reached by two public entry points: `buildFromTemplate`
- * (throwing, in `templates`) and `execute` (Result-based, here). `execute` sequences the existing
- * engines' public pure helpers through nine real stages and returns an append-only, deterministic,
- * JSON-safe `ExecutionReport`. It owns sequencing/classification/aggregation/reporting only.
+ * `execute` is the SINGLE canonical orchestrator: it sequences the other engines' public pure
+ * helpers through nine real stages and returns an append-only, deterministic, JSON-safe
+ * `ExecutionReport`. `executeOrThrow` is a throwing façade over it — not a second implementation,
+ * and no other layer sequences the stages (enforced by `__tests__/single-orchestrator.test.ts`).
+ * It owns sequencing/classification/aggregation/reporting only.
+ *
+ * The sequencer is deliberately IMPERATIVE (ADR-007 amendment): the stage set is closed and
+ * non-homomorphic, so the ordering is typed heterogeneous data flow rather than a pipeline
+ * description. Stage order/vocabulary live once in `./stages` (internal).
  *
  * Boundaries (ADR-007 §4.4, §4.8): no validation rules, defaults, precedence, rendering, or
  * template/composition/parameter semantics; no React; imports downward on `templates`,
@@ -12,12 +17,13 @@
  */
 
 // Public surface = the two entry points + the result/report/context TYPES. The context/report
-// construction helpers (createExecutionContext, deriveExecutionId, createReport,
-// …) are execution-internal and deliberately NOT re-exported.
-export { execute, executeOrThrow } from "./execute";
+// construction helpers (createExecutionContext, deriveExecutionId, createReport) and the stage
+// list (EXECUTION_STAGES) are execution-internal and deliberately NOT re-exported.
+export { execute, executeOrThrow, executeTyped, executeTypedOrThrow } from "./execute";
 export type {
   ExecutionRequest,
   ExecutionInput,
+  TypedExecutionInput,
   ExecutionStage,
   ExecutionDiagnostic,
   ExecutionIssue,

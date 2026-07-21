@@ -6,7 +6,8 @@ import { buildComposition } from "../../composition";
 import { sceneRegistry } from "../../composition/SceneRegistry";
 import { transitionRegistry } from "../../transitions";
 import { demoConfig } from "../../demo/DemoConfig";
-import { buildFromTemplate, createTemplateDefinition } from "..";
+import { createTemplateDefinition } from "..";
+import { executeOrThrow } from "../../execution";
 import type { ParameterSchema } from "../../parameters";
 import type { TemplateCompositionBase } from "../types";
 
@@ -47,7 +48,9 @@ const both = createTemplateDefinition({
 
 const templates = createRegistry({ withSchema, legacy, both });
 const build = (spec: TemplateCompositionBase) =>
-  buildFromTemplate(spec, templates, sceneRegistry, transitionRegistry, assetRegistry, brandRegistry);
+  executeOrThrow(spec, {
+    registries: { templates, scenes: sceneRegistry, transitions: transitionRegistry, assets: assetRegistry, brands: brandRegistry },
+  });
 
 describe("template parameter integration", () => {
   it("resolves defaults and passes them into build()", () => {
@@ -57,7 +60,8 @@ describe("template parameter integration", () => {
   });
 
   it("rejects invalid params before build()", () => {
-    expect(() => build({ id: "x", template: "withSchema", params: {} })).toThrow(/Parameter validation failed[\s\S]*required/);
+    // Now surfaced through the canonical orchestrator: executeOrThrow formats the failed report.
+    expect(() => build({ id: "x", template: "withSchema", params: {} })).toThrow(/Execution failed[\s\S]*required/);
     expect(() => build({ id: "x", template: "withSchema", params: { title: "Hi", count: 9 } })).toThrow(/max/);
   });
 

@@ -12,22 +12,27 @@ const tsFiles = (dir: string): string[] => {
   return out;
 };
 
+// Runtime source only — test files legitimately import across layers for integration testing
+// (same rationale as the requests-layer dependency test). Production source is additionally
+// guarded by `single-orchestrator.test.ts`.
+const sourceFiles = (dir: string): string[] => tsFiles(dir).filter((f) => !f.includes("__tests__"));
+
 const importsExecution = (file: string): boolean =>
   /\bfrom\s+["'][^"']*\/execution(?:\/[^"']*)?["']/.test(readFileSync(file, "utf8"));
 
 describe("dependency direction (ADR-007 §5)", () => {
   it("templates never imports execution", () => {
-    const offenders = tsFiles("src/templates").filter(importsExecution);
+    const offenders = sourceFiles("src/templates").filter(importsExecution);
     expect(offenders).toEqual([]);
   });
 
   it("composition never imports execution", () => {
-    const offenders = tsFiles("src/composition").filter(importsExecution);
+    const offenders = sourceFiles("src/composition").filter(importsExecution);
     expect(offenders).toEqual([]);
   });
 
   it("parameters, brand, assets, and errors never import execution", () => {
-    const offenders = ["src/parameters", "src/brand", "src/assets", "src/errors"].flatMap(tsFiles).filter(importsExecution);
+    const offenders = ["src/parameters", "src/brand", "src/assets", "src/errors"].flatMap(sourceFiles).filter(importsExecution);
     expect(offenders).toEqual([]);
   });
 });

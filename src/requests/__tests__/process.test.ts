@@ -2,12 +2,7 @@ import { describe, expect, it } from "vitest";
 import { DomainError } from "../../errors";
 import { createRegistry } from "../../registry";
 import { createTemplateDefinition } from "../../templates";
-import { buildFromTemplate } from "../../templates";
 import { executeOrThrow } from "../../execution";
-import { sceneRegistry } from "../../composition/SceneRegistry";
-import { transitionRegistry } from "../../transitions";
-import { assetRegistry } from "../../assets";
-import { brandRegistry } from "../../brand";
 import { processRequest, processRequestOrThrow } from "..";
 import type { MigrationMap, RequestSpan } from "../types";
 
@@ -143,7 +138,9 @@ describe("processRequest — determinism & parity", () => {
     });
     const request = processRequestOrThrow(JSON.stringify({ id: "R", template: "basic", params: { title: "Hi" } }));
     const viaProcess = executeOrThrow(request, { registries: { templates } });
-    const viaBuild = buildFromTemplate({ id: "R", template: "basic", params: { title: "Hi" } }, templates, sceneRegistry, transitionRegistry, assetRegistry, brandRegistry);
-    expect(viaProcess.durationInFrames).toBe(viaBuild.durationInFrames);
+    // A hand-authored request must execute identically to the same request round-tripped through
+    // processRequest — the front-end changes transport syntax only, never semantics.
+    const viaDirect = executeOrThrow({ id: "R", template: "basic", params: { title: "Hi" } }, { registries: { templates } });
+    expect(viaProcess.durationInFrames).toBe(viaDirect.durationInFrames);
   });
 });

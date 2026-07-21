@@ -16,7 +16,7 @@ typed registries into a deterministic render artifact. Mapped to a compiler:
 | source | a `TemplateComposition` (template name + params + overrides) |
 | lexer / parser + envelope check | **Request Processing** (ADR-008, designed) — untrusted JSON → validated request |
 | type system + semantic analysis | **Parameter Engine** (ADR-006) — `ParameterSchema` + `resolveParameters` |
-| lowering to IR | **Template Engine** (ADR-005) — `resolveTemplateComposition` → `CompositionSchema` |
+| lowering to IR | **Template Engine** (ADR-005) — pure stage helpers → `CompositionSchema` |
 | code generation | **Composition Engine** — `buildComposition` → a React tree |
 | driver + diagnostics | **Execution Engine** (ADR-007) — `execute` → `ExecutionReport` |
 | symbol-table dump / reflection | **Metadata Engine** (ADR-009, designed) — `describeFramework` |
@@ -80,7 +80,7 @@ nothing else in the framework.
 | **brand / branding** | `src/brand`, `src/branding` | Brand packs + `resolveBrand` + `BrandProvider`; `BrandLogo`/`Watermark`. | assets, transitions, config, registry | Built |
 | **composition** | `src/composition` | `CompositionSchema`, `Timeline`, `buildComposition` — the assembler. | scenes, transitions, assets, brand, config, registry, errors | Built |
 | **parameters** | `src/parameters` | Parameter-type registry + `ParameterSchema` + `resolveParameters` (a parallel branch). | assets/brand *types*, config, registry, errors | Built |
-| **templates** | `src/templates` | `TemplateDefinition` + `buildFromTemplate` + public stage helpers. | composition, parameters, registry, errors | Built |
+| **templates** | `src/templates` | `TemplateDefinition` + the public pure stage helpers. Owns template semantics, **no sequencing**. | composition, parameters, registry, errors | Built |
 | **execution** | `src/execution` | `execute` / `executeOrThrow` — orchestration + diagnostics; owns no rules. | templates, composition, parameters, errors | Built |
 | **contracts** | `src/contracts` | Neutral shared protocol: `ExecutionRequest`, `FrameworkRegistries`, `RegistryFamily`, `Diagnostic<S>`/`Report<S>`. | family *types*, errors | **Designed** — ADR-008 (Phase 25) |
 | **requests** | `src/requests` | Request Processing: untrusted JSON → validated `ExecutionRequest` (parse → migrate → validate → normalize). | contracts, errors | **Designed** — ADR-008 (Phase 25) |
@@ -146,7 +146,7 @@ The same recipe repeats across every family — this is the framework's design l
   data threading (`TemplateContext`, `ExecutionContext`, `ParameterContext`).
 - **Schema** — declarative shapes (`CompositionSchema`, `ParameterSchema`).
 - **Capabilities vs Metadata** — machine-read (enforced) vs human-facing (inert); kept separate everywhere.
-- **`resolve*`** — fold config → concrete (`resolveBrand`, `resolveParameters`, `resolveTemplateComposition`, `resolveTimeline`).
+- **`resolve*`** — fold config → concrete (`resolveBrand`, `resolveParameters`, `resolveTemplate`, `resolveTimeline`).
 - **Result / DomainError / sanitize** — the error model: `Result` at boundaries, `DomainError` for
   expected failures, `sanitize` for JSON-safe diagnostics.
 - **Report** — append-only, deterministic, JSON-safe diagnostics (`ExecutionReport`, `RequestReport`).

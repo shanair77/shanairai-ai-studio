@@ -8,7 +8,8 @@ import { buildComposition, type CompositionSchemaBase } from "../../composition"
 import { sceneRegistry } from "../../composition/SceneRegistry";
 import { transitionRegistry } from "../../transitions";
 import { demoConfig } from "../../demo/DemoConfig";
-import { buildFromTemplate, createTemplateDefinition, resolveTemplateComposition, resolveTemplateDefaults } from "..";
+import { createTemplateDefinition, resolveTemplateDefaults } from "..";
+import { execute, executeOrThrow } from "../../execution";
 import type { TemplateCompositionBase, TemplateOutput } from "../types";
 
 // ── Fixture templates (test-only; the framework ships none) ────────────────────────────────
@@ -96,8 +97,11 @@ const brands = createRegistry({
   b: createBrandDefinition({ name: "B", transition: { type: "dissolve", duration: 1 } }),
 });
 
+// The canonical orchestrator is `execute`; `executeOrThrow` is its throwing facade.
 const build = (spec: TemplateCompositionBase) =>
-  buildFromTemplate(spec, templates, sceneRegistry, transitionRegistry, assetRegistry, brands);
+  executeOrThrow(spec, {
+    registries: { templates, scenes: sceneRegistry, transitions: transitionRegistry, assets: assetRegistry, brands },
+  });
 
 const find = (node: unknown, type: unknown, acc: ReactElement[] = []): ReactElement[] => {
   if (Array.isArray(node)) return node.reduce((a, n) => find(n, type, a), acc);
@@ -123,7 +127,7 @@ const sequenceSignature = (node: unknown): Array<{ from?: number; durationInFram
   });
 
 // ── Resolution + validation ────────────────────────────────────────────────────────────────
-describe("buildFromTemplate — resolution & validation", () => {
+describe("execute — resolution & validation", () => {
   it("throws a clear error for an unknown template", () => {
     expect(() => build({ id: "x", template: "nope", params: {} })).toThrow(/no template registered as "nope"/);
   });
@@ -142,7 +146,7 @@ describe("buildFromTemplate — resolution & validation", () => {
 });
 
 // ── Capabilities ─────────────────────────────────────────────────────────────────────────
-describe("buildFromTemplate — capabilities", () => {
+describe("execute — capabilities", () => {
   it("accepts a supported format and rejects an unsupported one", () => {
     expect(build({ id: "x", template: "basic", format: "square", params: { title: "Hi" } }).width).toBe(1080);
     expect(() => build({ id: "x", template: "basic", format: "vertical", params: { title: "Hi" } })).toThrow(
@@ -171,7 +175,7 @@ describe("buildFromTemplate — capabilities", () => {
 });
 
 // ── Precedence ─────────────────────────────────────────────────────────────────────────────
-describe("buildFromTemplate — transition precedence (scene > caller > template > brand > framework)", () => {
+describe("execute — transition precedence (scene > caller > template > brand > framework)", () => {
   it("uses the template default when nothing overrides it", () => {
     // 2×1s − dissolve 0.5s (15f) = 45.
     expect(build({ id: "x", template: "basic", params: { title: "Hi" } }).durationInFrames).toBe(45);
@@ -214,13 +218,18 @@ describe("resolveTemplateDefaults — music & timing precedence", () => {
   });
 });
 
-describe("buildFromTemplate — brand audio default (end to end)", () => {
+describe("execute — brand audio default (end to end)", () => {
   it("wires the selected brand's default audio when caller & template omit music", () => {
     const kit = createAssetKit({ bed: createAssetDefinition({ category: "audio", source: "https://cdn/bed.mp3" }) });
     const branded = createRegistry({ m: createBrandDefinition({ name: "M", assets: kit, audio: { music: "bed" } }) });
-    const built = buildFromTemplate(
+    const built = executeOrThrow(
       { id: "M", template: "plain", brand: "m", params: {} },
-      templates, sceneRegistry, transitionRegistry, kit.registry, branded,
+      {
+        registries: {
+          templates, scenes: sceneRegistry, transitions: transitionRegistry,
+          assets: kit.registry, brands: branded,
+        },
+      },
     );
     const audios = find(built.component({}), Audio);
     expect(audios).toHaveLength(1);
@@ -229,7 +238,7 @@ describe("buildFromTemplate — brand audio default (end to end)", () => {
 });
 
 // ── Delegation, parity, demo integrity ───────────────────────────────────────────────────────
-describe("buildFromTemplate — delegation & parity", () => {
+describe("execute — delegation & parity", () => {
   it("produces output identical to the equivalent handwritten CompositionSchema", () => {
     const built = build({ id: "P", template: "basic", format: "horizontal", params: { title: "Hi", body: "there" } });
     const handwritten = buildComposition(
@@ -264,11 +273,15 @@ describe("buildFromTemplate — delegation & parity", () => {
       transitions: { type: "dissolve", duration: 0.5 },
     };
 
-    // 1. The template-generated CompositionSchema equals the handwritten one (structure).
-    expect(resolveTemplateComposition(spec, templates)).toEqual(handwritten);
+    // 1. The schema `execute` assembles equals the handwritten one (structure).
+    const result = execute(spec, { registries: { templates } });
+    expect(result.ok).toBe(true);
+    expect(result.schema).toEqual(handwritten);
 
     // 2. The built compositions match on canvas + timeline duration.
-    const fromTemplate = buildFromTemplate(spec, templates, sceneRegistry, transitionRegistry, assetRegistry);
+    const fromTemplate = executeOrThrow(spec, {
+      registries: { templates, scenes: sceneRegistry, transitions: transitionRegistry, assets: assetRegistry },
+    });
     const fromHand = buildComposition(handwritten, sceneRegistry, transitionRegistry, assetRegistry);
     expect(fromTemplate.durationInFrames).toBe(fromHand.durationInFrames);
     expect([fromTemplate.width, fromTemplate.height, fromTemplate.fps]).toEqual([fromHand.width, fromHand.height, fromHand.fps]);

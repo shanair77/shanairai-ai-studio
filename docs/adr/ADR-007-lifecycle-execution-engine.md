@@ -304,3 +304,68 @@ Lifecycle hooks (observer tier first; transform tier gated later); `LifecycleDef
 dispatch over the append-only report; the `compute-derived` stage (computed parameters); the
 `strict` flag; trace timing / debug tooling; a discriminated request union for direct
 `CompositionSchema` execution; locale/responsive threading; an AI-Director request JSON-Schema.
+
+## 11. Amendment (Phase 30) — single canonical orchestrator; `ExecutionPipeline` withdrawn
+
+**Status: Accepted.** This section supersedes §4.10's proposed declarative pipeline and records the
+architecture as implemented.
+
+### 11.1 `execute()` is the single canonical orchestrator
+
+This ADR's §4.1 claimed "a single orchestration IMPLEMENTATION reached by two public entry points."
+That was not what shipped. `templates` also carried `resolveTemplateComposition` /
+`buildFromTemplate`, which sequenced the same stage helpers independently. The two paths had already
+diverged: the `templates` path accepted only `templates`/`assets`/`brands` registries, so parameter
+resolution silently fell back to the **global** `parameterTypeRegistry` / `validatorRegistry` and a
+caller-supplied vocabulary was ignored with no diagnostic.
+
+Both were removed. `templates` now owns definitions, the registry, types, and the pure stage helpers
+— and no sequencing function. `execute()` is the only sequencer; `executeOrThrow` is a façade over it.
+`executeTyped` / `executeTypedOrThrow` are typed views that delegate to the same implementation.
+
+Enforced by `src/execution/__tests__/single-orchestrator.test.ts`: no module other than
+`execution/execute.ts` may call more than one stage helper, `templates` may expose no sequencing
+entry point, and `templates` must never import `execution`.
+
+### 11.2 The pipeline stays IMPERATIVE — `ExecutionPipeline` is withdrawn, not deferred
+
+§4.10 proposed a declarative pipeline description that `execute()` would interpret. It should not be
+built, because the stage set is **closed** and **non-homomorphic**:
+
+- **Heterogeneous state threading.** Each stage consumes a different subset of prior outputs
+  (`template`, `videoInput`, `templateCtx`, `params`, `output`, `schema`). This is not `f(state) → state`.
+- **Three error protocols.** Six stages throw; `resolve-parameters` is Result-based;
+  `resolve-template-defaults` cannot fail.
+- **Stage-specific diagnostics.** `ok(stage)`, `ok(stage, detail)`, `ok(stage, …, metrics)`, plus
+  parameter-specific `warnParams`/`issueParams`.
+- **Data-dependent conditional skips.** Stages 3 and 4 skip based on the template's shape
+  (`!template.parameters`, `!template.validate`) — runtime control flow, not static structure.
+- **A special schema-bearing failure.** Stage 8 returns `{ ok: false, schema, report }`; every other
+  stage returns `{ ok: false, report }`.
+
+An interpreter would force either accumulating per-stage generics (harder to read than the code it
+replaces) or an untyped context bag — moving the pipeline's correctness out of the type checker and
+into runtime convention. The imperative sequencer keeps the ordering as **typed heterogeneous data
+flow**: `runTemplate` cannot precede parameter resolution because the types forbid it.
+
+A pipeline interpreter is reserved **only** if plugin-contributed stages become a real requirement
+(§4.11 remains deferred). That is a change in requirements, not aesthetics.
+
+### 11.3 Stage vocabulary has one declaration
+
+`EXECUTION_STAGES` (`src/execution/stages.ts`) is the ordered list; `ExecutionStage` is derived from
+it via `as const`. Previously the union (`types.ts`) and the array (`report.ts`) were maintained
+independently, and a stage missing from the array silently stopped being marked skipped after a halt.
+`EXECUTION_STAGES` is execution-internal and not re-exported.
+
+`src/execution/__tests__/stage-order.test.ts` binds the implementation to that list: a successful run
+must trace every stage in canonical order, and a failed run must mark exactly the later stages
+skipped. It catches both an omitted and a reordered stage.
+
+### 11.4 Defect fixed while consolidating
+
+Stage 5 reported `{ scenes: output.scenes.length }` **before** stage 6 validated the output, outside
+any try/catch. A template returning a malformed `TemplateOutput` crashed `execute()` with an
+unclassified `TypeError` instead of the `invalid-output` `DomainError` — the removed path validated
+first, so the defect only ever manifested on the canonical path. Scene counts are now reported by
+stage 6, after validation.
