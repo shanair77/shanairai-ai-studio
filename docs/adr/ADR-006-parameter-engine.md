@@ -380,3 +380,162 @@ demo renders **byte-identical**.
 - **Lifecycle hooks** — **deferred** (consistent with ADR-005 §4.7): the declarative pipeline plus
   named validators/computes covers the need without reintroducing non-serializable imperative
   seams; revisit alongside the template lifecycle-hook decision.
+
+## 13. Amendment (post-Phase 30) — parameter type names are a CLOSED vocabulary
+
+**Status: Accepted.** This section corrects §4.1's extensibility claim and withdraws the reserved
+surface listed in §13.4. It supersedes those points only — every decision not named here stands as
+originally written (see §13.6). The original text is left intact as the historical record.
+
+This amendment deliberately separates three different kinds of change:
+
+| Kind | What it covers | Where |
+|---|---|---|
+| **Architecture correction** | The type-name vocabulary is closed, not open | §13.1–§13.3 |
+| **Bookkeeping withdrawal** | Speculative surface with no named consumer | §13.4 |
+| **Implementation debt** | Needs no ADR decision; recorded so it is not mistaken for design | §13.7 |
+
+### 13.1 The correction: type NAMES are closed
+
+§4.1 committed to an open vocabulary — parameter types are "`ParameterTypeDefinition`s, **extended
+via `createRegistry(...)` / `.extend(...)`**". That is now **superseded**: the set of parameter type
+*names* is closed and owned by the framework.
+
+Parameter types are the compiler's **primitives**, not user-authored content. Scenes, transitions,
+templates, brands, and assets are content — open registries, correctly. A parameter type is the
+vocabulary that content is *described in terms of*. Uniformity of mechanism (`createRegistry`) led
+the original design to treat these as the same kind of thing. They are not.
+
+Four independent reasons:
+
+1. **Closing preserves the only detector of a whole failure class.** `resolve.ts` short-circuits on
+   an unsupplied parameter (`if (!provided) { …default…; continue; }`) *before* the
+   `types.has(def.type)` check. A typo'd type name on any parameter that is not supplied is
+   therefore **never caught at runtime — ever**. The closed union is the sole mechanism that
+   catches it, and it catches it at authoring time.
+2. **The JSON boundary bounds what a type can be.** `parse` starts from JSON, so every conceivable
+   custom type is a *constrained primitive* — precisely what `constraints` + named validators
+   already express declaratively, serializably, and without code.
+3. **The vocabulary was never uniformly open.** `group` and `list` have structural semantics
+   hardcoded in the resolver; a registered custom type can never participate in nesting. The open
+   registry was already a partial fiction.
+4. **No production consumer exists.** `parameterTypeRegistry.extend` appears nowhere outside tests.
+
+**Withdrawn guidance.** Any documentation or example suggesting `parameterTypeRegistry.extend({
+mySlug })` — or registering any *new* type name — is withdrawn. New validation semantics belong in
+`validatorRegistry` + `constraints` (§13.5).
+
+### 13.2 `parameterTypeRegistry` is retained — for substitution and reflection only
+
+The registry stays, but its justification is restated, because the original one (extension) has been
+rejected. It exists for exactly two purposes:
+
+- **Substitution** — a host may replace a *built-in's behaviour* per execution (a stricter `color`
+  parse, a locale-aware `date`) via `ExecutionContext.registries.parameterTypes`. This changes
+  behaviour **without adding names**, so it survives the closed decision intact.
+- **Reflection** — `metadata.describeParameterTypes` genuinely consumes `keys()` / `require()`.
+  Removing the registry would make parameters the only family with no reflection.
+
+If substitution proves unexercised by 1.0, collapsing the registry to a frozen map is the
+simplification to revisit — it would remove `ParameterTypeMap`, `ParameterTypeResolver`,
+`createParameterTypeDefinition`, and the `parameterTypes` plumbing through `FrameworkRegistries`.
+That is noted as a future option, not a decision.
+
+### 13.3 `ParameterTypeDefinition` is reduced to `{ name, parse, validate?, ui? }`
+
+`parse` is the irreducible responsibility: JSON → trusted value. `ui` is declarative reflection
+metadata, consistent with the `TemplateMetadata` precedent. `serialize` and `capabilities` are
+withdrawn (§13.4).
+
+**Intrinsic `validate` remains distinct from named validators, and must not be collapsed into them.**
+The two share a signature but differ in **binding**, which is the architecturally meaningful part:
+
+- A type's `validate` is **intrinsic and automatic** — *every* `color` parameter is hex-checked, and
+  every `image` parameter is existence-checked, without the schema opting in. It expresses what it
+  *means* to be a value of that type.
+- A named validator is **extrinsic and opt-in** — it applies only where a `ParameterDefinition`
+  lists it. It expresses what *this template* additionally demands.
+
+This is a class invariant versus a call-site precondition. Collapsing intrinsic checks into named
+validators would force every colour parameter to write `validators: ["color"]`, which is verbose,
+easy to forget, and silently weakens validation when omitted. An earlier draft of this analysis
+called them duplicates; that was wrong, and the distinction is recorded here so the redundancy is
+not "simplified away" by a future reviewer.
+
+### 13.4 Bookkeeping — reserved surface withdrawn (no named consumer)
+
+The following was specified by this ADR but has **no implementation and no reader**. It is
+**withdrawn, not deferred** — consistent with Invariant #7 ("reserve, don't build"). Each may be
+reinstated the day a real consumer is named, at which point it should be designed against that
+consumer rather than in advance.
+
+| Surface | ADR reference | Evidence |
+|---|---|---|
+| `ParameterTypeDefinition.serialize` | §4.2 (line 80) | Implemented by **0 of 14** built-ins; never called |
+| `ParameterCapabilities` | §4.13 (lines 82, 141, 151) | `localizable`/`responsive`/`computed`/`aiGeneratable` — 0 implementations; projected by metadata only |
+| `ParameterSchema.groups` / `ParameterGroup` | §4.9 (line 150) | Never read by the resolver *or* metadata; a group may reference a nonexistent key with no diagnostic |
+| `ParameterSchema.version` | §4.3 (line 148) | Never read; request versioning belongs to ADR-008's envelope |
+| `ParameterContext.locale` | §4.2 | Threaded into `ExecutionEnvironment`; never read |
+| `ParameterContext.format` | §4.2 | Passed by `execute`; no type or constraint reads it |
+
+**Effect on §12.** The *ideas* in "Future extension points" (localization, responsive variants,
+computed parameters, AI-generated defaults) remain legitimate future work. What is withdrawn is the
+**pre-declared type surface** that anticipated them. When one is built, it brings its own fields.
+
+### 13.5 Extensibility: validators + constraints; parameterized refs reserved
+
+With type names closed, the sanctioned extensibility mechanisms are:
+
+- **`constraints`** — declarative, parameterized, JSON-expressible (`min`/`max`/`step`/`pattern`/
+  `enum`/`options`/`itemType`/`fields`/`assetCategory`). Preferred: no code, fully reflectable.
+- **Named validators** — `validatorRegistry` refs for what constraints cannot express. Open by
+  design, referenced by name, no closures, JSON-safe. This is the correct open registry.
+
+**Known limitation, reserved.** `ParameterDefinition.validators` is `string[]` — names only, with no
+arguments. A parameterized rule ("at most 5 words") therefore needs one registered validator per
+configuration. Now that validators carry the primary extensibility role, this is the binding
+constraint. **Parameterized validator references** (`{ name, options }`) are reserved as the
+sanctioned next step **only if a real consumer appears** — and if extensibility pressure does
+arrive, it must land here, not on reopening the type vocabulary.
+
+### 13.6 Unchanged and still accepted
+
+This amendment touches nothing else. The following remain as originally decided:
+
+- **§4.2 behavior/policy separation** — only the *openness* claim in §4.1 is corrected; the split
+  between `ParameterTypeDefinition` (behaviour) and `ParameterDefinition` (policy) stands.
+- **§4.5 validation pipeline** — the explicit, ordered stages.
+- **§4.6 issue model + §4.7 Result-based resolver** — path-addressed, severity-tagged diagnostics
+  that collect *all* issues rather than failing fast.
+- **§4.11 immutable resolved parameters** — deep-frozen output handed to `build()`.
+- **§4.14 serialization boundary** — the JSON-first schema as the single source of truth; code
+  referenced by name only.
+- **§5 architectural boundaries and §6 no Provider / no React** — the Parameter Engine validates
+  data only, imports no React, and remains pre-render. This is the cleanest boundary discipline in
+  the framework and is unaffected.
+- **§4.8 conditions (V1 now, expression AST reserved)**, **§4.10 asset/brand names-only validation**,
+  and **§4.12 build() integration + precedence**.
+
+A from-first-principles redesign of this engine, performed without reference to the existing code,
+differed from the shipped architecture in only two structural ways: the closed vocabulary above, and
+a single resolver entry point (§13.7). That is a strong result, and the reason this amendment
+corrects rather than replaces ADR-006.
+
+### 13.7 Implementation debt — recorded, not decided here
+
+The following require **no architectural decision**. They are consequences or defects, listed so a
+future reader does not mistake them for design intent. None is addressed by this amendment, and each
+is deferred to a later phase:
+
+1. **Duplicate vocabulary** — `ParameterTypeName` (hand-written union) and `BuiltinParameterTypeName`
+   (derived from `builtinParameterTypes`) are two declarations of one truth. The cycle-free fix is to
+   anchor the built-in map with `satisfies Record<ParameterTypeName, …>` so TypeScript enforces exact,
+   exhaustive agreement.
+2. **`resolveParametersOrThrow` is obsolete** — its only production caller
+   (`resolveTemplateComposition`) was removed in Phase 30. It now survives only in its own test.
+3. **The double validation pass** — `resolveTemplateParameters` calls `validateParameters` and then
+   `resolveParameters`, running the full pipeline (and every named validator) **twice**, purely to
+   split warnings from errors. The minimal design has one resolver returning value *and* issues.
+4. **Defaults bypass validation** — an applied `default` skips type validation, constraints, and
+   validators entirely. This is a genuine correctness defect and the sharpest single fix available in
+   this layer; it is independent of everything above.
