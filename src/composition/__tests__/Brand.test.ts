@@ -83,12 +83,6 @@ describe("brand integration", () => {
     expect(() => build(cfg({ brand: "nope", scenes: [{ scene: "hero", duration: 1 }] }))).toThrow(/not registered|no entry/);
   });
 
-  it("preserves inline BrandConfig (legacy, back-compat)", () => {
-    const built = build(cfg({ brand: { mode: "dark", theme: { colors: { accent: "#fff" } } }, scenes: [{ scene: "hero", duration: 1 }] }));
-    expect(built.durationInFrames).toBe(30);
-    expect(find(built.component({}), BrandProvider)).toHaveLength(1);
-  });
-
   it("leaves the existing demo unchanged (330 frames, no brand)", () => {
     const built = buildComposition(demoConfig);
     expect(built.durationInFrames).toBe(330);

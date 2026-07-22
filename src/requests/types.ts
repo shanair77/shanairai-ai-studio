@@ -9,7 +9,7 @@
 
 import { type Registry } from "../registry";
 import { type ExecutionRequest, type Issue, type Report, type Span, type Warning } from "../contracts";
-import { type BrandConfig, type MusicConfig, type TimingConfig, type TransitionConfigBase, type VideoConfigInput } from "../composition";
+import { type MusicConfig, type TimingConfig, type TransitionConfigBase, type VideoConfigInput } from "../composition";
 import { type ThemeMode } from "../config/Theme";
 
 /** Untrusted input: a JSON string or an already-parsed value. */
@@ -26,7 +26,7 @@ export type RequestEnvelope = VideoConfigInput & {
   version?: RequestSchemaVersion;
   id: string;
   template: string;
-  brand?: string | BrandConfig;
+  brand?: string;
   theme?: ThemeMode;
   transitions?: TransitionConfigBase;
   music?: MusicConfig;

@@ -38,7 +38,6 @@ import {
   type CompositionSchemaFor,
   type MusicConfig,
 } from "./CompositionSchema";
-import { type BrandConfig } from "./BrandConfig";
 import { BrandProvider, brandRegistry, resolveBrand, type BrandDefinition, type BrandRegistry } from "../brand";
 import { resolveVideoConfig } from "./VideoConfig";
 import { resolveTimeline, type ResolvedBoundary, type ResolvedScene, type Timeline } from "./Timeline";
@@ -183,13 +182,8 @@ export function buildComposition(
   validateComposition(config);
 
   const video = resolveVideoConfig(config);
-  // Select a brand pack by name, or fold an inline BrandConfig (legacy), or none.
-  const brandInput: BrandDefinition | undefined =
-    typeof config.brand === "string"
-      ? brands.require(config.brand)
-      : config.brand
-        ? { name: (config.brand as BrandConfig).name ?? "inline", mode: config.brand.mode, theme: config.brand.theme }
-        : undefined;
+  // Select a registered brand pack by name, or none.
+  const brandInput: BrandDefinition | undefined = config.brand ? brands.require(config.brand) : undefined;
   const brand = resolveBrand(brandInput, config.theme);
 
   // The default transition falls back to the brand's default when the composition omits one.

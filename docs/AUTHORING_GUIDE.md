@@ -98,38 +98,44 @@ Themes are token objects. Start from `theme` (light) or `darkTheme`, or select v
 
 ## 5. Create a brand
 
-A brand is pure config — a name, a base mode, semantic color overrides, and a mark reference:
+A brand is registered content — a name, a base mode, and semantic color overrides — selected by
+name (never inlined):
 
 ```ts
-buildComposition({
-  id, scenes: [...],
-  brand: {
+const brands = createRegistry({
+  midnight: createBrandDefinition({
     name: "Midnight",
     mode: "light",
     theme: { colors: { background: "#0E1B2B", textPrimary: "#E8F0FF", accent: "#00E0C6" } },
-    mark: "brand/midnight-logo.png",
-  },
+  }),
 });
+
+buildComposition(
+  { id, scenes: [...], brand: "midnight" },
+  sceneRegistry, transitionRegistry, assetRegistry, brands,
+);
 ```
 
-`resolveBrand` folds this into a concrete `Theme`; `BrandThemeProvider` supplies it so every
+`resolveBrand` folds the selected brand into a concrete `Theme`; `BrandProvider` supplies it so every
 primitive recolors. Only **colors** are overridable today (see [THEMING.md](./THEMING.md#brand-overrides)).
 
 ## 6. Create / reference assets
 
-Assets are `public/`-relative paths or `http(s)` URLs. Reference them directly, or via a named
-catalog:
+Assets are registered by name against the asset registry (a `public/`-relative path or an `http(s)`
+URL), then referenced by that name:
 
 ```ts
-buildComposition({
-  id, scenes: [...],
-  assets: { bed: "audio/bed.mp3", logo: "brand/logo.png" },
-  music: { src: "bed", volume: 0.6, loop: true },   // "bed" resolves from the catalog
-  brand: { mark: "logo" },
+const assets = createRegistry({
+  bed: createAssetDefinition({ category: "audio", source: "audio/bed.mp3" }),
 });
+
+buildComposition(
+  { id, scenes: [...], music: { asset: "bed", volume: 0.6, loop: true } },
+  sceneRegistry, transitionRegistry, assets, brandRegistry,
+);
 ```
 
-Files live under `public/`; `resolveAssetRef` wraps local paths in `staticFile()`.
+Files live under `public/`; the asset resolver wraps local paths in `staticFile()`.
 
 ## 7. Create a template
 

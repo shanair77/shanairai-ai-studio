@@ -105,7 +105,7 @@ const validateEnvelope = (raw: RawExecutionRequest, report: RequestReportBuilder
   if (typeof raw.id !== "string" || raw.id.trim().length === 0) bad("id", "invalid-envelope", "`id` must be a non-empty string.", raw.id);
   if (typeof raw.template !== "string" || raw.template.trim().length === 0) bad("template", "invalid-envelope", "`template` must be a non-empty string.", raw.template);
   if (raw.params !== undefined && !isPlainObject(raw.params)) bad("params", "invalid-envelope", "`params` must be an object.", raw.params);
-  if (raw.brand !== undefined && typeof raw.brand !== "string" && !isPlainObject(raw.brand)) bad("brand", "invalid-envelope", "`brand` must be a string or a BrandConfig object.", raw.brand);
+  if (raw.brand !== undefined && typeof raw.brand !== "string") bad("brand", "invalid-envelope", "`brand` must be a string.", raw.brand);
   if (raw.theme !== undefined && typeof raw.theme !== "string") bad("theme", "invalid-envelope", "`theme` must be a string.", raw.theme);
   if (raw.transitions !== undefined && (!isPlainObject(raw.transitions) || typeof raw.transitions.type !== "string")) bad("transitions", "invalid-envelope", "`transitions` must be an object with a string `type`.", raw.transitions);
   if (raw.music !== undefined && !isPlainObject(raw.music)) bad("music", "invalid-envelope", "`music` must be an object.", raw.music);

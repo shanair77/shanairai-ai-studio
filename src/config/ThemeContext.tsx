@@ -6,7 +6,7 @@
  * `<ThemeProvider>`, and falls back to the static default theme when no provider is present
  * — so a bare primitive renders exactly as it did before this context existed.
  *
- * The engine's brand layer wraps compositions in a provider (see BrandConfig); primitives
+ * The engine's brand layer wraps compositions in a provider (see `src/brand`); primitives
  * read colors/typography from here instead of importing the static theme directly, which is
  * what makes brand configuration actually recolor the output.
  */

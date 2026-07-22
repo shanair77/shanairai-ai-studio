@@ -28,9 +28,8 @@ flowchart LR
 
 | Module | Role |
 |---|---|
-| `CompositionSchema.ts` | The declarative shape (typed via registries) + `validateComposition` + asset resolution. |
+| `CompositionSchema.ts` | The declarative shape (typed via registries) + `validateComposition`. |
 | `VideoConfig.ts` | `resolveVideoConfig` — format preset / explicit dims / duration → `{ width, height, fps, durationInFrames? }`. |
-| `BrandConfig.ts` | `resolveBrand` — brand config → concrete `Theme`; `BrandThemeProvider` / `useBrandTheme`. |
 | `SceneRegistry.ts` | Typed scene registry (`sceneRegistry`, `createSceneDefinition`, `builtinScenes`). |
 | `Timeline.ts` | `resolveTimeline` — scenes + boundary transitions + clamped frames + total. |
 | `CompositionBuilder.ts` | `buildComposition` — validates, resolves, assembles the tree, returns `BuiltComposition`. |
@@ -53,27 +52,41 @@ is rejected against a non-opaque incoming scene (see [TRANSITIONS.md](./TRANSITI
 `buildComposition` groups scenes into **runs** of transition-connected scenes (split at
 0-frame "cut" boundaries) and renders each run as a positioned `<Sequence>` wrapping a
 `<TransitionSeries>` (interleaved `.Sequence` / `.Transition`). Music (`<Audio>`) and
-`BrandThemeProvider` are outer siblings, so audio continuity and brand theming are preserved.
+`BrandProvider` are outer siblings, so audio continuity and brand theming are preserved.
 Everything is built with `React.createElement` — no hardcoded JSX.
 
 ## Examples
 
 ```ts
-import { buildComposition } from "./composition";
+import { buildComposition, createBrandDefinition, sceneRegistry, transitionRegistry } from "./composition";
+import { createRegistry } from "./registry";
+import { createAssetDefinition } from "./assets";
 
-const built = buildComposition({
-  id: "Promo",
-  format: "vertical",
-  duration: 12,                       // optional; else derived from scenes
-  brand: { mode: "dark", theme: { colors: { accent: "#00E0C6" } } },
-  music: { src: "audio/bed.mp3", volume: 0.6 },
-  transitions: { type: "fade", duration: 0.5 },
-  scenes: [
-    { scene: "hero",  duration: 3.5, props: { title: "…" } },
-    { scene: "quote", duration: 3,   props: { quote: "…", attribution: "…" } },
-    { scene: "outro", duration: 3,   props: { title: "…" } },
-  ],
+// Brands and assets are registered and referenced by name (never inlined).
+const brands = createRegistry({
+  promo: createBrandDefinition({ name: "Promo", mode: "dark", theme: { colors: { accent: "#00E0C6" } } }),
 });
+const assets = createRegistry({ bed: createAssetDefinition({ category: "audio", source: "audio/bed.mp3" }) });
+
+const built = buildComposition(
+  {
+    id: "Promo",
+    format: "vertical",
+    duration: 12,                       // optional; else derived from scenes
+    brand: "promo",                     // a registered brand, by name
+    music: { asset: "bed", volume: 0.6 }, // a registered audio asset, by name
+    transitions: { type: "fade", duration: 0.5 },
+    scenes: [
+      { scene: "hero",  duration: 3.5, props: { title: "…" } },
+      { scene: "quote", duration: 3,   props: { quote: "…", attribution: "…" } },
+      { scene: "outro", duration: 3,   props: { title: "…" } },
+    ],
+  },
+  sceneRegistry,
+  transitionRegistry,
+  assets,
+  brands,
+);
 ```
 
 Custom registries via the second overload:

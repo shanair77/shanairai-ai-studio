@@ -14,7 +14,6 @@
  *   createSceneDefinition / createTransitionDefinition — bind definitions for each registry.
  *   resolveTimeline    — scenes + transitions → durations + boundaries + total.
  *   VideoConfig        — canvas resolution (format / width / height / fps / duration).
- *   BrandConfig        — brand identity + theme resolution + theme context.
  */
 
 export { createRegistry, type Registry, type DefinitionMap } from "../registry";
@@ -80,7 +79,6 @@ export {
   type VideoConfigInput,
 } from "./VideoConfig";
 
-export { type BrandConfig } from "./BrandConfig";
 
 export {
   createBrandDefinition,

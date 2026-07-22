@@ -36,7 +36,7 @@ npm run test:typecheck # tsc -p tsconfig.test.json  (typechecks tests, incl. @ts
 ## Test types, by example
 
 ### Unit (pure logic)
-`src/composition/__tests__/Timeline.test.ts`, `VideoConfig.test.ts`, `BrandConfig.test.ts`,
+`src/composition/__tests__/Timeline.test.ts`, `VideoConfig.test.ts`,
 `SceneRegistry.test.ts`, `CompositionSchema.test.ts`, `src/config/__tests__/fonts.test.ts`.
 Timeline/registry tests inject **fake registries** so they never touch real scenes or rendering:
 

@@ -13,7 +13,6 @@
 import { DomainError } from "../errors";
 import { type ThemeMode } from "../config/Theme";
 import { type VideoConfigInput } from "./VideoConfig";
-import type { BrandConfig } from "./BrandConfig";
 import type { BuiltinSceneMap, PropsOf, SceneMap } from "./SceneRegistry";
 import type { BuiltinTransitionMap, OptionsOf, TransitionMap } from "../transitions";
 
@@ -42,9 +41,6 @@ export type TransitionConfigBase = {
   duration?: number;
   options?: unknown;
 };
-
-/** A reference to a media asset: a `public/`-relative path or an absolute http(s) URL. */
-export type AssetRef = string;
 
 export type MusicConfig = {
   /** Named audio asset, resolved from the asset registry. */
@@ -102,8 +98,8 @@ export type CompositionSchemaFor<M extends SceneMap> = VideoConfigInput & {
   id: string;
   /** Quick theme-mode select; `brand` takes precedence if both are given. */
   theme?: ThemeMode;
-  /** Brand identity + theme overrides. */
-  brand?: BrandConfig | string;
+  /** Registered brand name (resolved from the brand registry). */
+  brand?: string;
   /** Background music for the whole composition. */
   music?: MusicConfig;
   /** Ordered scenes that make up the video. */
@@ -133,7 +129,7 @@ export type SceneConfigBase = SceneConfigMeta & {
 export type CompositionSchemaBase = VideoConfigInput & {
   id: string;
   theme?: ThemeMode;
-  brand?: BrandConfig | string;
+  brand?: string;
   music?: MusicConfig;
   scenes: SceneConfigBase[];
   transitions?: TransitionConfigBase;

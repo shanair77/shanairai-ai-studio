@@ -3,8 +3,7 @@
 ## Purpose
 
 Explain the design-token system, the theme object, the theme context that lets brands recolor
-the whole tree, and how brand overrides are resolved. Sources: `src/config/*`,
-`src/composition/BrandConfig.ts`. Decision: [ADR-001 §3](./adr/ADR-001-typed-scene-registration.md).
+the whole tree, and how brand overrides are resolved. Sources: `src/config/*`, `src/brand/*`. Decision: [ADR-001 §3](./adr/ADR-001-typed-scene-registration.md).
 
 ## Concepts
 
@@ -28,8 +27,8 @@ brand (config) → resolveBrand → concrete Theme → BrandThemeProvider (conte
 ```
 
 Primitives read colors/typography from `useTheme()`, so a brand's overrides recolor the whole
-composition. `BrandThemeProvider`/`useBrandTheme` (in `BrandConfig`) are stable aliases over
-the config-layer `ThemeProvider`/`useTheme`.
+composition. `BrandProvider` (in `src/brand`) supplies the resolved brand theme over the config-layer
+`ThemeProvider`/`useTheme`.
 
 ## Brand overrides
 
@@ -58,12 +57,19 @@ const theme = useTheme();
 style={{ color: theme.colors.textPrimary, ...theme.typography.textStyles.h1 }}
 ```
 
-Per-video brand (config):
+Brand theming (register a brand, then select it by name):
 ```ts
-buildComposition({ id, scenes: [...], brand: {
-  name: "Midnight", mode: "light",
-  theme: { colors: { background: "#0E1B2B", textPrimary: "#E8F0FF", accent: "#00E0C6" } },
-}});
+const brands = createRegistry({
+  midnight: createBrandDefinition({
+    name: "Midnight", mode: "light",
+    theme: { colors: { background: "#0E1B2B", textPrimary: "#E8F0FF", accent: "#00E0C6" } },
+  }),
+});
+
+buildComposition(
+  { id, scenes: [...], brand: "midnight" },
+  sceneRegistry, transitionRegistry, assetRegistry, brands,
+);
 ```
 
 ## Best practices

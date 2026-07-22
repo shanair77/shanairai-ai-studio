@@ -15,7 +15,6 @@ import { type FormatName } from "../config/Layout";
 import { type ThemeMode } from "../config/Theme";
 import { type ParameterSchema } from "../parameters";
 import {
-  type BrandConfig,
   type MusicConfig,
   type SceneConfigBase,
   type TimingConfig,
@@ -32,7 +31,7 @@ export type TemplateContext = {
   width: number;
   height: number;
   fps: number;
-  /** The selected brand's name, if a brand was chosen by name (not for inline BrandConfig). */
+  /** The selected brand's name, if any. */
   brand?: string;
 };
 
@@ -133,7 +132,7 @@ export type TemplateComposition<P extends TemplateParams = TemplateParams> = Vid
   id: string;
   template: string;
   params: P;
-  brand?: BrandConfig | string;
+  brand?: string;
   theme?: ThemeMode;
   /** Caller override of the template's default transition. */
   transitions?: TransitionConfig;
@@ -151,7 +150,7 @@ export type TemplateComposition<P extends TemplateParams = TemplateParams> = Vid
  */
 export type TemplateCompositionFor<M extends TemplateMap> = VideoConfigInput & {
   id: string;
-  brand?: BrandConfig | string;
+  brand?: string;
   theme?: ThemeMode;
   transitions?: TransitionConfig;
   music?: MusicConfig;
@@ -165,7 +164,7 @@ export type TemplateCompositionBase = VideoConfigInput & {
   id: string;
   template: string;
   params: TemplateParams;
-  brand?: BrandConfig | string;
+  brand?: string;
   theme?: ThemeMode;
   transitions?: TransitionConfigBase;
   music?: MusicConfig;
