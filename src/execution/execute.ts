@@ -84,7 +84,6 @@ export function execute(request: ExecutionRequest, input: ExecutionInput = {}): 
   const paramCtx: ParameterContext = {
     assets: context.registries.assets,
     brands: context.registries.brands,
-    format: context.environment.canvas.format,
     types: context.registries.parameterTypes,
     validators: context.registries.validators,
   };

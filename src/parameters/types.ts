@@ -10,7 +10,6 @@
 
 import { type AssetCategory, type AssetRegistry } from "../assets";
 import { type BrandRegistry } from "../brand";
-import { type FormatName } from "../config/Layout";
 
 /** A pure JSON value — fully serializable. */
 export type ParameterValue = string | number | boolean | null | ParameterValue[] | { [key: string]: ParameterValue };
@@ -165,7 +164,7 @@ export type Validator = (
 export type ValidatorMap = Record<string, Validator>;
 export type ValidatorResolver = { require(name: string): Validator; has(name: string): boolean; keys(): string[] };
 
-/** Read-only context for validation: registries to check NAME references + reserved `format`. */
+/** Read-only context for validation: registries to check NAME references (never resolves/loads). */
 export type ParameterContext = {
   /** For image/video/audio name existence + category checks (never resolves/loads assets). */
   assets?: AssetRegistry;
@@ -175,8 +174,6 @@ export type ParameterContext = {
   types?: ParameterTypeResolver;
   /** Named validators (defaults to `validatorRegistry`). */
   validators?: ValidatorResolver;
-  /** Reserved: responsive variants. */
-  format?: FormatName;
 };
 
 /** A parameter type — BEHAVIOR only (ADR-006 §4.2). Never carries template policy. */
