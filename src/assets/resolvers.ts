@@ -7,6 +7,7 @@
  */
 
 import { staticFile } from "remotion";
+import { DomainError } from "../errors";
 import {
   type AssetCategory,
   type AssetMetadata,
@@ -51,7 +52,11 @@ export const RemoteAssetResolver: AssetSourceResolver = {
       throw new Error(`RemoteAssetResolver: unsupported source kind "${s.kind}".`);
     }
     if (!isUrl(s.url)) {
-      throw new Error(`RemoteAssetResolver: "${s.url}" is not a valid http(s) URL.`);
+      throw new DomainError({
+        code: "invalid-asset-source",
+        message: `RemoteAssetResolver: "${s.url}" is not a valid http(s) URL.`,
+        actual: s.url,
+      });
     }
     return file(category, s.url, metadata);
   },

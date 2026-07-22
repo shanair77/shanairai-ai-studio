@@ -11,6 +11,7 @@
 
 import React, { createContext, createElement, useContext } from "react";
 import { Audio, Img, OffthreadVideo, Video, useVideoConfig } from "remotion";
+import { DomainError } from "../errors";
 import { radii, type RadiusToken } from "../config/Layout";
 import { secondsToFrames } from "../config/Timing";
 import { useScale } from "../format";
@@ -147,7 +148,11 @@ export const createAssetKit = <M extends AssetMap>(
   const lookup = (name: string, allowed?: readonly AssetCategory[]): ResolvedAsset => {
     const def = map[name];
     if (!def) {
-      throw new Error(`Asset "${name}" is not registered. Registered: ${Object.keys(map).join(", ") || "(none)"}.`);
+      throw new DomainError({
+        code: "unknown-asset",
+        message: `Asset "${name}" is not registered. Registered: ${Object.keys(map).join(", ") || "(none)"}.`,
+        actual: name,
+      });
     }
     if (allowed) assertCategory(name, def, allowed);
     return resolveAsset(name, def, resolvers);

@@ -1,6 +1,17 @@
 import { describe, expect, it } from "vitest";
+import { DomainError } from "../../errors";
 import { assertCategory, resolveAsset, validateMetadata } from "../resolve";
 import type { AssetDefinition, AssetSourceResolver } from "../types";
+
+/** Run `fn`, return whatever it throws (fails loudly if it doesn't throw). */
+const caught = (fn: () => unknown): unknown => {
+  try {
+    fn();
+  } catch (e) {
+    return e;
+  }
+  throw new Error("expected the function to throw, but it did not");
+};
 
 const okResolver: AssetSourceResolver = {
   name: "ok",
@@ -18,6 +29,11 @@ describe("validateMetadata", () => {
     expect(() => validateMetadata("a", { width: 0 })).toThrow(/width/);
     expect(() => validateMetadata("a", { durationInSeconds: -1 })).toThrow(/durationInSeconds/);
   });
+  it("classifies bad metadata as a DomainError `invalid-asset-metadata` (path + actual)", () => {
+    const err = caught(() => validateMetadata("a", { width: 0 }));
+    expect(err).toBeInstanceOf(DomainError);
+    expect(err).toMatchObject({ code: "invalid-asset-metadata", path: "metadata.width", actual: 0 });
+  });
 });
 
 describe("assertCategory", () => {
@@ -27,6 +43,11 @@ describe("assertCategory", () => {
   });
   it("throws on a category mismatch", () => {
     expect(() => assertCategory("a", def, ["audio"])).toThrow(/is a "image" asset but was requested as "audio"/);
+  });
+  it("classifies a mismatch as a DomainError `asset-category` (expected + actual)", () => {
+    const err = caught(() => assertCategory("a", def, ["audio"]));
+    expect(err).toBeInstanceOf(DomainError);
+    expect(err).toMatchObject({ code: "asset-category", expected: ["audio"], actual: "image" });
   });
 });
 
@@ -42,6 +63,11 @@ describe("resolveAsset", () => {
   });
   it("throws when no resolver supports the source", () => {
     expect(() => resolveAsset("a", { category: "image", source: "x" }, [noResolver])).toThrow(/no resolver supports/);
+  });
+  it("classifies a missing resolver as a DomainError `unresolvable-source`", () => {
+    const err = caught(() => resolveAsset("a", { category: "image", source: "x" }, [noResolver]));
+    expect(err).toBeInstanceOf(DomainError);
+    expect(err).toMatchObject({ code: "unresolvable-source" });
   });
   it("throws on invalid metadata before resolving", () => {
     expect(() => resolveAsset("a", { category: "image", source: "x", metadata: { width: -5 } }, [okResolver])).toThrow(/width/);

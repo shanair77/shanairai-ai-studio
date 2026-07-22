@@ -1,4 +1,15 @@
 import { describe, expect, it, vi } from "vitest";
+import { DomainError } from "../../errors";
+
+/** Run `fn`, return whatever it throws (fails loudly if it doesn't throw). */
+const caught = (fn: () => unknown): unknown => {
+  try {
+    fn();
+  } catch (e) {
+    return e;
+  }
+  throw new Error("expected the function to throw, but it did not");
+};
 
 // resolvers.ts imports only `staticFile` from remotion — mock it deterministically.
 vi.mock("remotion", () => ({ staticFile: (path: string) => `/static/${path}` }));
@@ -33,6 +44,11 @@ describe("LocalAssetResolver", () => {
   it("rejects an unsupported (remote) source", () => {
     expect(() => LocalAssetResolver.resolve({ kind: "remote", url: "https://x" }, "image")).toThrow(/unsupported source/);
   });
+  it("keeps the kind-mismatch guard a raw Error (internal invariant — NOT a DomainError)", () => {
+    const err = caught(() => LocalAssetResolver.resolve({ kind: "remote", url: "https://x" }, "image"));
+    expect(err).toBeInstanceOf(Error);
+    expect(err).not.toBeInstanceOf(DomainError);
+  });
 });
 
 describe("RemoteAssetResolver", () => {
@@ -50,5 +66,11 @@ describe("RemoteAssetResolver", () => {
   });
   it("rejects an unsupported (local) source", () => {
     expect(() => RemoteAssetResolver.resolve({ kind: "local", path: "a" }, "video")).toThrow(/unsupported source/);
+  });
+  it("classifies a malformed URL as a DomainError `invalid-asset-source` (actual)", () => {
+    const err = caught(() => RemoteAssetResolver.resolve({ kind: "remote", url: "not-a-url" }, "image"));
+    expect(err).toBeInstanceOf(DomainError);
+    expect(err).toMatchObject({ code: "invalid-asset-source", actual: "not-a-url" });
+    expect((err as Error).message).toMatch(/is not a valid http\(s\) URL/);
   });
 });

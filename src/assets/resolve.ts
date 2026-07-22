@@ -6,6 +6,7 @@
  * from the registry's `require`.)
  */
 
+import { DomainError } from "../errors";
 import { DEFAULT_RESOLVERS } from "./resolvers";
 import { type AssetCategory, type AssetDefinition, type AssetMetadata, type AssetSourceResolver, type ResolvedAsset } from "./types";
 
@@ -14,7 +15,12 @@ export const validateMetadata = (name: string, metadata?: AssetMetadata): void =
   if (!metadata) return;
   const positive = (v: number | undefined, key: string) => {
     if (v !== undefined && !(typeof v === "number" && Number.isFinite(v) && v > 0)) {
-      throw new Error(`Asset "${name}": metadata.${key} must be a positive number, got ${String(v)}.`);
+      throw new DomainError({
+        code: "invalid-asset-metadata",
+        message: `Asset "${name}": metadata.${key} must be a positive number, got ${String(v)}.`,
+        path: `metadata.${key}`,
+        actual: v ?? null,
+      });
     }
   };
   positive(metadata.width, "width");
@@ -25,9 +31,12 @@ export const validateMetadata = (name: string, metadata?: AssetMetadata): void =
 /** Assert a definition's category is one of `allowed` (renderer compatibility). */
 export const assertCategory = (name: string, def: AssetDefinition, allowed: readonly AssetCategory[]): void => {
   if (!allowed.includes(def.category)) {
-    throw new Error(
-      `Asset "${name}" is a "${def.category}" asset but was requested as ${allowed.map((c) => `"${c}"`).join(" | ")}.`,
-    );
+    throw new DomainError({
+      code: "asset-category",
+      message: `Asset "${name}" is a "${def.category}" asset but was requested as ${allowed.map((c) => `"${c}"`).join(" | ")}.`,
+      expected: [...allowed],
+      actual: def.category,
+    });
   }
 };
 
@@ -40,7 +49,10 @@ export const resolveAsset = (
   validateMetadata(name, def.metadata);
   const resolver = resolvers.find((r) => r.supports(def.source));
   if (!resolver) {
-    throw new Error(`Asset "${name}": no resolver supports its source (${JSON.stringify(def.source)}).`);
+    throw new DomainError({
+      code: "unresolvable-source",
+      message: `Asset "${name}": no resolver supports its source (${JSON.stringify(def.source)}).`,
+    });
   }
   return resolver.resolve(def.source, def.category, def.metadata);
 };

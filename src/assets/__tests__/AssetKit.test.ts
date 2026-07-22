@@ -1,4 +1,5 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
+import { DomainError } from "../../errors";
 import { createAssetDefinition } from "../definition";
 import { createAssetKit } from "../AssetKit";
 
@@ -45,6 +46,18 @@ describe("createAssetKit — runtime", () => {
   it("throws for a missing asset name", () => {
     const resolveDynamic = kit.resolve as (name: string) => unknown;
     expect(() => resolveDynamic("missing")).toThrow(/Asset "missing" is not registered/);
+  });
+
+  it("classifies a missing asset name as a DomainError `unknown-asset` (actual)", () => {
+    const resolveDynamic = kit.resolve as (name: string) => unknown;
+    let err: unknown;
+    try {
+      resolveDynamic("missing");
+    } catch (e) {
+      err = e;
+    }
+    expect(err).toBeInstanceOf(DomainError);
+    expect(err).toMatchObject({ code: "unknown-asset", actual: "missing" });
   });
 
   it("extends the registry immutably", () => {
