@@ -2,7 +2,7 @@
  * parameters/types — the Parameter Engine's typed contracts (ADR-006, Phase 21 MVP).
  *
  * Strict separation (ADR-006 §4.2): `ParameterTypeDefinition` owns BEHAVIOR (parse/validate/
- * serialize/default ui/capabilities) and is the registry family; `ParameterDefinition` owns
+ * default ui/capabilities) and is the registry family; `ParameterDefinition` owns
  * POLICY (required/default/constraints/conditions/metadata/ui) and is embedded in a template's
  * `ParameterSchema`. Everything is pure JSON except code (validators), which is referenced by name.
  * No React, no Provider, no Hooks — parameters are pre-render data (ADR-006 §5–§6).
@@ -165,7 +165,7 @@ export type Validator = (
 export type ValidatorMap = Record<string, Validator>;
 export type ValidatorResolver = { require(name: string): Validator; has(name: string): boolean; keys(): string[] };
 
-/** Read-only context for validation: registries to check NAME references + future locale/format. */
+/** Read-only context for validation: registries to check NAME references + reserved `format`. */
 export type ParameterContext = {
   /** For image/video/audio name existence + category checks (never resolves/loads assets). */
   assets?: AssetRegistry;
@@ -177,8 +177,6 @@ export type ParameterContext = {
   validators?: ValidatorResolver;
   /** Reserved: responsive variants. */
   format?: FormatName;
-  /** Reserved: localization. */
-  locale?: string;
 };
 
 /** A parameter type — BEHAVIOR only (ADR-006 §4.2). Never carries template policy. */
@@ -188,8 +186,6 @@ export type ParameterTypeDefinition<V = unknown> = {
   parse: (raw: unknown, def: ParameterDefinition, ctx: ParameterContext) => V;
   /** Intrinsic validity beyond shape (grammar, name existence). Pushes issues; never throws. */
   validate?: (value: V, def: ParameterDefinition, ctx: ParameterContext, issues: ParameterIssue[], path: string) => void;
-  /** Typed value → JSON (identity for primitives; the name for asset/brand refs). */
-  serialize?: (value: V) => ParameterValue;
   /** Default UI hints for this type (overridable per-parameter). */
   ui?: ParameterUIHints;
   capabilities?: ParameterCapabilities;

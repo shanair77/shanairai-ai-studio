@@ -2,7 +2,7 @@
  * parameters/ — the typed, config-driven Parameter Engine (ADR-006, Phase 21 MVP).
  *
  * A template's inputs become a declarative, serializable `ParameterSchema`: `ParameterType`s own
- * BEHAVIOR (parse/validate/serialize) and are the registry family; each `ParameterDefinition` owns
+ * BEHAVIOR (parse/validate) and are the registry family; each `ParameterDefinition` owns
  * POLICY (required/default/constraints/conditions/metadata/ui) and is embedded in the schema. The
  * pure resolver folds caller values + defaults + validation into deeply-frozen `ResolvedParameters`.
  *

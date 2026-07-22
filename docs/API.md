@@ -127,7 +127,7 @@ const built = buildFromTemplate({ id: "P", template: "promo", params: { title: "
 ## `parameters` (the Parameter Engine barrel)
 
 Declarative, serializable, **React-free** validation of a template's inputs (ADR-006). A parameter
-**type** owns behavior (`parse`/`validate`/`serialize`) and is the registry family; a template's
+**type** owns behavior (`parse`/`validate`) and is the registry family; a template's
 per-parameter **policy** (required/default/constraints/conditions/metadata/ui) is an embedded
 `ParameterSchema`. No Context, no Provider, no Hooks — parameters are pre-render data.
 

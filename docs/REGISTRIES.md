@@ -123,7 +123,7 @@ Parameter Types are implemented; Effects remains future.
 
 The **Parameter Types** family (ADR-006) is the type *vocabulary* for the Parameter Engine —
 `parameterTypeRegistry` ships the built-in types (string/number/color/image/brand/…), extended with
-`.extend(...)`. A parameter type owns **behavior** (`parse`/`validate`/`serialize`); a template's
+`.extend(...)`. A parameter type owns **behavior** (`parse`/`validate`); a template's
 per-parameter **policy** (required/default/constraints/…) lives in an embedded `ParameterSchema`,
 not the registry. The empty `validatorRegistry` holds named custom validators. See
 [ADR-006](./adr/ADR-006-parameter-engine.md).
