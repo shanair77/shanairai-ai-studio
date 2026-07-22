@@ -223,13 +223,11 @@ describe("Result behavior & immutability", () => {
 describe("serializability", () => {
   it("a schema round-trips through JSON unchanged", () => {
     const s: ParameterSchema = {
-      version: 1,
       parameters: [
-        { key: "title", type: "string", required: true, constraints: { min: 1, max: 80 }, metadata: { label: "Title", group: "content" } },
+        { key: "title", type: "string", required: true, constraints: { min: 1, max: 80 }, metadata: { label: "Title" } },
         { key: "size", type: "enum", constraints: { options: [{ value: "s", label: "Small" }, { value: "l", label: "Large" }] } },
         { key: "cta", type: "group", constraints: { fields: [{ key: "url", type: "url" }] }, conditions: { visibleWhen: { key: "size", equals: "l" } } },
       ],
-      groups: [{ id: "content", label: "Content", parameters: ["title"] }],
     };
     expect(JSON.parse(JSON.stringify(s))).toEqual(s);
   });

@@ -145,8 +145,8 @@ resolveParameters(schema, values, ctx?): Result<DeepReadonly<ResolvedParameters>
 
 ```ts
 type ParameterDefinition = { key; type: ParameterTypeName; required?; default?;
-  validators?: string[]; constraints?; conditions?; metadata?; ui?; capabilities? };
-type ParameterSchema = { version?; parameters: ParameterDefinition[]; groups?; capabilities? };
+  validators?: string[]; constraints?; conditions?; metadata?; ui? };
+type ParameterSchema = { parameters: ParameterDefinition[] };
 type ParameterIssue = { path; code; severity: "error" | "warning"; message; expected?; actual? };
 ```
 

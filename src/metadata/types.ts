@@ -12,7 +12,7 @@ import { type ThemeMode } from "../config/Theme";
 import { type AssetCategory, type AssetMetadata, type AssetRole } from "../assets";
 import { type TransitionCapabilities } from "../transitions";
 import { type TemplateCapabilities } from "../templates";
-import { type ParameterCapabilities, type ParameterSchema, type ParameterUIHints } from "../parameters";
+import { type ParameterSchema, type ParameterUIHints } from "../parameters";
 import { type RegistryFamily } from "../contracts";
 
 /** Stable identity. `key` = canonical (registry key); `qualifiedName` = `${family}:${key}`; `name` = display. */
@@ -52,7 +52,7 @@ export type TemplateDescriptor = DescriptorIdentity & {
   parameters?: ParameterSchema;
   meta?: TemplateMetaSummary;
 };
-export type ParameterTypeDescriptor = DescriptorIdentity & { ui?: ParameterUIHints; capabilities?: ParameterCapabilities };
+export type ParameterTypeDescriptor = DescriptorIdentity & { ui?: ParameterUIHints };
 export type ValidatorDescriptor = DescriptorIdentity;
 
 export type RegistryDescriptor = { family: RegistryFamily; keys: string[]; count: number };

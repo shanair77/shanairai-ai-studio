@@ -79,19 +79,9 @@ export type ParameterMetadata = {
   description?: string;
   placeholder?: string;
   helpText?: string;
-  /** `ParameterGroup` id (presentation only). */
-  group?: string;
   advanced?: boolean;
   order?: number;
   icon?: string;
-};
-
-/** Machine-read, declarative capability flags (future-facing). Distinct from metadata. */
-export type ParameterCapabilities = {
-  localizable?: boolean;
-  responsive?: boolean;
-  computed?: boolean;
-  aiGeneratable?: boolean;
 };
 
 /** One parameter's POLICY — how THIS template uses a type. Nested objects keep it lean. */
@@ -106,27 +96,11 @@ export type ParameterDefinition = {
   conditions?: ParameterConditions;
   metadata?: ParameterMetadata;
   ui?: ParameterUIHints;
-  capabilities?: ParameterCapabilities;
-};
-
-/** UI ORGANIZATION ONLY — never affects validation or the resolved value shape (ADR-006 §4.9). */
-export type ParameterGroup = {
-  id: string;
-  label?: string;
-  description?: string;
-  order?: number;
-  advanced?: boolean;
-  /** Keys of parameters in this section. */
-  parameters: string[];
 };
 
 /** A template's declarative parameter schema (embedded in `TemplateDefinition`). */
 export type ParameterSchema = {
-  version?: number;
   parameters: ParameterDefinition[];
-  /** Optional UI sections (presentation only). */
-  groups?: ParameterGroup[];
-  capabilities?: ParameterCapabilities;
 };
 
 /** A validation issue — path-addressed and severity-tagged (ADR-006 §4.6). */
@@ -185,7 +159,6 @@ export type ParameterTypeDefinition<V = unknown> = {
   validate?: (value: V, def: ParameterDefinition, ctx: ParameterContext, issues: ParameterIssue[], path: string) => void;
   /** Default UI hints for this type (overridable per-parameter). */
   ui?: ParameterUIHints;
-  capabilities?: ParameterCapabilities;
 };
 
 /**

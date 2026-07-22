@@ -107,7 +107,6 @@ export const describeParameterTypes = (types: ParameterTypeResolver = parameterT
     const def = types.require(key);
     const d: ParameterTypeDescriptor = { ...identity("parameterTypes", key) };
     if (def.ui !== undefined) d.ui = def.ui;
-    if (def.capabilities !== undefined) d.capabilities = def.capabilities;
     return d;
   });
 
