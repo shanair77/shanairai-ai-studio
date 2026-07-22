@@ -10,7 +10,6 @@
  * `validateComposition` for the structural invariants the builder relies on.
  */
 
-import { staticFile } from "remotion";
 import { DomainError } from "../errors";
 import { type ThemeMode } from "../config/Theme";
 import { type VideoConfigInput } from "./VideoConfig";
@@ -47,14 +46,9 @@ export type TransitionConfigBase = {
 /** A reference to a media asset: a `public/`-relative path or an absolute http(s) URL. */
 export type AssetRef = string;
 
-/** Named catalog of asset references, so scenes/music can refer to assets by key. */
-export type AssetCatalog = Record<string, AssetRef>;
-
 export type MusicConfig = {
-  /** Named audio asset, resolved from the asset registry (preferred). */
+  /** Named audio asset, resolved from the asset registry. */
   asset?: string;
-  /** Legacy raw ref or catalog key for the audio track. Kept for backward compatibility. */
-  src?: AssetRef;
   /** 0–1 playback volume. Default 1. */
   volume?: number;
   /** Loop the track for the whole composition. Default true. */
@@ -120,8 +114,6 @@ export type CompositionSchemaFor<M extends SceneMap> = VideoConfigInput & {
   transitions?: TransitionConfig;
   /** Timing fallbacks. */
   timing?: TimingConfig;
-  /** Named asset catalog resolvable by scenes and music. */
-  assets?: AssetCatalog;
 };
 
 /** Scene config over the built-in scenes. */
@@ -148,17 +140,7 @@ export type CompositionSchemaBase = VideoConfigInput & {
   scenes: SceneConfigBase[];
   transitions?: TransitionConfigBase;
   timing?: TimingConfig;
-  assets?: AssetCatalog;
 };
-
-const isUrl = (ref: string): boolean => /^https?:\/\//.test(ref);
-
-/** Resolve a single reference to a usable URL (`staticFile` for local paths). */
-export const resolveAssetRef = (ref: AssetRef): string => (isUrl(ref) ? ref : staticFile(ref));
-
-/** Resolve a reference that may instead be a catalog key. */
-export const resolveNamedAsset = (catalog: AssetCatalog | undefined, refOrName: AssetRef): string =>
-  resolveAssetRef(catalog?.[refOrName] ?? refOrName);
 
 /** Structural validation of the invariants the builder relies on. Throws `DomainError` on violation. */
 export const validateComposition = (config: CompositionSchemaBase): void => {

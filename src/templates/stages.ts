@@ -234,7 +234,6 @@ export const assembleTemplateSchema = (
     transitions: defaults.transitions,
     music: defaults.music,
     timing: defaults.timing,
-    assets: output.assets,
   };
 };
 

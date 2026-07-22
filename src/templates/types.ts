@@ -15,7 +15,6 @@ import { type FormatName } from "../config/Layout";
 import { type ThemeMode } from "../config/Theme";
 import { type ParameterSchema } from "../parameters";
 import {
-  type AssetCatalog,
   type BrandConfig,
   type MusicConfig,
   type SceneConfigBase,
@@ -49,8 +48,6 @@ export type TemplateOutput = {
   timing?: TimingConfig;
   /** Music the template wires by name (a caller override outranks it). */
   music?: MusicConfig;
-  /** A template-declared named asset catalog. */
-  assets?: AssetCatalog;
 };
 
 /**

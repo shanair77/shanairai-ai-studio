@@ -19,6 +19,7 @@
 import React, { createElement } from "react";
 import { AbsoluteFill, Audio, Sequence } from "remotion";
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
+import { DomainError } from "../errors";
 import { secondsToFrames } from "../config/Timing";
 import { type Registry } from "../registry";
 import { transitionRegistry, type TransitionContext, type TransitionResolver } from "../transitions";
@@ -31,7 +32,6 @@ import {
   type AssetRegistry,
 } from "../assets";
 import {
-  resolveNamedAsset,
   validateComposition,
   type CompositionSchema,
   type CompositionSchemaBase,
@@ -130,28 +130,23 @@ const assembleRuns = (timeline: Timeline, ctx: TransitionContext): React.ReactNo
   return runs;
 };
 
-/** Resolve music into `<Audio>` props: a named audio asset (preferred) or a legacy raw ref. */
+/** Resolve music into `<Audio>` props from a named audio asset in the registry. */
 const resolveMusicProps = (
   music: MusicConfig,
-  catalog: Record<string, string> | undefined,
   assets: AssetRegistry,
   fps: number,
   durationInFrames: number,
 ): Record<string, unknown> => {
-  let src: string;
-  if (music.asset) {
-    const def = assets.require(music.asset); // throws with a clear message if missing
-    assertCategory(music.asset, def, ["audio"]);
-    const resolved = resolveAsset(music.asset, def);
-    if (resolved.kind !== "file") {
-      throw new Error(`Music asset "${music.asset}" did not resolve to a file-backed source.`);
-    }
-    src = resolved.src;
-  } else if (music.src !== undefined) {
-    src = resolveNamedAsset(catalog, music.src); // legacy path
-  } else {
-    throw new Error("MusicConfig: either `asset` or `src` is required.");
+  if (!music.asset) {
+    throw new DomainError({ code: "invalid-composition", message: "MusicConfig: `asset` is required.", path: "music.asset" });
   }
+  const def = assets.require(music.asset); // throws with a clear message if missing
+  assertCategory(music.asset, def, ["audio"]);
+  const resolved = resolveAsset(music.asset, def);
+  if (resolved.kind !== "file") {
+    throw new Error(`Music asset "${music.asset}" did not resolve to a file-backed source.`);
+  }
+  const src = resolved.src;
 
   const trimBeforeSeconds = music.trimBefore ?? music.startFrom;
   return {
@@ -208,7 +203,7 @@ export function buildComposition(
     config.music ?? (brand.audio?.music ? { asset: brand.audio.music } : undefined);
   const { fps } = video;
   const ctx: TransitionContext = { width: video.width, height: video.height };
-  const musicProps = music ? resolveMusicProps(music, config.assets, assets, fps, durationInFrames) : undefined;
+  const musicProps = music ? resolveMusicProps(music, assets, fps, durationInFrames) : undefined;
 
   const Root: React.FC = () => {
     const layers: React.ReactNode[] = [];

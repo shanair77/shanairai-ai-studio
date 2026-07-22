@@ -113,8 +113,28 @@ describe("execute — failure classification", () => {
     expect(result.report.issues[0]).toMatchObject({ stage: "validate-template-output", code: "empty-output" });
   });
 
+  it("classifies a music-config error (missing `asset`) as a DomainError, not a crash", () => {
+    const result = run({ id: "M", template: "badMusic", params: {} });
+    expect(result.ok).toBe(false);
+    expect(result.report.issues[0]).toMatchObject({ stage: "build-composition", code: "invalid-composition", path: "music.asset" });
+  });
+
   it("rethrows an unexpected (non-DomainError) error — never masks framework bugs", () => {
-    expect(() => run({ id: "M", template: "badMusic", params: {} })).toThrow(/MusicConfig/);
+    // Simulate a framework bug: a scene registry that throws a raw Error mid-build. `execute` must
+    // surface it (rethrow), never classify it as an expected issue.
+    const brokenScenes = {
+      require: () => {
+        throw new Error("scene registry exploded (simulated framework bug)");
+      },
+      has: () => true,
+      keys: () => ["hero", "outro"],
+    };
+    expect(() =>
+      execute(
+        { id: "BUG", template: "withSchema", params: { title: "Hi" } },
+        { registries: { templates, scenes: brokenScenes as never } },
+      ),
+    ).toThrow(/exploded/);
   });
 });
 

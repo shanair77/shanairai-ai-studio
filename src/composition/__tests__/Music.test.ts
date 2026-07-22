@@ -42,13 +42,6 @@ describe("music integration", () => {
     expect((audios[0].props as { src: string }).src).toBe("https://cdn/bed.mp3");
   });
 
-  it("preserves legacy MusicConfig.src (raw ref)", () => {
-    const built = buildComposition(base({ src: "https://cdn/legacy.mp3" }), sceneRegistry, transitionRegistry);
-    const audios = findAll(built.component({}), Audio);
-    expect(audios).toHaveLength(1);
-    expect((audios[0].props as { src: string }).src).toBe("https://cdn/legacy.mp3");
-  });
-
   it("rejects a music asset whose category is not audio", () => {
     const imgAssets = createRegistry({ pic: createAssetDefinition({ category: "image", source: "https://cdn/p.png" }) });
     expect(() => buildComposition(base({ asset: "pic" }), sceneRegistry, transitionRegistry, imgAssets)).toThrow(/audio/);

@@ -34,10 +34,6 @@ export {
   type TransitionType,
   type MusicConfig,
   type TimingConfig,
-  type AssetRef,
-  type AssetCatalog,
-  resolveAssetRef,
-  resolveNamedAsset,
   validateComposition,
 } from "./CompositionSchema";
 

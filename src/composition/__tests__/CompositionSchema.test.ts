@@ -1,17 +1,5 @@
-import { describe, expect, it, vi } from "vitest";
-
-// CompositionSchema imports `staticFile` from remotion for local asset paths. It is the only
-// remotion surface this module touches, so we mock just that with a predictable transform.
-vi.mock("remotion", () => ({
-  staticFile: (path: string) => `/static/${path}`,
-}));
-
-import {
-  resolveAssetRef,
-  resolveNamedAsset,
-  validateComposition,
-  type CompositionSchema,
-} from "../CompositionSchema";
+import { describe, expect, it } from "vitest";
+import { validateComposition, type CompositionSchema } from "../CompositionSchema";
 
 const valid: CompositionSchema = {
   id: "Demo",
@@ -48,33 +36,5 @@ describe("validateComposition", () => {
       const cfg = { id: "X", scenes: [{ scene: "hero" }, {}] } as unknown as CompositionSchema;
       expect(() => validateComposition(cfg)).toThrow(/scenes\[1\]/);
     });
-  });
-});
-
-describe("resolveAssetRef", () => {
-  it("passes an http(s) URL through unchanged (no staticFile)", () => {
-    expect(resolveAssetRef("https://cdn.example.com/track.mp3")).toBe("https://cdn.example.com/track.mp3");
-  });
-
-  it("routes a local path through staticFile", () => {
-    expect(resolveAssetRef("audio/bg.mp3")).toBe("/static/audio/bg.mp3");
-  });
-});
-
-describe("resolveNamedAsset", () => {
-  it("resolves a catalog key to its ref", () => {
-    expect(resolveNamedAsset({ music: "audio/bg.mp3" }, "music")).toBe("/static/audio/bg.mp3");
-  });
-
-  it("resolves a catalog key whose value is a URL", () => {
-    expect(resolveNamedAsset({ music: "https://cdn/x.mp3" }, "music")).toBe("https://cdn/x.mp3");
-  });
-
-  it("treats a non-key as a direct ref", () => {
-    expect(resolveNamedAsset({ music: "audio/bg.mp3" }, "https://cdn/y.mp3")).toBe("https://cdn/y.mp3");
-  });
-
-  it("handles an undefined catalog by resolving the ref directly", () => {
-    expect(resolveNamedAsset(undefined, "https://cdn/z.mp3")).toBe("https://cdn/z.mp3");
   });
 });
