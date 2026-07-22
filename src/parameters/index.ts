@@ -46,4 +46,4 @@ export { createParameterTypeDefinition } from "./definition";
 // replace it like any other family.
 export { builtinParameterTypes, parameterTypeRegistry } from "./ParameterTypeRegistry";
 export { validatorRegistry } from "./validators";
-export { validateParameters, resolveParameters, resolveParametersOrThrow } from "./resolve";
+export { validateParameters, resolveParameters } from "./resolve";

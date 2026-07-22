@@ -6,8 +6,8 @@
  *            → Template constraints → Named validators → Conditional rules → ResolvedParameters
  *
  * Result-based (collect ALL issues; no control-flow-by-exception). `validateParameters` returns
- * the issue list; `resolveParameters` returns a `Result`; `resolveParametersOrThrow` is the
- * build-path convenience. Resolved params are deeply frozen — `build()` must not mutate them.
+ * the issue list; `resolveParameters` returns a `Result`. Resolved params are deeply frozen —
+ * `build()` must not mutate them.
  */
 
 import { err, ok, type Result } from "../errors";
@@ -216,18 +216,4 @@ export const resolveParameters = (
   const errors = issues.filter((i) => i.severity === "error");
   if (errors.length > 0) return err(issues);
   return ok(deepFreeze(resolved) as DeepReadonly<ResolvedParameters>);
-};
-
-/** Throwing convenience for the build path (mirrors `validateComposition`). */
-export const resolveParametersOrThrow = (
-  schema: ParameterSchema,
-  values: Record<string, ParameterValue>,
-  ctx: ParameterContext = {},
-): DeepReadonly<ResolvedParameters> => {
-  const result = resolveParameters(schema, values, ctx);
-  if (!result.ok) {
-    const detail = result.errors.map((i) => ` - [${i.code}] ${i.path}: ${i.message}`).join("\n");
-    throw new Error(`Parameter validation failed:\n${detail}`);
-  }
-  return result.value;
 };

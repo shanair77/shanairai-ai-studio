@@ -531,8 +531,9 @@ is deferred to a later phase:
    (derived from `builtinParameterTypes`) are two declarations of one truth. The cycle-free fix is to
    anchor the built-in map with `satisfies Record<ParameterTypeName, …>` so TypeScript enforces exact,
    exhaustive agreement.
-2. **`resolveParametersOrThrow` is obsolete** — its only production caller
-   (`resolveTemplateComposition`) was removed in Phase 30. It now survives only in its own test.
+2. **`resolveParametersOrThrow`** — an obsolete throwing helper whose only production caller
+   (`resolveTemplateComposition`) was removed in Phase 30. **Removed in Phase 33** (it had survived
+   only in its own test); the public resolver surface is now `validateParameters` + `resolveParameters`.
 3. **The double validation pass** — `resolveTemplateParameters` calls `validateParameters` and then
    `resolveParameters`, running the full pipeline (and every named validator) **twice**, purely to
    split warnings from errors. The minimal design has one resolver returning value *and* issues.

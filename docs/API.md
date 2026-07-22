@@ -138,7 +138,6 @@ validatorRegistry: Registry<ValidatorMap>                                // empt
 
 validateParameters(schema, values, ctx?): ParameterIssue[]                                   // non-throwing
 resolveParameters(schema, values, ctx?): Result<DeepReadonly<ResolvedParameters>, ParameterIssue[]>
-resolveParametersOrThrow(schema, values, ctx?): DeepReadonly<ResolvedParameters>              // build path
 ```
 
 **Pipeline:** `parse → type-validate → defaults → constraints → named validators → conditional rules`.

@@ -4,7 +4,6 @@ import { createAssetDefinition } from "../../assets";
 import { createBrandDefinition } from "../../brand";
 import {
   resolveParameters,
-  resolveParametersOrThrow,
   validateParameters,
   type ParameterContext,
   type ParameterSchema,
@@ -27,6 +26,12 @@ const ctx: ParameterContext = { assets, brands, validators };
 const schema = (parameters: ParameterSchema["parameters"]): ParameterSchema => ({ parameters });
 const codes = (schemaDef: ParameterSchema, values: Record<string, unknown>) =>
   validateParameters(schemaDef, values as never, ctx).map((i) => i.code);
+/** Test convenience: resolve and unwrap the value (throws on failure). */
+const resolved = (schemaDef: ParameterSchema, values: Record<string, unknown>) => {
+  const r = resolveParameters(schemaDef, values as never, ctx);
+  if (!r.ok) throw new Error(r.errors.map((i) => `${i.path}: ${i.message}`).join("; "));
+  return r.value;
+};
 
 // ── Defaults & precedence ────────────────────────────────────────────────────────────────────
 describe("defaults & precedence", () => {
@@ -35,18 +40,18 @@ describe("defaults & precedence", () => {
       { key: "title", type: "string", default: "Untitled" },
       { key: "loop", type: "boolean" },
     ]);
-    const r = resolveParametersOrThrow(s, {}, ctx);
+    const r = resolved(s, {});
     expect(r).toEqual({ title: "Untitled", loop: false });
   });
 
   it("caller value beats the parameter default", () => {
     const s = schema([{ key: "title", type: "string", default: "Untitled" }]);
-    expect(resolveParametersOrThrow(s, { title: "Nova" }, ctx)).toEqual({ title: "Nova" });
+    expect(resolved(s, { title: "Nova" })).toEqual({ title: "Nova" });
   });
 
   it("leaves an absent optional with no default undefined", () => {
     const s = schema([{ key: "subtitle", type: "string" }]);
-    expect(resolveParametersOrThrow(s, {}, ctx)).toEqual({});
+    expect(resolved(s, {})).toEqual({});
   });
 });
 
@@ -127,7 +132,7 @@ describe("lists & groups", () => {
       ] } },
     ]);
     expect(validateParameters(s, { cta: {} } as never, ctx).map((i) => i.path)).toEqual(["cta.label"]);
-    expect(resolveParametersOrThrow(s, { cta: { label: "Go" } }, ctx)).toEqual({ cta: { label: "Go", url: "https://x.com" } });
+    expect(resolved(s, { cta: { label: "Go" } })).toEqual({ cta: { label: "Go", url: "https://x.com" } });
   });
 });
 
@@ -198,14 +203,16 @@ describe("Result behavior & immutability", () => {
     if (!bad.ok) expect(bad.errors[0]).toMatchObject({ path: "title", code: "required", severity: "error" });
   });
 
-  it("resolveParametersOrThrow throws on invalid params", () => {
+  it("resolveParameters returns err on invalid params", () => {
     const s = schema([{ key: "n", type: "number", constraints: { min: 5 } }]);
-    expect(() => resolveParametersOrThrow(s, { n: 1 }, ctx)).toThrow(/Parameter validation failed[\s\S]*min/);
+    const r = resolveParameters(s, { n: 1 } as never, ctx);
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.errors.map((i) => i.code)).toContain("min");
   });
 
   it("resolved params are deeply frozen", () => {
     const s = schema([{ key: "cta", type: "group", constraints: { fields: [{ key: "label", type: "string", default: "Go" }] } }]);
-    const r = resolveParametersOrThrow(s, {}, ctx) as { cta: { label: string } };
+    const r = resolved(s, {}) as { cta: { label: string } };
     expect(Object.isFrozen(r)).toBe(true);
     expect(Object.isFrozen(r.cta)).toBe(true);
     expect(() => { (r as { cta: { label: string } }).cta.label = "x"; }).toThrow(TypeError);
