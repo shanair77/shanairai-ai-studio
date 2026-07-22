@@ -5,9 +5,10 @@
  *   Raw JSON → Type parse → Type validation → Default resolution
  *            → Template constraints → Named validators → Conditional rules → ResolvedParameters
  *
- * Result-based (collect ALL issues; no control-flow-by-exception). `validateParameters` returns
- * the issue list; `resolveParameters` returns a `Result`. Resolved params are deeply frozen —
- * `build()` must not mutate them.
+ * Result-based (collect ALL issues; no control-flow-by-exception). One pipeline pass per resolve:
+ * `resolveParametersDetailed` returns value + issues in a single traversal; `validateParameters`
+ * (issues only) and `resolveParameters` (a `Result`) are projections of that one pass. Resolved
+ * params are deeply frozen — `build()` must not mutate them.
  */
 
 import { err, ok, type Result } from "../errors";
@@ -206,14 +207,39 @@ export const validateParameters = (
   ctx: ParameterContext = {},
 ): ParameterIssue[] => run(schema, values, ctx).issues;
 
-/** Result-based: `ok` with deeply-frozen resolved params, or `err` with the error issues. */
+/**
+ * The outcome of one resolve pass — a discriminated union so the states are unambiguous:
+ *   - `ok: true`  → a usable, deeply-frozen `value` plus any `warnings`.
+ *   - `ok: false` → the `errors` (and any `warnings`); NO resolved value is exposed, so a caller
+ *                   cannot accidentally treat a failed/partial resolution as valid parameters.
+ */
+export type ParameterResolution =
+  | { ok: true; value: DeepReadonly<ResolvedParameters>; warnings: ParameterIssue[] }
+  | { ok: false; errors: ParameterIssue[]; warnings: ParameterIssue[] };
+
+/**
+ * The canonical resolve: ONE pipeline pass. `resolveParameters` (Result) and template resolution are
+ * projections of this — so no parameter is parsed, and no named validator executed, twice. The value
+ * is present only on success; on failure the caller gets errors + warnings and no value.
+ */
+export const resolveParametersDetailed = (
+  schema: ParameterSchema,
+  values: Record<string, ParameterValue>,
+  ctx: ParameterContext = {},
+): ParameterResolution => {
+  const { resolved, issues } = run(schema, values, ctx);
+  const warnings = issues.filter((i) => i.severity === "warning");
+  const errors = issues.filter((i) => i.severity === "error");
+  if (errors.length > 0) return { ok: false, errors, warnings };
+  return { ok: true, value: deepFreeze(resolved) as DeepReadonly<ResolvedParameters>, warnings };
+};
+
+/** Result-based projection: `ok` with deeply-frozen resolved params, or `err` with the issues. */
 export const resolveParameters = (
   schema: ParameterSchema,
   values: Record<string, ParameterValue>,
   ctx: ParameterContext = {},
 ): Result<DeepReadonly<ResolvedParameters>, ParameterIssue[]> => {
-  const { resolved, issues } = run(schema, values, ctx);
-  const errors = issues.filter((i) => i.severity === "error");
-  if (errors.length > 0) return err(issues);
-  return ok(deepFreeze(resolved) as DeepReadonly<ResolvedParameters>);
+  const r = resolveParametersDetailed(schema, values, ctx);
+  return r.ok ? ok(r.value) : err([...r.errors, ...r.warnings]);
 };

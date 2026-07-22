@@ -31,8 +31,7 @@ import {
 import { type FormatName } from "../config/Layout";
 import { DomainError } from "../errors";
 import {
-  resolveParameters,
-  validateParameters,
+  resolveParametersDetailed,
   type ParameterContext,
   type ParameterIssue,
   type ParameterValue,
@@ -164,12 +163,11 @@ export const resolveTemplateParameters = (
   ctx: ParameterContext,
 ): TemplateParameterResolution => {
   if (!template.parameters) return { ok: true, params: rawParams, warnings: [] };
-  const all = validateParameters(template.parameters, rawParams as Record<string, ParameterValue>, ctx);
-  const warnings = all.filter((i) => i.severity === "warning");
-  const errors = all.filter((i) => i.severity === "error");
-  if (errors.length > 0) return { ok: false, issues: errors, warnings };
-  const res = resolveParameters(template.parameters, rawParams as Record<string, ParameterValue>, ctx);
-  return { ok: true, params: res.ok ? (res.value as unknown as TemplateParams) : rawParams, warnings };
+  // ONE pipeline pass: value + issues together (previously this ran validate then resolve, executing
+  // every parameter parse and named validator twice). The value is exposed only on the ok branch.
+  const r = resolveParametersDetailed(template.parameters, rawParams as Record<string, ParameterValue>, ctx);
+  if (!r.ok) return { ok: false, issues: r.errors, warnings: r.warnings };
+  return { ok: true, params: r.value as unknown as TemplateParams, warnings: r.warnings };
 };
 
 /** Stage 5 (public pure helper) — run the pure template build (configuration only). */
