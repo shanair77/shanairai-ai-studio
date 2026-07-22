@@ -44,6 +44,6 @@ export { createParameterTypeDefinition } from "./definition";
 // `parameterTypeRegistry = createRegistry(builtinParameterTypes)` — the built-in vocabulary is the
 // single definition site; the registry wraps it (mirrors builtinScenes/sceneRegistry). Extend or
 // replace it like any other family.
-export { builtinParameterTypes, parameterTypeRegistry, type BuiltinParameterTypeName } from "./ParameterTypeRegistry";
+export { builtinParameterTypes, parameterTypeRegistry } from "./ParameterTypeRegistry";
 export { validatorRegistry } from "./validators";
 export { validateParameters, resolveParameters, resolveParametersOrThrow } from "./resolve";

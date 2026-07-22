@@ -18,7 +18,7 @@ import {
   type ParameterDefinition,
   type ParameterIssue,
   type ParameterTypeDefinition,
-  type ParameterTypeMap,
+  type ParameterTypeName,
   type ParameterValue,
 } from "./types";
 
@@ -177,10 +177,12 @@ export const builtinParameterTypes = {
       return raw as Record<string, ParameterValue>;
     },
   }),
-} satisfies ParameterTypeMap;
-
-/** The strongly-typed union of built-in parameter-type names. */
-export type BuiltinParameterTypeName = keyof typeof builtinParameterTypes;
+  // Anchored to `ParameterTypeName` (not `Record<string, …>`) so the built-in map and the closed
+  // name vocabulary must agree EXACTLY: a missing built-in or an extra key is a compile error. This
+  // is the single guard against the two ever drifting apart (ADR-006 §13.7 item 1). `ParameterTypeName`
+  // stays authoritative because `types` cannot import this module (that would be a cycle).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+} satisfies Record<ParameterTypeName, ParameterTypeDefinition<any>>;
 
 /**
  * The default parameter-type registry — created directly from `builtinParameterTypes`, exactly as
