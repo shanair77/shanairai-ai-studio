@@ -10,16 +10,10 @@
  */
 
 import type React from "react";
-import { type EasingToken } from "../config/Animation";
-import { type SafeAreaToken } from "../config/Layout";
 import { type Theme, type ThemeMode, type ThemeOverrides } from "../config/Theme";
 import { type FontFace } from "../config/fonts";
 import { type AssetKit, type AssetMap, type AssetRegistry, type NamesOfCategory } from "../assets";
 import { type TransitionName } from "../transitions";
-
-/** A semantic color token. */
-type ColorToken = keyof Theme["colors"];
-type BrandAlignment = "start" | "center" | "end";
 
 /** A brand's default scene-to-scene transition. */
 export type BrandTransition = { type: TransitionName; duration?: number; options?: unknown };
@@ -38,12 +32,8 @@ export type BrandDefinition<M extends AssetMap = AssetMap> = {
     alternate?: NamesOfCategory<M, "image" | "svg">;
     watermark?: NamesOfCategory<M, "image" | "svg">;
   };
-  surface?: { default?: ColorToken; opaqueByDefault?: boolean };
-  motion?: { easing?: EasingToken; durationScale?: number; stagger?: number };
   transition?: BrandTransition;
-  cta?: { uppercase?: boolean; weight?: number; letterSpacing?: string };
-  layout?: { safeArea?: SafeAreaToken; align?: BrandAlignment; maxWidth?: number };
-  audio?: { music?: NamesOfCategory<M, "audio">; sfx?: Record<string, NamesOfCategory<M, "audio">> };
+  audio?: { music?: NamesOfCategory<M, "audio"> };
   meta?: { handles?: Record<string, string>; legal?: string; url?: string };
 };
 
@@ -74,11 +64,7 @@ export type ResolvedBrand = {
   renderLogo?: (variant?: "primary" | "alternate") => React.ReactNode;
   /** Render the brand's watermark as a node. */
   renderWatermark?: () => React.ReactNode;
-  surface?: { default?: ColorToken; opaqueByDefault?: boolean };
-  motion?: { easing?: EasingToken; durationScale?: number; stagger?: number };
   transition?: BrandTransition;
-  cta?: BrandDefinition["cta"];
-  layout?: BrandDefinition["layout"];
   audio?: { music?: string };
   meta?: BrandDefinition["meta"];
 };

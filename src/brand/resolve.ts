@@ -57,12 +57,8 @@ export const resolveBrand = <M extends AssetMap = AssetMap>(
     logos: logos ? { primary: logos.primary, alternate: logos.alternate, watermark: logos.watermark } : undefined,
     renderLogo,
     renderWatermark,
-    surface: def.surface,
-    motion: def.motion,
     // eslint-disable-next-line @remotion/non-pure-animation -- config key, not a CSS animation
     transition: def.transition,
-    cta: def.cta,
-    layout: def.layout,
     audio: def.audio ? { music: def.audio.music } : undefined,
     meta: def.meta,
   };
