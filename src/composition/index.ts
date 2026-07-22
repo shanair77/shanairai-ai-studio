@@ -84,11 +84,7 @@ export {
   type VideoConfigInput,
 } from "./VideoConfig";
 
-export {
-  BrandThemeProvider,
-  useBrandTheme,
-  type BrandConfig,
-} from "./BrandConfig";
+export { type BrandConfig } from "./BrandConfig";
 
 export {
   createBrandDefinition,
