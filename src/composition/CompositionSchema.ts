@@ -53,8 +53,6 @@ export type MusicConfig = {
   volume?: number;
   /** Loop the track for the whole composition. Default true. */
   loop?: boolean;
-  /** Seconds to trim from the start of the track. Default 0. (Alias of `trimBefore`.) */
-  startFrom?: number;
   /** Seconds to trim from the start of the track. */
   trimBefore?: number;
   /** Seconds to trim from the end of the track. */

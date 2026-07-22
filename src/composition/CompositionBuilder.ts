@@ -148,7 +148,7 @@ const resolveMusicProps = (
   }
   const src = resolved.src;
 
-  const trimBeforeSeconds = music.trimBefore ?? music.startFrom;
+  const trimBeforeSeconds = music.trimBefore;
   return {
     src,
     volume: audioVolume(music.volume ?? 1, secondsToFrames(music.fadeIn ?? 0, fps), secondsToFrames(music.fadeOut ?? 0, fps), durationInFrames),
