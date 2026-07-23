@@ -51,8 +51,8 @@ export type SceneDefinition<P> = {
   defaultDuration: number;
   /**
    * Whether the scene fully covers the frame opaquely (its default surface does). Default
-   * `true`. Feeds the transition opacity contract; a scene used transparently (translucent
-   * surface / overlay) can override per-instance via `SceneConfig.opaque`.
+   * `true`. Feeds the transition opacity contract; a scene meant to render transparently
+   * (translucent surface / overlay) declares `opaque: false` here.
    */
   opaque?: boolean;
 };

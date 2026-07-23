@@ -8,10 +8,12 @@ import { resolveTimeline } from "../Timeline";
 
 const noopScene: SceneComponent = () => null;
 
+// Opacity is a property of the scene definition: the "transparent" scene declares itself
+// non-opaque; every other scene inherits the default (opaque).
 const fakeScenes = (defaultDuration = 5): SceneResolver => ({
   require: (name: string) => {
     if (name === "missing") throw new Error(`fake: no scene "${name}"`);
-    return { component: noopScene, defaultDuration };
+    return { component: noopScene, defaultDuration, ...(name === "transparent" ? { opaque: false } : {}) };
   },
   has: (name: string) => name !== "missing",
   keys: () => [],
@@ -124,8 +126,8 @@ describe("resolveTimeline", () => {
   });
 
   describe("opacity contract", () => {
-    it("resolves effective opacity (config overrides definition/default)", () => {
-      const t = run({ scenes: [{ scene: "a", duration: 1 }, { scene: "b", duration: 1, opaque: false }] });
+    it("resolves effective opacity from the scene definition", () => {
+      const t = run({ scenes: [{ scene: "a", duration: 1 }, { scene: "transparent", duration: 1 }] });
       expect(t.scenes[0].opaque).toBe(true);
       expect(t.scenes[1].opaque).toBe(false);
     });
@@ -134,7 +136,7 @@ describe("resolveTimeline", () => {
       expect(() =>
         run({
           transitions: { type: "fade", duration: 0.5 },
-          scenes: [{ scene: "a", duration: 3 }, { scene: "b", duration: 3, opaque: false }],
+          scenes: [{ scene: "a", duration: 3 }, { scene: "transparent", duration: 3 }],
         }),
       ).toThrow(/requires an opaque incoming scene/);
     });
@@ -143,14 +145,14 @@ describe("resolveTimeline", () => {
       expect(() =>
         run({
           transitions: { type: "dissolve", duration: 0.5 },
-          scenes: [{ scene: "a", duration: 3 }, { scene: "b", duration: 3, opaque: false }],
+          scenes: [{ scene: "a", duration: 3 }, { scene: "transparent", duration: 3 }],
         }),
       ).not.toThrow();
     });
 
     it("does not apply the contract to the first scene", () => {
       expect(() =>
-        run({ transitions: { type: "fade" }, scenes: [{ scene: "a", duration: 3, opaque: false }] }),
+        run({ transitions: { type: "fade" }, scenes: [{ scene: "transparent", duration: 3 }] }),
       ).not.toThrow();
     });
   });

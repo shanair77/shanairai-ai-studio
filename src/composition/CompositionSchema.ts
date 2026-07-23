@@ -70,11 +70,6 @@ type SceneConfigMeta = {
   duration?: number;
   /** Optional instance label shown in the Studio timeline. */
   label?: string;
-  /**
-   * Override the scene's opacity for this instance (feeds the transition opacity contract).
-   * Defaults to the scene definition's `opaque`, then `true`.
-   */
-  opaque?: boolean;
 };
 
 /**

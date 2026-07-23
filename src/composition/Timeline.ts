@@ -25,7 +25,7 @@ export type ResolvedScene = {
   /** Opaque config-supplied props, passed straight to the scene component. */
   props: unknown;
   durationInFrames: number;
-  /** Effective opacity (config ?? definition ?? true). */
+  /** Effective opacity (definition ?? true). */
   opaque: boolean;
 };
 
@@ -64,7 +64,7 @@ export const resolveTimeline = (
       scene.duration ?? config.timing?.defaultSceneDuration ?? def.defaultDuration,
       fps,
     );
-    const opaque = scene.opaque ?? def.opaque ?? true;
+    const opaque = def.opaque ?? true;
     return { key: `${scene.scene}-${i}`, name: scene.scene, label: scene.label, component: def.component, props: scene.props ?? {}, durationInFrames, opaque };
   });
 

@@ -75,6 +75,16 @@ describe("typed scene registration", () => {
     void badFrames;
   });
 
+  it("rejects authored per-instance `opaque` (opacity is owned by the scene definition)", () => {
+    const badOpaque: CompositionSchema = {
+      id: "bad",
+      // @ts-expect-error `opaque` is not an authored scene field — declare it on the scene definition
+      scenes: [{ scene: "hero", opaque: false, props: { title: "Hi" } }],
+    };
+
+    void badOpaque;
+  });
+
   it("keeps a custom registry's config typed via extend", () => {
     const studio = sceneRegistry.extend({
       probe: createSceneDefinition<{ headline?: string }>({ component: () => null }),
