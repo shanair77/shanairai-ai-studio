@@ -59,6 +59,22 @@ describe("typed scene registration", () => {
     void badPropType;
   });
 
+  it("accepts per-scene `duration` (seconds) but rejects authored `durationInFrames`", () => {
+    const ok: CompositionSchema = {
+      id: "ok",
+      scenes: [{ scene: "hero", duration: 3.5, props: { title: "Hi" } }],
+    };
+
+    const badFrames: CompositionSchema = {
+      id: "bad",
+      // @ts-expect-error `durationInFrames` is not an authored scene field — author in seconds via `duration`
+      scenes: [{ scene: "hero", durationInFrames: 90, props: { title: "Hi" } }],
+    };
+
+    void ok;
+    void badFrames;
+  });
+
   it("keeps a custom registry's config typed via extend", () => {
     const studio = sceneRegistry.extend({
       probe: createSceneDefinition<{ headline?: string }>({ component: () => null }),

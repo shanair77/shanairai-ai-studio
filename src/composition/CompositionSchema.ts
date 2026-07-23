@@ -66,10 +66,8 @@ export type TimingConfig = {
 
 /** Fields every scene config carries besides its name, props, and transition. */
 type SceneConfigMeta = {
-  /** Length in seconds (overridden by `durationInFrames`). */
+  /** Length in seconds. */
   duration?: number;
-  /** Length in frames (takes precedence over `duration`). */
-  durationInFrames?: number;
   /** Optional instance label shown in the Studio timeline. */
   label?: string;
   /**

@@ -60,9 +60,10 @@ export const resolveTimeline = (
 
   const resolvedScenes: ResolvedScene[] = config.scenes.map((scene, i) => {
     const def = scenes.require(scene.scene);
-    const durationInFrames =
-      scene.durationInFrames ??
-      secondsToFrames(scene.duration ?? config.timing?.defaultSceneDuration ?? def.defaultDuration, fps);
+    const durationInFrames = secondsToFrames(
+      scene.duration ?? config.timing?.defaultSceneDuration ?? def.defaultDuration,
+      fps,
+    );
     const opaque = scene.opaque ?? def.opaque ?? true;
     return { key: `${scene.scene}-${i}`, name: scene.scene, label: scene.label, component: def.component, props: scene.props ?? {}, durationInFrames, opaque };
   });

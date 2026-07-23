@@ -58,8 +58,8 @@ describe("resolveTimeline", () => {
       expect(run({ scenes: [{ scene: "a", duration: 3 }] }, 60).scenes[0].durationInFrames).toBe(180);
     });
 
-    it("resolves duration precedence: durationInFrames > duration > timing default > registry default", () => {
-      expect(run({ scenes: [{ scene: "a", duration: 3, durationInFrames: 42 }] }).scenes[0].durationInFrames).toBe(42);
+    it("resolves duration precedence: duration > timing default > registry default", () => {
+      expect(run({ scenes: [{ scene: "a", duration: 3 }] }).scenes[0].durationInFrames).toBe(90);
       expect(run({ timing: { defaultSceneDuration: 2 }, scenes: [{ scene: "a" }] }).scenes[0].durationInFrames).toBe(60);
       expect(run({ scenes: [{ scene: "a" }] }).scenes[0].durationInFrames).toBe(150); // registry default 5s
     });
