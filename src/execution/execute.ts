@@ -75,7 +75,7 @@ export function execute(request: ExecutionRequest, input: ExecutionInput = {}): 
 
   const { videoInput, ctx: templateCtx } = resolveTemplateCanvas(request, template);
   const context = createExecutionContext(
-    { executionId, canvas: { format: videoInput.format, width: templateCtx.width, height: templateCtx.height, fps: templateCtx.fps }, locale: input.locale },
+    { executionId, canvas: { format: videoInput.format, width: templateCtx.width, height: templateCtx.height, fps: templateCtx.fps } },
     registries,
   );
 

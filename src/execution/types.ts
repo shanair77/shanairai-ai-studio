@@ -45,7 +45,6 @@ export type ExecutionReport = Report<ExecutionStage> & { executionId: string };
 export type ExecutionEnvironment = {
   executionId: string;
   canvas: { format?: FormatName; width: number; height: number; fps: number };
-  locale?: string; // reserved
 };
 
 /**
@@ -63,7 +62,6 @@ export type ExecutionContext = {
 export type ExecutionInput = {
   registries?: Partial<FrameworkRegistries>;
   executionId?: string;
-  locale?: string; // reserved
 };
 
 /**

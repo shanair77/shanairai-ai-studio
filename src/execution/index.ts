@@ -16,9 +16,10 @@
  * `composition`, `parameters` (types), and `errors`. Nothing imports this layer.
  */
 
-// Public surface = the two entry points + the result/report/context TYPES. The context/report
-// construction helpers (createExecutionContext, deriveExecutionId, createReport) and the stage
-// list (EXECUTION_STAGES) are execution-internal and deliberately NOT re-exported.
+// Public surface = the entry points + the request/input/result/report TYPES. The context types
+// (ExecutionContext, ExecutionEnvironment), the context/report construction helpers
+// (createExecutionContext, deriveExecutionId, createReport), and the stage list (EXECUTION_STAGES)
+// are execution-internal and deliberately NOT re-exported.
 export { execute, executeOrThrow, executeTyped, executeTypedOrThrow } from "./execute";
 export type {
   ExecutionRequest,
@@ -30,8 +31,6 @@ export type {
   ExecutionWarning,
   ExecutionSpan,
   ExecutionReport,
-  ExecutionEnvironment,
-  ExecutionContext,
   ExecutionResult,
 } from "./types";
 // The registries bundle is now the canonical `FrameworkRegistries` from `contracts`.
