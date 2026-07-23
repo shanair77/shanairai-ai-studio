@@ -18,7 +18,6 @@ export type {
   RawInput,
   RawExecutionRequest,
   RequestSchemaVersion,
-  RequestEnvelope,
   NormalizedExecutionRequest,
   RequestStage,
   RequestIssue,

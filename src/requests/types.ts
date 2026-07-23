@@ -9,8 +9,6 @@
 
 import { type Registry } from "../registry";
 import { type ExecutionRequest, type Issue, type Report, type Span, type Warning } from "../contracts";
-import { type MusicConfig, type TimingConfig, type TransitionConfigBase, type VideoConfigInput } from "../composition";
-import { type ThemeMode } from "../config/Theme";
 
 /** Untrusted input: a JSON string or an already-parsed value. */
 export type RawInput = string | unknown;
@@ -20,18 +18,6 @@ export type RawExecutionRequest = Record<string, unknown>;
 
 /** The request schema version (numeric string, e.g. "1"). */
 export type RequestSchemaVersion = string;
-
-/** The structural request envelope validated here; `params` is the OPAQUE payload (Execution validates it). */
-export type RequestEnvelope = VideoConfigInput & {
-  version?: RequestSchemaVersion;
-  id: string;
-  template: string;
-  brand?: string;
-  theme?: ThemeMode;
-  transitions?: TransitionConfigBase;
-  music?: MusicConfig;
-  timing?: TimingConfig;
-};
 
 /** The validated, normalized, guaranteed-serializable output — the type Execution consumes. */
 export type NormalizedExecutionRequest = ExecutionRequest;

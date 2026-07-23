@@ -26,7 +26,6 @@ export { processRequest, processRequestOrThrow, CURRENT_REQUEST_VERSION } from "
 export type {
   RawInput,
   RawExecutionRequest,
-  RequestEnvelope,
   NormalizedExecutionRequest,
   RequestStage,
   RequestIssue,
