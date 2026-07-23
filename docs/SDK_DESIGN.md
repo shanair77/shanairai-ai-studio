@@ -4,6 +4,9 @@
 > **Basis:** HEAD `30ab67a` (Phase 45). Every claim re-verified against current source.
 >
 > **Revision history**
+> - Rev 3 — recorded the **Phase S0** decision (settled): `processRequest` stays a standalone,
+>   React-free, registry-free transport front-end; `compile` is the semantic compiler over a
+>   normalized `CompileRequest`. See the **Decision Records** appendix (DR-S0), §9, and §10.
 > - Rev 2 — updated for **Phase 44** (`c06d372`, remove authored per-scene `durationInFrames`) and
 >   **Phase 45** (`30ab67a`, move scene opacity to `SceneDefinition`). These resolve the "Phase F"
 >   authored-timing/opacity freeze-blocker flagged in Rev 1; see §5, §8, §9, §10.
@@ -170,7 +173,7 @@ Headline: with Phases 37–45 complete, **the authored model is freeze-ready.** 
 ## 9. Remaining Architectural Debt (ranked)
 
 **Must fix before SDK:**
-1. **Wire and surface the compiler.** `execute` + `describeFramework` have **0 consumers** and aren't exported. Decide `processRequest`↔`compile` relationship (one design decision). This *is* the SDK.
+1. **Wire and surface the compiler.** `execute` + `describeFramework` have **0 consumers** and aren't exported. This *is* the SDK. *(The `processRequest`↔`compile` relationship — the one design decision this item carried — is now settled; see Decision Records: DR-S0.)*
 2. **`CompileResult` must not leak `CompositionSchemaBase`** (today `ExecutionResult` does). Define the bespoke public result.
 3. **Version-baseline bug** (`process.ts:63`: absent version → `CURRENT`, not `"1"`) — must fix before `processRequest` is public.
 4. **Remove dead/misleading exports from any public path:** `RequestEnvelope`, `migrationRegistry`, `ExecutionContext`/`ExecutionEnvironment`, `ExecutionInput.locale`, `Result<T,E>` as "shared."
@@ -195,7 +198,7 @@ Headline: with Phases 37–45 complete, **the authored model is freeze-ready.** 
 
 Exact phases (each: implement → verify → byte-identical demo + `describeFramework()` → stop → review):
 
-- **Phase S0 — One design decision (no code).** Resolve `processRequest` ↔ `compile`: is transport-validation a separate front-end (recommended) or folded into `compile`? The only genuine architecture choice left.
+- **Phase S0 — One design decision (no code). ✅ SETTLED.** `processRequest` ↔ `compile` resolved as a **separate front-end** (transport validation is not folded into `compile`). Recorded permanently in Decision Records: DR-S0.
 - **Phase S1 — Correctness fixes (internal).** Fix the version-baseline bug; define a bespoke internal result without the `schema` leak; delete `RequestEnvelope`, `ExecutionContext`/`Environment` exports, `ExecutionInput.locale`; demote `executeOrThrow`/`executeTyped*` to internal.
 - **Phase S2 — `createCompiler` + `compile` + `describe`.** Build the instance over `execute`, with typed `compile<M>` inference; define `CompileRequest`/`CompileResult`.
 - **Phase S3 — `define*` renames + public entry (`.`).**
@@ -205,3 +208,33 @@ Exact phases (each: implement → verify → byte-identical demo + `describeFram
 *(Rev 1's separate "freeze decision on Phase F" phase is dropped — Phases 44/45 already resolved it. `TemplateOutput`/`SceneConfigBase`/`SceneDefinition` are ready to freeze as they stand at HEAD `30ab67a`.)*
 
 The guidance for the decade-long maintainer is unchanged: **the biggest risk is what you'd be tempted to add.** Ship `createCompiler` + five `define*` + `describeFramework` + `processRequest`, and add `execute`, `buildComposition`, `createRegistry`, `compileOrThrow`, and any dynamic-opacity resolver only when a real consumer demands them. Every function you *don't* export in v1 is a function you can design correctly later instead of maintaining forever.
+
+## Decision Records
+
+Permanent, settled architecture decisions. These are not open questions — they are fixed contracts the implementation must uphold. Reopening one requires an explicit new decision, not incidental drift.
+
+### DR-S0 — `processRequest` and `compile` are permanently separate
+
+**Status:** Settled (Phase S0). **Decision:** transport-validation is a **separate front-end**, not folded into `compile`.
+
+**Rationale (summary):** the two layers sit on opposite sides of both the React boundary and the registry boundary. `processRequest` is React-free and registry-free and belongs on the `./inspect` path so an edge/server tier can reject malformed requests without importing React or the compiler; `compile` is registry-bearing and React-producing and runs on the render tier. Their types already compose (`NormalizedExecutionRequest = ExecutionRequest`), and a semantics-preserving handoff is already proven by test. Folding would break the React-free validation path, force two disjoint report vocabularies into one incoherent report, and create a second way to do one thing. Full analysis: Phase S0 review.
+
+**The contract:**
+
+1. **`processRequest()` remains a standalone, React-free, registry-free transport front-end.**
+2. **`compile()` remains the semantic compiler** and accepts a normalized `CompileRequest`.
+3. **`processRequest()` owns**, exclusively:
+   - parsing
+   - migration
+   - envelope validation
+   - normalization
+   - default application
+4. **`compile()` owns**, exclusively:
+   - template resolution
+   - capability validation
+   - registry-backed parameter validation
+   - template execution
+   - output validation
+   - composition assembly
+5. **`compile()` may perform only a minimal structural sanity guard** (object; `template` string; `params` object) to prevent malformed JavaScript inputs from becoming unclassified framework failures. This guard is a defensive backstop, not transport validation.
+6. **`compile()` must never perform migration, normalization, transport validation, or default application.** Those responsibilities permanently belong to `processRequest()`.
