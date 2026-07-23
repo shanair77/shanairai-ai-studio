@@ -9,7 +9,7 @@
  */
 
 import { DomainError, sanitize } from "../errors";
-import { CURRENT_REQUEST_VERSION, migrationRegistry } from "./version";
+import { BASELINE_REQUEST_VERSION, CURRENT_REQUEST_VERSION, migrationRegistry } from "./version";
 import { createReport, type RequestReportBuilder } from "./report";
 import { findNonJsonPath } from "./jsonSafety";
 import {
@@ -60,7 +60,10 @@ const migrate = (
   target: RequestSchemaVersion,
   report: RequestReportBuilder,
 ): { raw: RawExecutionRequest; from: RequestSchemaVersion } | null => {
-  const declared = typeof raw.version === "string" && raw.version.length > 0 ? raw.version : CURRENT_REQUEST_VERSION;
+  // An absent/blank version means the request predates versioning: treat it as the BASELINE (the
+  // migration floor), NOT the current format — otherwise un-versioned requests would skip every
+  // migration the day CURRENT_REQUEST_VERSION advances past the baseline.
+  const declared = typeof raw.version === "string" && raw.version.length > 0 ? raw.version : BASELINE_REQUEST_VERSION;
   const fromN = Number(declared);
   const toN = Number(target);
   if (!Number.isInteger(fromN) || fromN < 1 || !Number.isInteger(toN) || toN < 1) {

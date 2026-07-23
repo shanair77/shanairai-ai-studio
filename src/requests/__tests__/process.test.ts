@@ -4,6 +4,7 @@ import { createRegistry } from "../../registry";
 import { createTemplateDefinition } from "../../templates";
 import { executeOrThrow } from "../../execution";
 import { processRequest, processRequestOrThrow } from "..";
+import { BASELINE_REQUEST_VERSION, CURRENT_REQUEST_VERSION } from "../version";
 import type { MigrationMap, RequestSpan } from "../types";
 
 const status = (trace: RequestSpan[], stage: string) => trace.find((s) => s.stage === stage)?.status;
@@ -40,6 +41,23 @@ describe("processRequest — migration", () => {
     expect(result.report.fromVersion).toBe("1");
     expect(result.report.toVersion).toBe("3");
     expect(status(result.report.trace, "migrate")).toBe("ok");
+  });
+
+  it("treats an un-versioned request as the BASELINE version, not the current one", () => {
+    // A request with no `version` predates versioning, so it must migrate up from the baseline floor.
+    // FORWARD-REGRESSION GUARD: today BASELINE_REQUEST_VERSION === CURRENT_REQUEST_VERSION === "1", so
+    // this cannot yet observe an output divergence — the buggy (default-from-CURRENT) and fixed
+    // (default-from-BASELINE) code produce the same result. Its purpose is future protection: once
+    // CURRENT advances past the baseline, defaulting from CURRENT would SKIP this migration and fail
+    // here. Do not "simplify" it away on the grounds that the two constants are currently equal.
+    expect(BASELINE_REQUEST_VERSION).toBe("1");
+    expect(CURRENT_REQUEST_VERSION).toBe("1");
+    const migrations = createRegistry<MigrationMap>({ "1": (raw) => ({ ...raw, id: `${String(raw.id)}-migrated` }) });
+    const result = processRequest({ id: "x", template: "t", params: {} }, { migrations, targetVersion: "2" });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.request.id).toBe("x-migrated"); // the 1→2 migration ran ⇒ absent version started at baseline "1"
+    expect(result.report.fromVersion).toBe("1");
   });
 
   it("reports unsupported-version when a step is missing", () => {
