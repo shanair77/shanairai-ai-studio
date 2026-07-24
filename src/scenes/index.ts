@@ -6,7 +6,7 @@
  * theme, `SafeArea`, and `useScale()`. Each fills the frame, paints a theme-token surface,
  * insets content in the safe area, and orchestrates staggered entrance motion.
  *
- * They carry no copy, colors, assets, logos, or branding: every scene exposes role slots
+ * They carry no copy, colors, assets, logos, or brand identity: every scene exposes role slots
  * (eyebrow / title / subtitle / body / actions / panes / quote / mark …) and a `children`
  * escape hatch, so one scene serves any subject — real estate, mortgage, travel, AI
  * influencers, AI agents, storytelling, corporate, education — by swapping the content in.

@@ -7,8 +7,8 @@
  * `assetRegistry` is empty; brands/videos populate their own.
  *
  * Deferred (extension points, not implemented): Lottie, captions, gradients, masks, inline-SVG
- * markup, metadata probing, opacity inference, @remotion/preload, the serializable asset-render
- * spec, and the consumer layers (branding/backgrounds/effects/icons/music).
+ * markup, metadata probing, opacity inference, @remotion/preload, and the serializable
+ * asset-render spec.
  */
 
 export {
