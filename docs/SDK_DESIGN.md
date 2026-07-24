@@ -4,6 +4,8 @@
 > **Basis:** HEAD `30ab67a` (Phase 45). Every claim re-verified against current source.
 >
 > **Revision history**
+> - Rev 4 — recorded **DR-S4**: `./inspect` guarantees runtime (not declaration) independence from
+>   React/Remotion; the accepted declaration-level references are documented. See Decision Records.
 > - Rev 3 — recorded the **Phase S0** decision (settled): `processRequest` stays a standalone,
 >   React-free, registry-free transport front-end; `compile` is the semantic compiler over a
 >   normalized `CompileRequest`. See the **Decision Records** appendix (DR-S0), §9, and §10.
@@ -238,3 +240,28 @@ Permanent, settled architecture decisions. These are not open questions — they
    - composition assembly
 5. **`compile()` may perform only a minimal structural sanity guard** (object; `template` string; `params` object) to prevent malformed JavaScript inputs from becoming unclassified framework failures. This guard is a defensive backstop, not transport validation.
 6. **`compile()` must never perform migration, normalization, transport validation, or default application.** Those responsibilities permanently belong to `processRequest()`.
+
+### DR-S4 — `./inspect` guarantees runtime independence, not declaration independence
+
+**Status:** Accepted (Phase S4). This is a deliberate design decision, **not** technical debt.
+
+**Decision.** The contractual guarantee of the `./inspect` entry is **runtime** independence from React and Remotion. The compiled entry `dist/inspect.js` has **zero** external module imports — no `react`, `remotion`, or `@remotion/*` — verified at the built-artifact level and enforced permanently by the committed React-free guard test (`src/__tests__/inspect-surface.test.ts`). Declaration-level (`.d.ts`) references to React/Remotion are understood, intentional, and accepted; the entry does **not** promise a React/Remotion-free *declaration* graph.
+
+**What the declaration references are, and why they exist.** A focused build-pipeline investigation (grounded in the actual emitted `.d.ts`, not speculation) found two distinct causes:
+
+1. **`react` and `@remotion/transitions` — a declaration-bundling artifact.** tsup bundles the `lib` and `inspect` declarations into one shared type chunk that also contains the root entry's React-bearing types (`AssetKit → React.FC`, `TransitionDefinition → TransitionPresentation`). rollup-plugin-dts hoists that chunk's external side-effect imports into every entry that imports the chunk, so they appear atop `inspect.d.ts` even though inspect's own exported types never reference them. Proven by building `inspect` in isolation, which drops both references entirely.
+2. **`remotion` — a genuine type dependency via `ThemeMode`.** It survives isolation. The chain: the request contract exposes `theme?: ThemeMode`; `ThemeMode = keyof typeof themes`; the theme tokens are typed in `config/Animation.ts` via `import { Easing } from "remotion"` (`linear: Easing.linear`). So the emitted `ThemeMode` inlines `typeof remotion.Easing.linear`, and any type exposing `theme?: ThemeMode` transitively names a Remotion type.
+
+**Why we accept it rather than eliminate it.** No build-configuration change removes all references without violating another constraint:
+
+- *Isolated per-entry declaration builds* remove `react`/`@remotion/transitions` but **duplicate the shared declaration text** (inspect's `.d.ts` grows ~10×) and still leave `remotion`.
+- *`tsc`-generated declarations* avoid the eager side-effect imports but emit directory-specifier imports that strict consumer module resolution can reject, and still leave `remotion`.
+- Removing the final `remotion` reference is a **source-level architectural refactor** (redefine `ThemeMode` as a standalone literal union independent of `keyof typeof themes`, plus a type-module boundary keeping request/descriptor types out of any module importing React-bearing types) — not a build-config change.
+
+The team intentionally chose **not** to make that tradeoff for Phase S4: it would either duplicate declarations or add architectural complexity **without improving runtime behavior**, which is the only behavior that governs how `./inspect` deploys. React and Remotion are declared **peer dependencies**, so a type-checking consumer resolves the declaration references regardless.
+
+**The contract:**
+
+1. `./inspect` guarantees **runtime** independence from React/Remotion; `dist/inspect.js` imports nothing external. This is enforced by the committed React-free guard.
+2. Declaration-level React/Remotion references are **accepted and intentional**, not a defect to be fixed under time pressure.
+3. Full declaration-level independence, if ever required, is a **dedicated future phase** (redefine `ThemeMode`; introduce a request/descriptor type-module boundary) — undertaken only when a real consumer needs it, never as incidental cleanup.
