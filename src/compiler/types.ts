@@ -12,30 +12,37 @@
 import {
   type BuiltComposition,
   type MusicConfig,
+  type SceneMap,
   type TimingConfig,
   type TransitionConfig,
+  type TransitionMap,
   type VideoConfigInput,
 } from "../composition";
+import { type AssetMap } from "../assets";
+import { type BrandMap } from "../brand";
 import { type ThemeMode } from "../config/Theme";
-import { type FrameworkRegistries } from "../contracts";
 import { type ExecutionReport } from "../execution";
 import { type FrameworkDescriptor } from "../metadata";
-import { type Registry } from "../registry";
+import { type ParameterTypeMap, type ValidatorMap } from "../parameters";
 import { type ParamsOf, type TemplateMap } from "../templates";
 
 /**
- * The registries a compiler is built over. `templates` is REQUIRED — the framework ships none, and it
- * binds the typed template map `M`. Every other family is optional and falls back to its framework
- * default through the standard resolution path (`resolveRegistries`, invoked inside the engine).
+ * The content a compiler is built over — plain object maps, never registries. Registries are an
+ * implementation detail the SDK does not ask users to think about.
+ *
+ * EXTEND SEMANTICS: compiler configuration extends the framework defaults; matching keys override
+ * builtins. Providing `scenes: { myScene }` ADDS to the ten builtin scenes rather than replacing
+ * them; the same holds for every family. `templates` is REQUIRED — the framework ships none, and it
+ * binds the typed template map `M`.
  */
 export type CompilerConfig<M extends TemplateMap> = {
-  templates: Registry<M>;
-  scenes?: FrameworkRegistries["scenes"];
-  transitions?: FrameworkRegistries["transitions"];
-  assets?: FrameworkRegistries["assets"];
-  brands?: FrameworkRegistries["brands"];
-  parameterTypes?: FrameworkRegistries["parameterTypes"];
-  validators?: FrameworkRegistries["validators"];
+  templates: M;
+  scenes?: SceneMap;
+  transitions?: TransitionMap;
+  assets?: AssetMap;
+  brands?: BrandMap;
+  parameterTypes?: ParameterTypeMap;
+  validators?: ValidatorMap;
 };
 
 /**

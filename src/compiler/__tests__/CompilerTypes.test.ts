@@ -6,7 +6,6 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { createRegistry } from "../../registry";
 import { defineTemplate } from "../../templates";
 import { createCompiler } from "..";
 
@@ -22,7 +21,7 @@ const listT = defineTemplate({
   build: (p: ListParams) => ({ scenes: p.items.map((t) => ({ scene: "centered", duration: 1, props: { title: t } })) }),
 });
 
-const compiler = createCompiler({ templates: createRegistry({ hero: heroT, list: listT }) });
+const compiler = createCompiler({ templates: { hero: heroT, list: listT } });
 
 describe("createCompiler — typed compile inference", () => {
   it("accepts valid selections and rejects invalid ones at compile time", () => {

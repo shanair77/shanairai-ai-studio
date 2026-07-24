@@ -1,8 +1,9 @@
 /**
  * compiler/compiler — `createCompiler`, the SDK's registry-bound entry point (Phase S2).
  *
- * A THIN wrapper over the existing engine — it adds NO compilation semantics. It binds registries
- * once, then per request it:
+ * A THIN wrapper over the existing engine — it adds NO compilation semantics. It binds content once
+ * (compiler configuration EXTENDS the framework defaults; matching keys override builtins), then per
+ * request it:
  *   1. GUARDS structural sanity (DR-S0): the request is an object with a string `template` and an
  *      object (or absent) `params`. This is the ONLY validation `compile` owns. It performs NO
  *      migration, normalization, version handling, defaults, or transport validation — those belong
@@ -15,13 +16,18 @@
  * here does not make them public.
  */
 
+import { assetRegistry } from "../assets";
+import { brandRegistry } from "../brand";
+import { sceneRegistry } from "../composition";
 import { type FrameworkRegistries } from "../contracts";
 import { sanitize } from "../errors";
 import { execute } from "../execution";
 import { createReport } from "../execution/report";
 import { deriveExecutionId } from "../execution/context";
 import { describeFramework } from "../metadata";
-import { type TemplateMap } from "../templates";
+import { parameterTypeRegistry, validatorRegistry } from "../parameters";
+import { templateRegistry, type TemplateMap } from "../templates";
+import { transitionRegistry } from "../transitions";
 import { type Compiler, type CompilerConfig, type CompileRequest, type CompileResult } from "./types";
 
 const isPlainObject = (v: unknown): v is Record<string, unknown> =>
@@ -39,17 +45,28 @@ const structuralViolation = (
   return null;
 };
 
+/**
+ * Layer a user map onto a framework default registry. EXTEND semantics: the default is the single
+ * source of truth and the user's entries are merged on top, with matching keys overriding the
+ * builtin. Uses the registry kernel's existing immutable `extend` — the framework singletons are
+ * never mutated. An omitted family returns `undefined`, so the engine's own `resolveRegistries`
+ * supplies the untouched default.
+ */
+const layer = <R extends { extend(entries: Record<string, never>): unknown }>(
+  base: R,
+  map: Record<string, unknown> | undefined,
+): R => (map === undefined ? base : (base.extend(map as Record<string, never>) as R));
+
 export function createCompiler<M extends TemplateMap>(config: CompilerConfig<M>): Compiler<M> {
-  // Bind once. Pass through the STANDARD resolution path: `execute` and `describeFramework` both call
-  // `resolveRegistries` internally, where any omitted (undefined) family falls back to its default.
+  // Bind once. Every family follows ONE rule — provided entries extend the framework defaults.
   const registries: Partial<FrameworkRegistries> = {
-    templates: config.templates,
-    scenes: config.scenes,
-    transitions: config.transitions,
-    assets: config.assets,
-    brands: config.brands,
-    parameterTypes: config.parameterTypes,
-    validators: config.validators,
+    templates: layer(templateRegistry, config.templates),
+    scenes: layer(sceneRegistry, config.scenes),
+    transitions: layer(transitionRegistry, config.transitions),
+    assets: layer(assetRegistry, config.assets),
+    brands: layer(brandRegistry, config.brands),
+    parameterTypes: layer(parameterTypeRegistry, config.parameterTypes),
+    validators: layer(validatorRegistry, config.validators),
   };
 
   return {
