@@ -8,10 +8,10 @@
  */
 
 import { sanitize } from "../errors";
-import { sceneRegistry, type SceneResolver, type AssetRegistry, type BrandRegistry } from "../composition";
+import { sceneRegistry, type SceneResolver } from "../composition";
 import { transitionRegistry, type TransitionResolver } from "../transitions";
-import { assetRegistry, type AssetSource } from "../assets";
-import { brandRegistry } from "../brand";
+import { assetRegistry, type AssetSource, type AssetRegistry } from "../assets";
+import { brandRegistry, type BrandRegistry } from "../brand";
 import { templateRegistry, type TemplateResolver } from "../templates";
 import { parameterTypeRegistry, validatorRegistry, type ParameterTypeResolver, type ValidatorResolver } from "../parameters";
 import { type FrameworkRegistries, type RegistryFamily, resolveRegistries } from "../contracts";

@@ -10,13 +10,14 @@
  *   buildComposition   — validate config → resolved `<Composition>` descriptor.
  *   CompositionSchema  — the typed, declarative shape of a whole video.
  *   sceneRegistry      — typed name → scene lookup; `.extend({...})` to add your own.
- *   transitionRegistry — typed transition lookup (fade/dissolve/slide/wipe/clockWipe/iris).
- *   defineScene / defineTransition — bind definitions for each registry.
+ *   defineScene        — bind a scene definition.
  *   resolveTimeline    — scenes + transitions → durations + boundaries + total.
  *   VideoConfig        — canvas resolution (format / width / height / fps / duration).
+ *
+ * This barrel exports ONLY the composition engine's own surface. Sibling layers are imported
+ * directly from their own barrels — `../registry`, `../transitions`, `../assets`, `../brand` — so
+ * this layer is no longer a cross-layer re-export hub.
  */
-
-export { createRegistry, type Registry, type DefinitionMap } from "../registry";
 
 export { buildComposition, type BuiltComposition } from "./CompositionBuilder";
 
@@ -37,60 +38,11 @@ export {
 } from "./CompositionSchema";
 
 export {
-  transitionRegistry,
-  builtinTransitions,
-  defineTransition,
-  type TransitionDefinition,
-  type TransitionCapabilities,
-  type TransitionMap,
-  type TransitionName,
-  type BuiltinTransitionMap,
-  type SlideOptions,
-  type WipeOptions,
-} from "../transitions";
-
-export {
-  defineAssetKit,
-  defineAsset,
-  assetRegistry,
-  AssetRegistryProvider,
-  useAssetRegistry,
-  LocalAssetResolver,
-  RemoteAssetResolver,
-  resolveAsset,
-  audioVolume,
-  type AssetKit,
-  type AssetDefinition,
-  type AssetMap,
-  type AssetCategory,
-  type AssetSource,
-  type AssetMetadata,
-  type ResolvedAsset,
-  type AssetSourceResolver,
-  type AssetRegistry,
-  type NamesOfCategory,
-  type CategoryOf,
-} from "../assets";
-
-export {
   resolveVideoConfig,
   DEFAULT_FORMAT,
   type VideoConfig,
   type VideoConfigInput,
 } from "./VideoConfig";
-
-export {
-  defineBrand,
-  brandRegistry,
-  resolveBrand,
-  BrandProvider,
-  useBrand,
-  type BrandDefinition,
-  type ResolvedBrand,
-  type BrandMap,
-  type BrandRegistry,
-  type BrandTransition,
-} from "../brand";
 
 export {
   sceneRegistry,

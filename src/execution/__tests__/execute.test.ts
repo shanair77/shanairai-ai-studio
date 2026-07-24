@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createRegistry } from "../../registry";
-import { assetRegistry, buildComposition, sceneRegistry, type MusicConfig } from "../../composition";
+import { buildComposition, sceneRegistry, type MusicConfig } from "../../composition";
+import { assetRegistry } from "../../assets";
 import { brandRegistry } from "../../brand";
 import { transitionRegistry } from "../../transitions";
 import { type ValidatorMap } from "../../parameters";

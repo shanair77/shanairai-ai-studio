@@ -15,9 +15,9 @@ import {
   type SceneMap,
   type TimingConfig,
   type TransitionConfig,
-  type TransitionMap,
   type VideoConfigInput,
 } from "../composition";
+import { type TransitionMap } from "../transitions";
 import { type AssetMap } from "../assets";
 import { type BrandMap } from "../brand";
 import { type ThemeMode } from "../config/Theme";

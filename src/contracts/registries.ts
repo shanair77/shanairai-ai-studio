@@ -6,8 +6,10 @@
  * `RegistryFamily` names the families for descriptors/reporting. Type-only, no runtime, no React.
  */
 
-import { type SceneResolver, type AssetRegistry, type BrandRegistry } from "../composition";
+import { type SceneResolver } from "../composition";
 import { type TransitionResolver } from "../transitions";
+import { type AssetRegistry } from "../assets";
+import { type BrandRegistry } from "../brand";
 import { type ParameterTypeResolver, type ValidatorResolver } from "../parameters";
 import { type TemplateResolver } from "../templates";
 
