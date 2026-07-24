@@ -8,7 +8,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { createTemplateDefinition, resolveTemplateParameters } from "..";
+import { defineTemplate, resolveTemplateParameters } from "..";
 import { resolveParametersDetailed, validatorRegistry, type ParameterContext, type Validator } from "../../parameters";
 
 describe("resolveTemplateParameters — single pipeline pass", () => {
@@ -18,7 +18,7 @@ describe("resolveTemplateParameters — single pipeline pass", () => {
       calls += 1;
     };
     const validators = validatorRegistry.extend({ counting });
-    const template = createTemplateDefinition({
+    const template = defineTemplate({
       name: "t",
       parameters: { parameters: [{ key: "title", type: "string", required: true, validators: ["counting"] }] },
       build: (p: { title: string }) => ({ scenes: [{ scene: "hero", duration: 1, props: { title: p.title } }] }),
@@ -36,7 +36,7 @@ describe("resolveTemplateParameters — single pipeline pass", () => {
       issues.push({ path, code: "soft", severity: "warning", message: "heads up" });
     };
     const validators = validatorRegistry.extend({ warn });
-    const template = createTemplateDefinition({
+    const template = defineTemplate({
       name: "t",
       parameters: {
         parameters: [

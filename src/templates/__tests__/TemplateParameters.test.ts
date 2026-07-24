@@ -6,7 +6,7 @@ import { buildComposition } from "../../composition";
 import { sceneRegistry } from "../../composition/SceneRegistry";
 import { transitionRegistry } from "../../transitions";
 import { demoConfig } from "../../demo/DemoConfig";
-import { createTemplateDefinition } from "..";
+import { defineTemplate } from "..";
 import { executeOrThrow } from "../../execution";
 import type { ParameterSchema } from "../../parameters";
 import type { TemplateCompositionBase } from "../types";
@@ -21,7 +21,7 @@ const schema: ParameterSchema = {
 
 // Schema-backed template: build reads resolved params (defaults applied).
 let seen: Record<string, unknown> | undefined;
-const withSchema = createTemplateDefinition({
+const withSchema = defineTemplate({
   name: "withSchema",
   parameters: schema,
   build: (p: { title: string; subtitle?: string; count?: number }) => {
@@ -31,7 +31,7 @@ const withSchema = createTemplateDefinition({
 });
 
 // Legacy template: no schema, imperative validate only.
-const legacy = createTemplateDefinition({
+const legacy = defineTemplate({
   name: "legacy",
   validate: (p: { title?: string }) => { if (!p.title) throw new Error("legacy: title required"); },
   build: (p: { title?: string }) => ({ scenes: [{ scene: "hero", duration: 1, props: { title: p.title } }, { scene: "outro", duration: 1, props: {} }] }),
@@ -39,7 +39,7 @@ const legacy = createTemplateDefinition({
 
 // Both schema + imperative validate — schema runs first, then validate.
 const order: string[] = [];
-const both = createTemplateDefinition({
+const both = defineTemplate({
   name: "both",
   parameters: { parameters: [{ key: "title", type: "string", required: true }] },
   validate: (p: { title: string }) => { order.push(`validate:${p.title}`); },

@@ -1,7 +1,7 @@
 /**
  * assets/AssetKit — the typed asset kit factory + React context (ADR-003 §4.2).
  *
- * `createAssetKit(map)` closes over the map's literal type `M`, so its components enforce
+ * `defineAssetKit(map)` closes over the map's literal type `M`, so its components enforce
  * category-safe literal names at compile time (`kit.Image({ name: "heroBg" })` is valid;
  * `kit.Image({ name: "bed" })` is a compile error when "bed" is audio). Components resolve from
  * the closed-over map — they do NOT rely on context for typing. `AssetRegistryProvider` /
@@ -226,8 +226,3 @@ export const defineAssetKit = <M extends AssetMap>(
   };
 };
 
-/**
- * Internal compatibility alias for the pre-SDK name. `defineAssetKit` is the canonical authoring name
- * (Phase S3); remaining internal call sites migrate in a later cleanup commit.
- */
-export const createAssetKit = defineAssetKit;

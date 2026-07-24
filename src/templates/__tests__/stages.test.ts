@@ -2,20 +2,20 @@ import { isValidElement, type ReactElement } from "react";
 import { Audio, Sequence } from "remotion";
 import { describe, expect, it } from "vitest";
 import { createRegistry } from "../../registry";
-import { assetRegistry, createAssetDefinition, createAssetKit } from "../../assets";
-import { createBrandDefinition } from "../../brand";
+import { assetRegistry, defineAsset, defineAssetKit } from "../../assets";
+import { defineBrand } from "../../brand";
 import { buildComposition, type CompositionSchemaBase } from "../../composition";
 import { sceneRegistry } from "../../composition/SceneRegistry";
 import { transitionRegistry } from "../../transitions";
 import { demoConfig } from "../../demo/DemoConfig";
-import { createTemplateDefinition, resolveTemplateDefaults } from "..";
+import { defineTemplate, resolveTemplateDefaults } from "..";
 import { execute, executeOrThrow } from "../../execution";
 import type { TemplateCompositionBase, TemplateOutput } from "../types";
 
 // ── Fixture templates (test-only; the framework ships none) ────────────────────────────────
 type BasicParams = { title: string; body?: string };
 
-const basic = createTemplateDefinition({
+const basic = defineTemplate({
   name: "basic",
   format: "horizontal",
   capabilities: { formats: ["horizontal", "square"], providesTransitions: true, minScenes: 2, maxScenes: 3 },
@@ -30,13 +30,13 @@ const basic = createTemplateDefinition({
 });
 
 // No default transition (exercises the brand/framework tiers).
-const plain = createTemplateDefinition({
+const plain = defineTemplate({
   name: "plain",
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }),
 });
 
 // A scene-level transition on the middle boundary (exercises "scene wins").
-const triple = createTemplateDefinition({
+const triple = defineTemplate({
   name: "triple",
   build: () => ({
     scenes: [
@@ -48,43 +48,43 @@ const triple = createTemplateDefinition({
   }),
 });
 
-const requiresBrand = createTemplateDefinition({
+const requiresBrand = defineTemplate({
   name: "requiresBrand",
   capabilities: { requiresBrand: true },
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }),
 });
 
 // Capability must be checked BEFORE build — this build would throw if ever reached.
-const guard = createTemplateDefinition({
+const guard = defineTemplate({
   name: "guard",
   capabilities: { requiresBrand: true },
   build: () => { throw new Error("guard build must not run"); },
 });
 
-const tooFew = createTemplateDefinition({
+const tooFew = defineTemplate({
   name: "tooFew",
   capabilities: { minScenes: 2 },
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }] }),
 });
 
-const tooMany = createTemplateDefinition({
+const tooMany = defineTemplate({
   name: "tooMany",
   capabilities: { maxScenes: 1 },
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }),
 });
 
-const badDecl = createTemplateDefinition({
+const badDecl = defineTemplate({
   name: "badDecl",
   capabilities: { variableLength: false, minScenes: 2, maxScenes: 3 },
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }),
 });
 
-const emptyOut = createTemplateDefinition({
+const emptyOut = defineTemplate({
   name: "emptyOut",
   build: () => ({ scenes: [] }),
 });
 
-const malformed = createTemplateDefinition({
+const malformed = defineTemplate({
   name: "malformed",
   build: () => ({}) as TemplateOutput,
 });
@@ -94,7 +94,7 @@ const templates = createRegistry({
 });
 
 const brands = createRegistry({
-  b: createBrandDefinition({ name: "B", transition: { type: "dissolve", duration: 1 } }),
+  b: defineBrand({ name: "B", transition: { type: "dissolve", duration: 1 } }),
 });
 
 // The canonical orchestrator is `execute`; `executeOrThrow` is its throwing facade.
@@ -220,8 +220,8 @@ describe("resolveTemplateDefaults — music & timing precedence", () => {
 
 describe("execute — brand audio default (end to end)", () => {
   it("wires the selected brand's default audio when caller & template omit music", () => {
-    const kit = createAssetKit({ bed: createAssetDefinition({ category: "audio", source: "https://cdn/bed.mp3" }) });
-    const branded = createRegistry({ m: createBrandDefinition({ name: "M", assets: kit, audio: { music: "bed" } }) });
+    const kit = defineAssetKit({ bed: defineAsset({ category: "audio", source: "https://cdn/bed.mp3" }) });
+    const branded = createRegistry({ m: defineBrand({ name: "M", assets: kit, audio: { music: "bed" } }) });
     const built = executeOrThrow(
       { id: "M", template: "plain", brand: "m", params: {} },
       {

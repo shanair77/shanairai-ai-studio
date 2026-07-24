@@ -1,17 +1,17 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
 import { DomainError } from "../../errors";
-import { createAssetDefinition } from "../definition";
-import { createAssetKit } from "../AssetKit";
+import { defineAsset } from "../definition";
+import { defineAssetKit } from "../AssetKit";
 
 // Remote sources avoid staticFile so runtime resolution needs no render context.
-const kit = createAssetKit({
-  heroBg: createAssetDefinition({ category: "image", source: "https://cdn/hero.jpg" }),
-  badge: createAssetDefinition({ category: "svg", source: "https://cdn/badge.svg" }),
-  bed: createAssetDefinition({ category: "audio", source: "https://cdn/bed.mp3" }),
-  clip: createAssetDefinition({ category: "video", source: "https://cdn/clip.mp4" }),
+const kit = defineAssetKit({
+  heroBg: defineAsset({ category: "image", source: "https://cdn/hero.jpg" }),
+  badge: defineAsset({ category: "svg", source: "https://cdn/badge.svg" }),
+  bed: defineAsset({ category: "audio", source: "https://cdn/bed.mp3" }),
+  clip: defineAsset({ category: "video", source: "https://cdn/clip.mp4" }),
 });
 
-describe("createAssetKit — type inference (category-filtered names)", () => {
+describe("defineAssetKit — type inference (category-filtered names)", () => {
   it("constrains component names by category", () => {
     // Image accepts image | svg names.
     expectTypeOf<Parameters<typeof kit.Image>[0]["name"]>().toEqualTypeOf<"heroBg" | "badge">();
@@ -33,7 +33,7 @@ describe("createAssetKit — type inference (category-filtered names)", () => {
   });
 });
 
-describe("createAssetKit — runtime", () => {
+describe("defineAssetKit — runtime", () => {
   it("resolves a registered (remote) asset", () => {
     expect(kit.resolve("heroBg")).toEqual({
       kind: "file",
@@ -62,7 +62,7 @@ describe("createAssetKit — runtime", () => {
 
   it("extends the registry immutably", () => {
     const extended = kit.registry.extend({
-      extra: createAssetDefinition({ category: "image", source: "https://cdn/extra.png" }),
+      extra: defineAsset({ category: "image", source: "https://cdn/extra.png" }),
     });
     expect(extended.has("extra")).toBe(true);
     expect(extended.has("heroBg")).toBe(true); // built-ins carried over

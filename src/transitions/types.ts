@@ -2,7 +2,7 @@
  * transitions/types — the transition family's definition contract (ADR-002).
  *
  * Mirrors the scene family: a `TransitionDefinition<Options>` binds a presentation factory,
- * an optional default overlap, and honest capability metadata; `createTransitionDefinition`
+ * an optional default overlap, and honest capability metadata; `defineTransition`
  * captures the options type for config inference. Presentations come from
  * `@remotion/transitions` (or custom ones); the definition wraps them behind a uniform
  * factory that also receives composition dimensions (needed by clockWipe / iris).
@@ -41,12 +41,6 @@ export type TransitionDefinition<Options> = {
 export const defineTransition = <Options = void>(
   spec: TransitionDefinition<Options>,
 ): TransitionDefinition<Options> => spec;
-
-/**
- * Internal compatibility alias for the pre-SDK name. `defineTransition` is the canonical authoring
- * name (Phase S3); remaining internal call sites migrate in a later cleanup commit.
- */
-export const createTransitionDefinition = defineTransition;
 
 /** A map of transition name → definition. Prop/option type erased to `any` per entry. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

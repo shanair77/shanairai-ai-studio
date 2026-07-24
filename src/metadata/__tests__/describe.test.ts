@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { createRegistry } from "../../registry";
-import { createAssetDefinition, createAssetKit } from "../../assets";
-import { createBrandDefinition } from "../../brand";
-import { createTemplateDefinition } from "../../templates";
+import { defineAsset, defineAssetKit } from "../../assets";
+import { defineBrand } from "../../brand";
+import { defineTemplate } from "../../templates";
 import { type ValidatorMap } from "../../parameters";
 import {
   describeAssets,
@@ -21,16 +21,16 @@ import {
 
 // ── Fixture registries ─────────────────────────────────────────────────────────────────────────
 const assets = createRegistry({
-  heroImg: createAssetDefinition({ category: "image", source: "images/hero.png", roles: ["background"], metadata: { width: 1920, height: 1080 } }),
-  remoteVid: createAssetDefinition({ category: "video", source: "https://cdn/clip.mp4" }), // bare url string
-  localAudio: createAssetDefinition({ category: "audio", source: "audio/bed.mp3" }), // bare relative path
-  structuredRemote: createAssetDefinition({ category: "svg", source: { kind: "remote", url: "https://cdn/logo.svg" } }),
-  structuredLocal: createAssetDefinition({ category: "image", source: { kind: "local", path: "images/x.png" } }),
+  heroImg: defineAsset({ category: "image", source: "images/hero.png", roles: ["background"], metadata: { width: 1920, height: 1080 } }),
+  remoteVid: defineAsset({ category: "video", source: "https://cdn/clip.mp4" }), // bare url string
+  localAudio: defineAsset({ category: "audio", source: "audio/bed.mp3" }), // bare relative path
+  structuredRemote: defineAsset({ category: "svg", source: { kind: "remote", url: "https://cdn/logo.svg" } }),
+  structuredLocal: defineAsset({ category: "image", source: { kind: "local", path: "images/x.png" } }),
 });
 
-const kit = createAssetKit({ mark: createAssetDefinition({ category: "svg", source: "https://cdn/m.svg" }) });
+const kit = defineAssetKit({ mark: defineAsset({ category: "svg", source: "https://cdn/m.svg" }) });
 const brands = createRegistry({
-  midnight: createBrandDefinition({ // display name ("Midnight Co") ≠ registry key ("midnight")
+  midnight: defineBrand({ // display name ("Midnight Co") ≠ registry key ("midnight")
     name: "Midnight Co",
     mode: "dark",
     theme: { colors: { accent: "#00E0C6" } },
@@ -45,7 +45,7 @@ const brands = createRegistry({
 });
 
 const templates = createRegistry({
-  promo: createTemplateDefinition({ // display name ("Promo") ≠ key ("promo")
+  promo: defineTemplate({ // display name ("Promo") ≠ key ("promo")
     name: "Promo",
     format: "horizontal",
     capabilities: { formats: ["horizontal", "square"], requiresBrand: true, minScenes: 2 },
@@ -53,7 +53,7 @@ const templates = createRegistry({
     meta: { description: "A promo.", category: "marketing", previewParams: { title: "Hi" } },
     build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }] }),
   }),
-  boom: createTemplateDefinition({
+  boom: defineTemplate({
     name: "boom",
     validate: () => { throw new Error("validate boom"); },
     build: () => { throw new Error("build boom"); },

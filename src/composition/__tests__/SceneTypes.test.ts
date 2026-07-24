@@ -2,7 +2,7 @@ import { describe, expectTypeOf, it } from "vitest";
 import type { HeroSceneProps, QuoteSceneProps } from "../../scenes";
 import type { CompositionSchema, SceneConfig } from "../CompositionSchema";
 import { buildComposition } from "../CompositionBuilder";
-import { createSceneDefinition, sceneRegistry, type PropsOf } from "../SceneRegistry";
+import { defineScene, sceneRegistry, type PropsOf } from "../SceneRegistry";
 
 // Type-level suite: checked by `test:typecheck` (tsc -p tsconfig.test.json). The
 // `@ts-expect-error` directives FAIL the typecheck if the marked line stops being an error,
@@ -15,7 +15,7 @@ describe("typed scene registration", () => {
     expectTypeOf<NonNullable<HeroCfg["props"]>>().toEqualTypeOf<HeroSceneProps>();
 
     // PropsOf recovers the prop type from a definition.
-    const heroDef = createSceneDefinition<HeroSceneProps>({ component: () => null });
+    const heroDef = defineScene<HeroSceneProps>({ component: () => null });
     expectTypeOf<PropsOf<typeof heroDef>>().toEqualTypeOf<HeroSceneProps>();
     void heroDef;
 
@@ -87,7 +87,7 @@ describe("typed scene registration", () => {
 
   it("keeps a custom registry's config typed via extend", () => {
     const studio = sceneRegistry.extend({
-      probe: createSceneDefinition<{ headline?: string }>({ component: () => null }),
+      probe: defineScene<{ headline?: string }>({ component: () => null }),
     });
 
     // valid custom scene + prop

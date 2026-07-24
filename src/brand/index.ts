@@ -18,6 +18,6 @@ export {
   type ResolvedBrand,
 } from "./types";
 
-export { defineBrand, createBrandDefinition, brandRegistry } from "./definition";
+export { defineBrand, brandRegistry } from "./definition";
 export { resolveBrand } from "./resolve";
 export { BrandProvider, useBrand } from "./BrandContext";

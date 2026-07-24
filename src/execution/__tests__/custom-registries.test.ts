@@ -14,16 +14,16 @@
 import { describe, expect, it } from "vitest";
 import { createRegistry } from "../../registry";
 import {
-  createParameterTypeDefinition,
+  defineParameterType,
   parameterTypeRegistry,
   validatorRegistry,
   type ParameterTypeName,
 } from "../../parameters";
-import { createTemplateDefinition } from "../../templates";
+import { defineTemplate } from "../../templates";
 import { execute } from "../execute";
 
 // A parameter type that exists ONLY in the custom registry.
-const slug = createParameterTypeDefinition<string>({
+const slug = defineParameterType<string>({
   name: "slug",
   parse: (raw) => String(raw),
   validate: (value, _def, _ctx, issues, path) => {
@@ -48,7 +48,7 @@ const scenes = (title: string) => [
 ];
 
 const templates = createRegistry({
-  usesCustomType: createTemplateDefinition({
+  usesCustomType: defineTemplate({
     name: "usesCustomType",
     // NOTE: `ParameterTypeName` is a CLOSED union of the 14 builtin names, so a schema cannot name
     // a custom type without a cast — a pre-existing Parameter Engine limitation, out of scope here.
@@ -56,7 +56,7 @@ const templates = createRegistry({
     parameters: { parameters: [{ key: "handle", type: "slug" as ParameterTypeName, required: true }] },
     build: (p: { handle: string }) => ({ scenes: scenes(p.handle) }),
   }),
-  usesCustomValidator: createTemplateDefinition({
+  usesCustomValidator: defineTemplate({
     name: "usesCustomValidator",
     parameters: { parameters: [{ key: "title", type: "string", required: true, validators: ["no-foo"] }] },
     build: (p: { title: string }) => ({ scenes: scenes(p.title) }),

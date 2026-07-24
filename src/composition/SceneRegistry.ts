@@ -1,7 +1,7 @@
 /**
  * SceneRegistry — the typed name → scene lookup the builder assembles from.
  *
- * Each scene is bound once with `createSceneDefinition<Props>()`, capturing its component,
+ * Each scene is bound once with `defineScene<Props>()`, capturing its component,
  * default duration, AND prop type. The `builtinScenes` map is the single source of truth
  * (no separate registration array), and both the runtime registry and the config types are
  * derived from it — so a misspelled scene name or prop is now a compile error, not a silent
@@ -88,24 +88,18 @@ export const defineScene = <P>(spec: {
   ...(spec.opaque !== undefined ? { opaque: spec.opaque } : {}),
 });
 
-/**
- * Internal compatibility alias for the pre-SDK name. `defineScene` is the canonical authoring name
- * (Phase S3); remaining internal call sites migrate in a later cleanup commit.
- */
-export const createSceneDefinition = defineScene;
-
 /** The built-in scenes — the single definition site (replaces the old registration array). */
 export const builtinScenes = {
-  hero: createSceneDefinition<HeroSceneProps>({ component: HeroScene }),
-  centered: createSceneDefinition<CenteredSceneProps>({ component: CenteredScene }),
-  split: createSceneDefinition<SplitSceneProps>({ component: SplitScene }),
-  feature: createSceneDefinition<FeatureSceneProps>({ component: FeatureScene }),
-  gallery: createSceneDefinition<GallerySceneProps>({ component: GalleryScene }),
-  comparison: createSceneDefinition<ComparisonSceneProps>({ component: ComparisonScene }),
-  quote: createSceneDefinition<QuoteSceneProps>({ component: QuoteScene }),
-  cta: createSceneDefinition<CTASectionProps>({ component: CTASection }),
-  "logo-reveal": createSceneDefinition<LogoRevealSceneProps>({ component: LogoRevealScene }),
-  outro: createSceneDefinition<OutroSceneProps>({ component: OutroScene }),
+  hero: defineScene<HeroSceneProps>({ component: HeroScene }),
+  centered: defineScene<CenteredSceneProps>({ component: CenteredScene }),
+  split: defineScene<SplitSceneProps>({ component: SplitScene }),
+  feature: defineScene<FeatureSceneProps>({ component: FeatureScene }),
+  gallery: defineScene<GallerySceneProps>({ component: GalleryScene }),
+  comparison: defineScene<ComparisonSceneProps>({ component: ComparisonScene }),
+  quote: defineScene<QuoteSceneProps>({ component: QuoteScene }),
+  cta: defineScene<CTASectionProps>({ component: CTASection }),
+  "logo-reveal": defineScene<LogoRevealSceneProps>({ component: LogoRevealScene }),
+  outro: defineScene<OutroSceneProps>({ component: OutroScene }),
 } satisfies SceneMap;
 
 export type BuiltinSceneMap = typeof builtinScenes;

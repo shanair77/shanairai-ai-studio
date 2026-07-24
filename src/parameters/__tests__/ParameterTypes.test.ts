@@ -1,10 +1,10 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
 import { createRegistry } from "../../registry";
-import { createParameterTypeDefinition, parameterTypeRegistry, type ParameterTypeDefinition } from "..";
+import { defineParameterType, parameterTypeRegistry, type ParameterTypeDefinition } from "..";
 
-describe("createParameterTypeDefinition — type inference", () => {
+describe("defineParameterType — type inference", () => {
   it("captures the value type V", () => {
-    const t = createParameterTypeDefinition<number>({
+    const t = defineParameterType<number>({
       name: "even",
       parse: (raw) => raw as number,
     });
@@ -13,7 +13,7 @@ describe("createParameterTypeDefinition — type inference", () => {
   });
 
   it("registers + extends the type vocabulary immutably", () => {
-    const custom = createParameterTypeDefinition<string>({ name: "slug", parse: (r) => r as string });
+    const custom = defineParameterType<string>({ name: "slug", parse: (r) => r as string });
     const extended = parameterTypeRegistry.extend({ slug: custom });
     expect(extended.has("slug")).toBe(true);
     expect(extended.has("string")).toBe(true); // built-ins preserved
@@ -31,9 +31,9 @@ describe("createParameterTypeDefinition — type inference", () => {
     // Compile-time only — never executed.
     const _checks = (): void => {
       // @ts-expect-error `parse` is required
-      createParameterTypeDefinition<string>({ name: "bad" });
+      defineParameterType<string>({ name: "bad" });
       // @ts-expect-error `name` is required
-      createParameterTypeDefinition<string>({ parse: (r) => r as string });
+      defineParameterType<string>({ parse: (r) => r as string });
     };
     void _checks;
     expect(typeof _checks).toBe("function");
@@ -42,7 +42,7 @@ describe("createParameterTypeDefinition — type inference", () => {
 
 describe("erased resolver assignability", () => {
   it("a concrete parameter-type registry is assignable to the erased resolver shape", () => {
-    const reg = createRegistry({ n: createParameterTypeDefinition<number>({ name: "n", parse: (r) => r as number }) });
+    const reg = createRegistry({ n: defineParameterType<number>({ name: "n", parse: (r) => r as number }) });
     // Structural check: has the erased resolver surface.
     expect(reg.has("n")).toBe(true);
     expect(reg.require("n").name).toBe("n");

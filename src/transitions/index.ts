@@ -9,7 +9,6 @@
 
 export {
   defineTransition,
-  createTransitionDefinition,
   type TransitionDefinition,
   type TransitionCapabilities,
   type TransitionContext,

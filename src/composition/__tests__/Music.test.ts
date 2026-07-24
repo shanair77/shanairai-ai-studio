@@ -2,7 +2,7 @@ import { isValidElement, type ReactElement } from "react";
 import { describe, expect, it } from "vitest";
 import { Audio } from "remotion";
 import { createRegistry } from "../../registry";
-import { AssetRegistryProvider, createAssetDefinition } from "../../assets";
+import { AssetRegistryProvider, defineAsset } from "../../assets";
 import { demoConfig } from "../../demo/DemoConfig";
 import { buildComposition } from "../CompositionBuilder";
 import { sceneRegistry } from "../SceneRegistry";
@@ -21,7 +21,7 @@ const findAll = (node: unknown, type: unknown, acc: ReactElement[] = []): ReactE
 };
 
 // Remote sources avoid staticFile so no render context is needed.
-const audioAssets = createRegistry({ bed: createAssetDefinition({ category: "audio", source: "https://cdn/bed.mp3" }) });
+const audioAssets = createRegistry({ bed: defineAsset({ category: "audio", source: "https://cdn/bed.mp3" }) });
 
 const base = (music: CompositionSchemaBase["music"]): CompositionSchemaBase => ({
   id: "M",
@@ -43,7 +43,7 @@ describe("music integration", () => {
   });
 
   it("rejects a music asset whose category is not audio", () => {
-    const imgAssets = createRegistry({ pic: createAssetDefinition({ category: "image", source: "https://cdn/p.png" }) });
+    const imgAssets = createRegistry({ pic: defineAsset({ category: "image", source: "https://cdn/p.png" }) });
     expect(() => buildComposition(base({ asset: "pic" }), sceneRegistry, transitionRegistry, imgAssets)).toThrow(/audio/);
   });
 

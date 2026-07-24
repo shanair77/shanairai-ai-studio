@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createRegistry } from "../../registry";
-import { createAssetDefinition } from "../../assets";
-import { createBrandDefinition } from "../../brand";
+import { defineAsset } from "../../assets";
+import { defineBrand } from "../../brand";
 import {
   resolveParameters,
   validateParameters,
@@ -11,11 +11,11 @@ import {
 } from "..";
 
 const assets = createRegistry({
-  heroImg: createAssetDefinition({ category: "image", source: "https://cdn/h.png" }),
-  bed: createAssetDefinition({ category: "audio", source: "https://cdn/b.mp3" }),
-  clip: createAssetDefinition({ category: "video", source: "https://cdn/c.mp4" }),
+  heroImg: defineAsset({ category: "image", source: "https://cdn/h.png" }),
+  bed: defineAsset({ category: "audio", source: "https://cdn/b.mp3" }),
+  clip: defineAsset({ category: "video", source: "https://cdn/c.mp4" }),
 });
-const brands = createRegistry({ acme: createBrandDefinition({ name: "Acme" }) });
+const brands = createRegistry({ acme: defineBrand({ name: "Acme" }) });
 const validators = createRegistry<ValidatorMap>({
   nonEmpty: (value, _def, _ctx, issues, path) => {
     if (typeof value === "string" && value.trim() === "") issues.push({ path, code: "non-empty", severity: "error", message: "must not be blank" });

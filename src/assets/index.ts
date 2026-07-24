@@ -2,7 +2,7 @@
  * assets/ — the typed, config-driven Asset Engine (ADR-003, MVP).
  *
  * Categories image/video/audio/svg over local + remote sources, resolved to a discriminated
- * `ResolvedAsset`. `createAssetKit(map)` gives compile-time, category-safe literal names and
+ * `ResolvedAsset`. `defineAssetKit(map)` gives compile-time, category-safe literal names and
  * typed renderers (Image/Video/Audio/Svg/Logo). The framework ships no assets — the default
  * `assetRegistry` is empty; brands/videos populate their own.
  *
@@ -26,7 +26,7 @@ export {
   type Fit,
 } from "./types";
 
-export { defineAsset, createAssetDefinition, assetRegistry } from "./definition";
+export { defineAsset, assetRegistry } from "./definition";
 
 export {
   LocalAssetResolver,
@@ -41,7 +41,6 @@ export { audioVolume } from "./audio";
 
 export {
   defineAssetKit,
-  createAssetKit,
   AssetRegistryProvider,
   useAssetRegistry,
   type AssetKit,

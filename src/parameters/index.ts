@@ -38,7 +38,7 @@ export type {
 // `Result` now lives in `errors` (the canonical, shared primitive); re-exported here for back-compat.
 export { type Result, ok, err } from "../errors";
 
-export { createParameterTypeDefinition } from "./definition";
+export { defineParameterType } from "./definition";
 // `parameterTypeRegistry = createRegistry(builtinParameterTypes)` — the built-in vocabulary is the
 // single definition site; the registry wraps it (mirrors builtinScenes/sceneRegistry). Extend or
 // replace it like any other family.

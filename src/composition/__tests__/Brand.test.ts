@@ -1,8 +1,8 @@
 import { isValidElement, type ReactElement } from "react";
 import { describe, expect, it } from "vitest";
 import { createRegistry } from "../../registry";
-import { AssetRegistryProvider, assetRegistry, createAssetDefinition, createAssetKit } from "../../assets";
-import { BrandProvider, createBrandDefinition, resolveBrand } from "../../brand";
+import { AssetRegistryProvider, assetRegistry, defineAsset, defineAssetKit } from "../../assets";
+import { BrandProvider, defineBrand, resolveBrand } from "../../brand";
 import { transitionRegistry } from "../../transitions";
 import { demoConfig } from "../../demo/DemoConfig";
 import { buildComposition } from "../CompositionBuilder";
@@ -10,13 +10,13 @@ import { sceneRegistry } from "../SceneRegistry";
 import type { CompositionSchemaBase } from "../CompositionSchema";
 
 const brands = createRegistry({
-  acme: createBrandDefinition({ name: "Acme", mode: "dark", transition: { type: "dissolve", duration: 0.5 } }),
+  acme: defineBrand({ name: "Acme", mode: "dark", transition: { type: "dissolve", duration: 0.5 } }),
 });
 
 // A kit-bearing brand: its asset registry should be installed inside BrandProvider.
-const kittedBrand = createBrandDefinition({
+const kittedBrand = defineBrand({
   name: "Kitted",
-  assets: createAssetKit({ mark: createAssetDefinition({ category: "svg", source: "https://cdn/m.svg" }) }),
+  assets: defineAssetKit({ mark: defineAsset({ category: "svg", source: "https://cdn/m.svg" }) }),
   logos: { primary: "mark" },
 });
 

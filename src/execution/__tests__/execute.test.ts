@@ -4,14 +4,14 @@ import { assetRegistry, buildComposition, sceneRegistry, type MusicConfig } from
 import { brandRegistry } from "../../brand";
 import { transitionRegistry } from "../../transitions";
 import { type ValidatorMap } from "../../parameters";
-import { createTemplateDefinition } from "../../templates";
+import { defineTemplate } from "../../templates";
 import { execute, executeOrThrow } from "..";
 import { resolveRegistries } from "../../contracts";
 import { createExecutionContext } from "../context";
 import type { ExecutionRequest, ExecutionSpan } from "../types";
 
 // ── Fixtures (test-only) ───────────────────────────────────────────────────────────────────────
-const withSchema = createTemplateDefinition({
+const withSchema = defineTemplate({
   name: "withSchema",
   parameters: { parameters: [
     { key: "title", type: "string", required: true },
@@ -23,17 +23,17 @@ const withSchema = createTemplateDefinition({
   }),
 });
 
-const legacy = createTemplateDefinition({
+const legacy = defineTemplate({
   name: "legacy",
   validate: (p: { title?: string }) => { if (!p.title) throw new Error("legacy: title required"); },
   build: (p: { title?: string }) => ({ scenes: [{ scene: "hero", duration: 1, props: { title: p.title } }, { scene: "outro", duration: 1, props: {} }] }),
 });
 
-const throwsInBuild = createTemplateDefinition({ name: "throwsInBuild", build: () => { throw new Error("kaboom in build"); } });
-const requiresBrand = createTemplateDefinition({ name: "requiresBrand", capabilities: { requiresBrand: true }, build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }) });
-const emptyOut = createTemplateDefinition({ name: "emptyOut", build: () => ({ scenes: [] }) });
-const badMusic = createTemplateDefinition({ name: "badMusic", build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }], music: {} as MusicConfig }) });
-const softWarn = createTemplateDefinition({
+const throwsInBuild = defineTemplate({ name: "throwsInBuild", build: () => { throw new Error("kaboom in build"); } });
+const requiresBrand = defineTemplate({ name: "requiresBrand", capabilities: { requiresBrand: true }, build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }) });
+const emptyOut = defineTemplate({ name: "emptyOut", build: () => ({ scenes: [] }) });
+const badMusic = defineTemplate({ name: "badMusic", build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }], music: {} as MusicConfig }) });
+const softWarn = defineTemplate({
   name: "softWarn",
   parameters: { parameters: [{ key: "mode", type: "string", validators: ["softCheck"] }] },
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }),

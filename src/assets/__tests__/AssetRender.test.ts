@@ -9,14 +9,14 @@ vi.mock("remotion", async (importOriginal) => {
 });
 
 import { Audio, OffthreadVideo, Video } from "remotion";
-import { createAssetDefinition } from "../definition";
-import { createAssetKit } from "../AssetKit";
+import { defineAsset } from "../definition";
+import { defineAssetKit } from "../AssetKit";
 
-const kit = createAssetKit({
-  img: createAssetDefinition({ category: "image", source: "https://cdn/i.jpg" }),
-  badge: createAssetDefinition({ category: "svg", source: "https://cdn/b.svg" }),
-  aud: createAssetDefinition({ category: "audio", source: "https://cdn/a.mp3" }),
-  vid: createAssetDefinition({ category: "video", source: "https://cdn/v.mp4" }),
+const kit = defineAssetKit({
+  img: defineAsset({ category: "image", source: "https://cdn/i.jpg" }),
+  badge: defineAsset({ category: "svg", source: "https://cdn/b.svg" }),
+  aud: defineAsset({ category: "audio", source: "https://cdn/a.mp3" }),
+  vid: defineAsset({ category: "video", source: "https://cdn/v.mp4" }),
 });
 
 const props = (node: unknown): Record<string, unknown> => (node as ReactElement).props as Record<string, unknown>;

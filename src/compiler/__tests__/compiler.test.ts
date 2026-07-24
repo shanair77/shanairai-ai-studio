@@ -12,7 +12,7 @@ import { defineTemplate, templateRegistry } from "../../templates";
 import { execute } from "../../execution";
 import { describeFramework } from "../../metadata";
 import { defineScene, sceneRegistry } from "../../composition";
-import { createParameterTypeDefinition, parameterTypeRegistry, type ParameterTypeName } from "../../parameters";
+import { defineParameterType, parameterTypeRegistry, type ParameterTypeName } from "../../parameters";
 import { createCompiler } from "..";
 
 const templates = {
@@ -165,7 +165,7 @@ describe("createCompiler — configuration extends the framework defaults", () =
   });
 
   it("adding a parameter type PRESERVES the builtin parameter types", () => {
-    const slug = createParameterTypeDefinition<string>({
+    const slug = defineParameterType<string>({
       name: "slug",
       parse: (raw) => String(raw),
       validate: (value, _d, _c, issues, path) => {
@@ -193,7 +193,7 @@ describe("createCompiler — configuration extends the framework defaults", () =
   });
 
   it("overriding a builtin parameter type works", () => {
-    const strict = createParameterTypeDefinition<string>({
+    const strict = defineParameterType<string>({
       name: "string",
       parse: (raw) => String(raw),
       validate: (_v, _d, _c, issues, path) => {

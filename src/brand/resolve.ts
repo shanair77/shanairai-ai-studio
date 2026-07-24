@@ -4,7 +4,7 @@
  * Produces a concrete theme (base mode ← brand overrides, with an optional composition-level
  * mode override taking precedence) and render closures for the brand's logo/watermark that
  * close over the brand's asset kit. The erased kit's `Logo` is cast to accept a string name —
- * the authoring path (`createBrandDefinition<M>`) keeps compile-time safety; this is the erased
+ * the authoring path (`defineBrand<M>`) keeps compile-time safety; this is the erased
  * runtime consumption (mirrors the SceneComponent / AssetRegistry erasure).
  */
 

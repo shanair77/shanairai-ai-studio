@@ -2,20 +2,20 @@ import { type ReactElement } from "react";
 import { describe, expect, it } from "vitest";
 import { theme, darkTheme } from "../../config/Theme";
 import { createRegistry } from "../../registry";
-import { createAssetDefinition, createAssetKit } from "../../assets";
-import { createBrandDefinition } from "../definition";
+import { defineAsset, defineAssetKit } from "../../assets";
+import { defineBrand } from "../definition";
 import { resolveBrand } from "../resolve";
 
 // Remote sources avoid staticFile so logo closures resolve without a render context.
-const kit = createAssetKit({
-  logo: createAssetDefinition({ category: "svg", source: "https://cdn/logo.svg" }),
-  alt: createAssetDefinition({ category: "image", source: "https://cdn/alt.png" }),
-  wm: createAssetDefinition({ category: "svg", source: "https://cdn/wm.svg" }),
+const kit = defineAssetKit({
+  logo: defineAsset({ category: "svg", source: "https://cdn/logo.svg" }),
+  alt: defineAsset({ category: "image", source: "https://cdn/alt.png" }),
+  wm: defineAsset({ category: "svg", source: "https://cdn/wm.svg" }),
 });
 
 // Register + require so the definition is the erased BrandDefinition the engine sees.
 const brands = createRegistry({
-  acme: createBrandDefinition({
+  acme: defineBrand({
     name: "Acme",
     mode: "dark",
     theme: { colors: { accent: "#00E0C6" } },

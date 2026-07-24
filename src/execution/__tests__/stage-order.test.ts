@@ -10,7 +10,7 @@
 
 import { describe, expect, it } from "vitest";
 import { createRegistry } from "../../registry";
-import { createTemplateDefinition } from "../../templates";
+import { defineTemplate } from "../../templates";
 import { execute } from "../execute";
 import { EXECUTION_STAGES } from "../stages";
 
@@ -18,7 +18,7 @@ type P = { title: string };
 
 const templates = createRegistry({
   // Declares BOTH a parameter schema and a validate hook, so no stage is conditionally skipped.
-  full: createTemplateDefinition({
+  full: defineTemplate({
     name: "full",
     parameters: { parameters: [{ key: "title", type: "string", required: true }] },
     validate: (p: P) => {
@@ -32,7 +32,7 @@ const templates = createRegistry({
     }),
   }),
   // Throws inside build() → halts at `run-template`.
-  boom: createTemplateDefinition({
+  boom: defineTemplate({
     name: "boom",
     build: () => {
       throw new Error("boom");

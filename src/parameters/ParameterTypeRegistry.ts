@@ -12,7 +12,7 @@
 
 import { createRegistry } from "../registry";
 import { type AssetCategory } from "../assets";
-import { createParameterTypeDefinition } from "./definition";
+import { defineParameterType } from "./definition";
 import {
   type ParameterContext,
   type ParameterDefinition,
@@ -34,7 +34,7 @@ const TOKEN = /^[a-zA-Z][\w-]*$/;
 
 /** image/video/audio share one shape: a name whose asset must exist with a matching category. */
 const assetType = (typeName: string, category: AssetCategory): ParameterTypeDefinition<string> =>
-  createParameterTypeDefinition<string>({
+  defineParameterType<string>({
     name: typeName,
     parse: (raw) => {
       expect(typeof raw === "string", typeName);
@@ -59,7 +59,7 @@ const assetType = (typeName: string, category: AssetCategory): ParameterTypeDefi
   });
 
 const str = (name: string, control: "input" | "textarea"): ParameterTypeDefinition<string> =>
-  createParameterTypeDefinition<string>({
+  defineParameterType<string>({
     name,
     parse: (raw) => {
       expect(typeof raw === "string", name);
@@ -73,7 +73,7 @@ export const builtinParameterTypes = {
   string: str("string", "input"),
   text: str("text", "textarea"),
 
-  number: createParameterTypeDefinition<number>({
+  number: defineParameterType<number>({
     name: "number",
     parse: (raw) => {
       expect(typeof raw === "number" && Number.isFinite(raw), "number");
@@ -82,7 +82,7 @@ export const builtinParameterTypes = {
     ui: { control: "input" },
   }),
 
-  boolean: createParameterTypeDefinition<boolean>({
+  boolean: defineParameterType<boolean>({
     name: "boolean",
     parse: (raw) => {
       expect(typeof raw === "boolean", "boolean");
@@ -92,7 +92,7 @@ export const builtinParameterTypes = {
   }),
 
   // Membership is a CONSTRAINT (policy) checked by the resolver; the type only guards a primitive.
-  enum: createParameterTypeDefinition<ParameterValue>({
+  enum: defineParameterType<ParameterValue>({
     name: "enum",
     parse: (raw) => {
       expect(typeof raw === "string" || typeof raw === "number" || typeof raw === "boolean", "enum value");
@@ -101,7 +101,7 @@ export const builtinParameterTypes = {
     ui: { control: "select" },
   }),
 
-  color: createParameterTypeDefinition<string>({
+  color: defineParameterType<string>({
     name: "color",
     parse: (raw) => {
       expect(typeof raw === "string", "color");
@@ -118,7 +118,7 @@ export const builtinParameterTypes = {
   video: assetType("video", "video"),
   audio: assetType("audio", "audio"),
 
-  brand: createParameterTypeDefinition<string>({
+  brand: defineParameterType<string>({
     name: "brand",
     parse: (raw) => {
       expect(typeof raw === "string", "brand");
@@ -131,7 +131,7 @@ export const builtinParameterTypes = {
     },
   }),
 
-  date: createParameterTypeDefinition<string>({
+  date: defineParameterType<string>({
     name: "date",
     parse: (raw) => {
       expect(typeof raw === "string", "date");
@@ -145,7 +145,7 @@ export const builtinParameterTypes = {
     ui: { control: "datePicker" },
   }),
 
-  url: createParameterTypeDefinition<string>({
+  url: defineParameterType<string>({
     name: "url",
     parse: (raw) => {
       expect(typeof raw === "string", "url");
@@ -161,7 +161,7 @@ export const builtinParameterTypes = {
     ui: { control: "input" },
   }),
 
-  list: createParameterTypeDefinition<ParameterValue[]>({
+  list: defineParameterType<ParameterValue[]>({
     name: "list",
     parse: (raw) => {
       expect(Array.isArray(raw), "list");
@@ -170,7 +170,7 @@ export const builtinParameterTypes = {
     ui: { control: "repeater" },
   }),
 
-  group: createParameterTypeDefinition<Record<string, ParameterValue>>({
+  group: defineParameterType<Record<string, ParameterValue>>({
     name: "group",
     parse: (raw) => {
       expect(isPlainObject(raw), "group (object)");

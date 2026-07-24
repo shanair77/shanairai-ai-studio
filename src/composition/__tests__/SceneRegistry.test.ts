@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { theme } from "../../config/Theme";
 import { createRegistry } from "../../registry";
-import { createSceneDefinition, sceneRegistry, type SceneComponent } from "../SceneRegistry";
+import { defineScene, sceneRegistry, type SceneComponent } from "../SceneRegistry";
 
 const BUILTINS = [
   "hero",
@@ -35,22 +35,22 @@ describe("SceneRegistry", () => {
     });
   });
 
-  describe("createSceneDefinition", () => {
+  describe("defineScene", () => {
     it("binds a component and defaults the duration to the theme's base scene length", () => {
-      const def = createSceneDefinition({ component: noopScene });
+      const def = defineScene({ component: noopScene });
       expect(def.component).toBe(noopScene);
       expect(def.defaultDuration).toBe(theme.timing.scene.base);
     });
 
     it("honours an explicit default duration", () => {
-      expect(createSceneDefinition({ component: noopScene, defaultDuration: 7 }).defaultDuration).toBe(7);
+      expect(defineScene({ component: noopScene, defaultDuration: 7 }).defaultDuration).toBe(7);
     });
   });
 
   describe("extend (immutable, typed)", () => {
     it("returns a new registry with the added scene, leaving the base untouched", () => {
       const extended = sceneRegistry.extend({
-        "test-custom": createSceneDefinition({ component: noopScene, defaultDuration: 4 }),
+        "test-custom": defineScene({ component: noopScene, defaultDuration: 4 }),
       });
       expect(extended.has("test-custom")).toBe(true);
       expect(extended.require("test-custom").defaultDuration).toBe(4);
@@ -60,7 +60,7 @@ describe("SceneRegistry", () => {
 
     it("overrides an existing name in the extended registry", () => {
       const extended = sceneRegistry.extend({
-        hero: createSceneDefinition({ component: noopScene, defaultDuration: 9 }),
+        hero: defineScene({ component: noopScene, defaultDuration: 9 }),
       });
       expect(extended.require("hero").defaultDuration).toBe(9);
     });
@@ -68,7 +68,7 @@ describe("SceneRegistry", () => {
 
   describe("createRegistry (generic kernel)", () => {
     it("builds an isolated registry and enumerates its keys", () => {
-      const r = createRegistry({ a: createSceneDefinition({ component: noopScene, defaultDuration: 1 }) });
+      const r = createRegistry({ a: defineScene({ component: noopScene, defaultDuration: 1 }) });
       expect(r.keys()).toEqual(["a"]);
       expect(r.get("a").defaultDuration).toBe(1);
     });

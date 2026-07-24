@@ -11,7 +11,7 @@
  *   CompositionSchema  — the typed, declarative shape of a whole video.
  *   sceneRegistry      — typed name → scene lookup; `.extend({...})` to add your own.
  *   transitionRegistry — typed transition lookup (fade/dissolve/slide/wipe/clockWipe/iris).
- *   createSceneDefinition / createTransitionDefinition — bind definitions for each registry.
+ *   defineScene / defineTransition — bind definitions for each registry.
  *   resolveTimeline    — scenes + transitions → durations + boundaries + total.
  *   VideoConfig        — canvas resolution (format / width / height / fps / duration).
  */
@@ -40,7 +40,6 @@ export {
   transitionRegistry,
   builtinTransitions,
   defineTransition,
-  createTransitionDefinition,
   type TransitionDefinition,
   type TransitionCapabilities,
   type TransitionMap,
@@ -52,9 +51,7 @@ export {
 
 export {
   defineAssetKit,
-  createAssetKit,
   defineAsset,
-  createAssetDefinition,
   assetRegistry,
   AssetRegistryProvider,
   useAssetRegistry,
@@ -82,10 +79,8 @@ export {
   type VideoConfigInput,
 } from "./VideoConfig";
 
-
 export {
   defineBrand,
-  createBrandDefinition,
   brandRegistry,
   resolveBrand,
   BrandProvider,
@@ -100,7 +95,6 @@ export {
 export {
   sceneRegistry,
   defineScene,
-  createSceneDefinition,
   builtinScenes,
   type SceneComponent,
   type SceneDefinition,

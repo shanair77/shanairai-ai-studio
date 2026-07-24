@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { DomainError } from "../../errors";
 import { createRegistry } from "../../registry";
-import { createTemplateDefinition } from "../../templates";
+import { defineTemplate } from "../../templates";
 import { executeOrThrow } from "../../execution";
 import { processRequest, processRequestOrThrow } from "..";
 import { BASELINE_REQUEST_VERSION, CURRENT_REQUEST_VERSION } from "../version";
@@ -148,7 +148,7 @@ describe("processRequest — determinism & parity", () => {
 
   it("hands off to execute identically to a hand-built request", () => {
     const templates = createRegistry({
-      basic: createTemplateDefinition({
+      basic: defineTemplate({
         name: "basic",
         parameters: { parameters: [{ key: "title", type: "string", required: true }] },
         build: (p: { title: string }) => ({ scenes: [{ scene: "hero", duration: 1, props: { title: p.title } }, { scene: "outro", duration: 1, props: {} }], transitions: { type: "dissolve", duration: 0.5 } }),
