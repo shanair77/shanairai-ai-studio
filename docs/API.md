@@ -26,16 +26,15 @@ type BuiltComposition = { id: string; component: React.FC; durationInFrames: num
 
 **Config types:** `CompositionSchema`, `CompositionSchemaFor<M>`, `SceneConfig`,
 `SceneConfigFor<M>`, `TransitionConfig`, `TransitionConfigFor<M>`, `TransitionType`,
-`MusicConfig`, `TimingConfig`, `AssetRef`, `AssetCatalog`.
+`MusicConfig`, `TimingConfig`. *(Assets are referenced by registry name; the old `AssetRef`/`AssetCatalog`
+types and `resolveAssetRef`/`resolveNamedAsset` helpers were removed — see the asset engine below.)*
 
 **Functions:**
 ```ts
 validateComposition(config): void            // throws on structural violations
-resolveAssetRef(ref: string): string         // staticFile() for local paths, passthrough for URLs
-resolveNamedAsset(catalog, refOrName): string
 resolveTimeline(config, fps, scenes?, transitions?): Timeline
 resolveVideoConfig(input?): VideoConfig       // { width, height, fps, durationInFrames? }
-resolveBrand(brand?): ResolvedBrand           // { name?, theme, mark? }
+resolveBrand(brand?): ResolvedBrand           // { name?, theme }
 ```
 
 **Registries + kernel (re-exported):**
@@ -132,7 +131,7 @@ per-parameter **policy** (required/default/constraints/conditions/metadata/ui) i
 `ParameterSchema`. No Context, no Provider, no Hooks — parameters are pre-render data.
 
 ```ts
-createParameterTypeDefinition<V>(spec): ParameterTypeDefinition<V>       // identity; captures V
+defineParameterType<V>(spec): ParameterTypeDefinition<V>                 // identity; captures V
 parameterTypeRegistry: Registry<…>                                       // built-in types (string…group)
 validatorRegistry: Registry<ValidatorMap>                                // empty; named custom validators
 

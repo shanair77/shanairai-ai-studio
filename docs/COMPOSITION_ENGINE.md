@@ -14,7 +14,7 @@ The engine is a pure pipeline of small, testable functions:
 flowchart LR
   CFG["CompositionSchema<br/>(config data)"] --> VAL["validateComposition<br/>(structural checks)"]
   CFG --> VID["resolveVideoConfig<br/>(w/h/fps/duration)"]
-  CFG --> BR["resolveBrand<br/>(theme + mark)"]
+  CFG --> BR["resolveBrand<br/>(theme)"]
   CFG --> TL["resolveTimeline<br/>(scenes + boundaries + total)"]
   TL --> BUILD["buildComposition<br/>(assemble TransitionSeries)"]
   VID --> BUILD
@@ -100,7 +100,7 @@ buildComposition({ id, scenes: [{ scene: "myScene", props: { … } }] }, studio)
 
 - Let duration derive from scenes unless you need a fixed length; if you set `duration`, keep
   it ≥ the content length (the engine clamps to ≥ 1 frame but won't extend content).
-- Resolve assets by catalog key (`assets`) so references live in one place.
+- Reference assets by registry name (`assets`) so references live in one place.
 - Keep the builder free of business logic — express variation through config + registries.
 
 ## Common mistakes

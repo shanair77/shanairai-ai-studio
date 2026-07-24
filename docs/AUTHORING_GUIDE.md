@@ -219,7 +219,7 @@ The shipped `src/demo/DemoConfig.ts` is a complete four-scene example with fade 
 
 - Prefer config + built-ins; reach for a custom scene/transition only when needed.
 - Pass **content** into role slots; keep scene components content-free.
-- Use catalog keys for assets so references are centralized.
+- Reference assets by registry name so references are centralized.
 - Keep durations ≥ your transition overlaps.
 
 ## Common mistakes

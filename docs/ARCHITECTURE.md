@@ -77,7 +77,7 @@ nothing else in the framework.
 | **scenes** | `src/scenes` | Content-agnostic full-frame scenes on a shared `SceneFrame`. | components, typography, animations, format, config | Built |
 | **transitions** | `src/transitions` | Typed transition registry + capabilities + opacity contract. | registry, config | Built |
 | **assets** | `src/assets` | `AssetDefinition` + kits + resolvers + `AssetRegistryProvider`. | registry, config, errors | Built |
-| **brand / branding** | `src/brand`, `src/branding` | Brand packs + `resolveBrand` + `BrandProvider`; `BrandLogo`/`Watermark`. | assets, transitions, config, registry | Built |
+| **brand** | `src/brand` | Brand packs + `resolveBrand` + `BrandProvider`. | assets, transitions, config, registry | Built |
 | **composition** | `src/composition` | `CompositionSchema`, `Timeline`, `buildComposition` — the assembler. | scenes, transitions, assets, brand, config, registry, errors | Built |
 | **parameters** | `src/parameters` | Parameter-type registry + `ParameterSchema` + `resolveParameters` (a parallel branch). | assets/brand *types*, config, registry, errors | Built |
 | **templates** | `src/templates` | `TemplateDefinition` + the public pure stage helpers. Owns template semantics, **no sequencing**. | composition, parameters, registry, errors | Built |

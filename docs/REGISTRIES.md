@@ -21,7 +21,7 @@ graph TD
   KERNEL --> TRANS["transitionRegistry<br/>defineTransition&lt;Options&gt;"]
   KERNEL -. future .-> ASSET["assetRegistry<br/>defineAsset"]
   KERNEL -. future .-> BRAND["brandRegistry<br/>defineBrand"]
-  KERNEL -. future .-> EFFECT["effectRegistry<br/>createEffectDefinition"]
+  KERNEL -. future .-> EFFECT["effectRegistry<br/>defineEffect"]
   KERNEL -. future .-> TEMPLATE["templateRegistry<br/>defineTemplate"]
   SCENES --> SCHEMA["CompositionSchema<br/>(scenes[].scene + props typed)"]
   TRANS --> SCHEMA2["CompositionSchema<br/>(transition.type + options typed)"]
@@ -118,8 +118,8 @@ Parameter Types are implemented; Effects remains future.
 | **Assets** | `AssetDefinition` / `defineAsset` | `assetRegistry` | `asset` |
 | **Brands** | `BrandDefinition` / `defineBrand` | `brandRegistry` | `brand` |
 | **Templates** | `TemplateDefinition` / `defineTemplate` | `templateRegistry` | `template` |
-| **Parameter Types** | `ParameterTypeDefinition` / `createParameterTypeDefinition` | `parameterTypeRegistry` | `type` |
-| Effects _(future)_ | `EffectDefinition` / `createEffectDefinition` | `effectRegistry` | `effect` |
+| **Parameter Types** | `ParameterTypeDefinition` / `defineParameterType` | `parameterTypeRegistry` | `type` |
+| Effects _(future)_ | `EffectDefinition` / `defineEffect` | `effectRegistry` | `effect` |
 
 The **Parameter Types** family (ADR-006) is the type *vocabulary* for the Parameter Engine —
 `parameterTypeRegistry` ships the built-in types (string/number/color/image/brand/…), extended with

@@ -1,9 +1,16 @@
 # AI-Studio — v1 SDK Architecture & Public API Design
 
-> **Status:** design review, pre-implementation. No SDK code has been written.
-> **Basis:** HEAD `30ab67a` (Phase 45). Every claim re-verified against current source.
+> **Status:** IMPLEMENTED. Phases S0–S5 landed (Phases 46–55). The `.` and `./inspect` entries are
+> live and frozen for the alpha; the sections below are the design of record, reconciled to the
+> as-built surface. Where an early recommendation was superseded during implementation, the section
+> is annotated and the governing Decision Record cited.
+> **Basis:** HEAD `30ab67a` (Phase 45) for the original review; reconciled at Phase 55.
 >
 > **Revision history**
+> - Rev 5 — reconciled to the as-built surface (Phase 55): `./inspect` is transport-validation only
+>   (`processRequest` + `CURRENT_REQUEST_VERSION` + request types + the `FrameworkDescriptor` *type*),
+>   NOT the standalone `describeFramework()` function — runtime reflection is `compiler.describe()`
+>   only (per DR-S4, `describeFramework` is not React-free). Corrected §4, §6, §7, §10.
 > - Rev 4 — recorded **DR-S4**: `./inspect` guarantees runtime (not declaration) independence from
 >   React/Remotion; the accepted declaration-level references are documented. See Decision Records.
 > - Rev 3 — recorded the **Phase S0** decision (settled): `processRequest` stays a standalone,
@@ -55,7 +62,7 @@ Classification of what exists today, by subsystem (representative — decision-r
 | **templates** | `createTemplateDefinition` (→ `defineTemplate`), `TemplateDefinition`, `ParameterSchema`, `TemplateContext`, `TemplateOutput` | **PUBLIC** | The authoring surface (now clean — see §5). |
 | | stage helpers (`resolveTemplate`, `runTemplate`, `assembleTemplateSchema`, …) | **INTERNAL** | Compiler internals. |
 | | `TemplateCompositionFor`, `ParamsOf`, `templateRegistry` | **INTERNAL**/**ADVANCED** | Inference machinery; surfaced via the compiler, not raw. |
-| **parameters** | `ParameterSchema`, `ParameterDefinition`, `ParameterTypeName`, `createParameterTypeDefinition`, `validatorRegistry` | **PUBLIC** (schema) / **ADVANCED** (custom types/validators) | Schema is authored; custom types/validators are the extension seam. |
+| **parameters** | `ParameterSchema`, `ParameterDefinition`, `ParameterTypeName`, `defineParameterType`, `validatorRegistry` | **PUBLIC** (schema) / **ADVANCED** (custom types/validators) | Schema is authored; custom types/validators are the extension seam. |
 | | `resolveParameters`, `resolveParametersDetailed`, `validateParameters`, `parameterTypeRegistry` | **INTERNAL** | Engine internals. |
 | **composition** | `BuiltComposition` | **PUBLIC** | The terminal artifact — clean. |
 | | `CompositionSchema`, `SceneConfig`, `MusicConfig`, `TimingConfig`, `TransitionConfig` | **INTERNAL** (v1) | The IR is now clean but should stay internal until a direct-authoring path is designed. |
@@ -76,11 +83,11 @@ Classification of what exists today, by subsystem (representative — decision-r
 
 ```
 "."         full SDK — createCompiler, define*, all public types (pulls React: output is a component)
-"./inspect" React-free subset — describeFramework + FrameworkDescriptor + request-validation + report/request types
+"./inspect" React-free subset — processRequest + CURRENT_REQUEST_VERSION + request types + FrameworkDescriptor (type-only)
 ```
 
-- `.` is what 90% of users import. It transitively pulls React (a `BuiltComposition` *is* a React component), so servers that only validate/reflect shouldn't be forced through it.
-- `./inspect` guarantees a **React-free** path for edge/serverless request-validation and catalog reflection. This is the one split that pays for itself; it's the difference between a Lambda importing React or not.
+- `.` is what 90% of users import. It transitively pulls React (a `BuiltComposition` *is* a React component), so servers that only validate shouldn't be forced through it.
+- `./inspect` guarantees a **runtime** React-free path for edge/serverless request-validation. *(As-built correction, Rev 5: the original review put `describeFramework` here for "catalog reflection." It is not React-free — reflecting real registries imports scene components — so the standalone function stays internal and reflection is `compiler.describe()` only. `./inspect` re-exports the `FrameworkDescriptor` **type** only, so transport code can type a serialized catalog without a runtime reflector. See DR-S4.)*
 - **No `./core`, no `./react`, no `./advanced` in v1.** `execute`/`buildComposition`/`createRegistry` are internal or advanced-later; adding a subpath is a non-breaking minor, so defer until a real consumer asks. One-or-two entries is the ceiling for v1.
 
 ## 5. Public Type Review
@@ -110,7 +117,7 @@ Classification of what exists today, by subsystem (representative — decision-r
 | **`createCompiler`** (new) | **PUBLIC** | The one configured entry: binds registries once, hosts typed `compile`. |
 | `compile(request)` | **PUBLIC** | The one compile path. Result-typed. |
 | `compileOrThrow(request)` | **DEFER** | Start Result-only; a throwing façade is a trivial non-breaking add later. Removing it later is breaking. Prefer the smaller surface. |
-| `describeFramework()` | **PUBLIC** | Exposed as the compiler's `.describe()` and via `./inspect`. The reflection backbone. |
+| `describeFramework()` | **INTERNAL** (as built) | Exposed only as the compiler's `.describe()`. The standalone function is not React-free (it imports the default registries' scene components), so it is **not** on `./inspect`; only the `FrameworkDescriptor` *type* is re-exported there. See DR-S4. |
 | `processRequest` | **PUBLIC** (conditional) | Valuable for servers; **gate on the version-baseline fix**. Exposed as a standalone in `./inspect` (registry-agnostic transport validation — must **not** be a compiler method implying registry-awareness). |
 | `buildComposition` | **DEFER** | Public only when `CompositionSchema` becomes a public authored type; not v1. |
 | `execute` | **INTERNAL** | Wrapped by `compile`. One public compile way. |
@@ -145,8 +152,10 @@ if (!v.ok) return Response.json(v.report, { status: 400 });
 
 **C. AI agent** — reflect, then propose a request against what's discoverable:
 ```ts
-import { describeFramework } from "@shanairai/ai-studio/inspect";
+import { createCompiler } from "@shanairai/ai-studio";
+const compiler = createCompiler({ templates });
 const menu = compiler.describe();       // templates + param schemas + brands + scenes (incl. opaque) + capabilities
+// (reflection is compiler.describe(); ./inspect exposes the FrameworkDescriptor type for typing this payload)
 ```
 Scene opacity being a static reflected boolean means an agent can pick transition-compatible scenes from `describe()` alone.
 
@@ -192,20 +201,20 @@ Headline: with Phases 37–45 complete, **the authored model is freeze-ready.** 
 9. Delete `src/branding/` + the six empty stub dirs.
 10. Shrink the 80-symbol `composition` god-barrel.
 11. Trim `Registry.get()`, `AssetSource` reserved kinds.
-12. Documentation debt (`AssetRef`/catalog references in `docs/API.md`, `docs/ROADMAP.md`, `docs/COMPOSITION_ENGINE.md`, `docs/TESTING.md`) — already scheduled.
+12. Documentation debt (`AssetRef`/catalog references) — **resolved in Phase 55** across `docs/API.md`, `docs/COMPOSITION_ENGINE.md`, `docs/AUTHORING_GUIDE.md`, and `docs/ARCHITECTURE.md`. `docs/ROADMAP.md` is intentionally left as a historical planning snapshot (its phase-delivery table records the original `create*` names as shipped; a full ROADMAP refresh is a separate task).
 
 ## 10. Recommendation
 
-**GO** — with a defined, short pre-exposure phase list. The content **and** authored-timing/opacity models are now freeze-ready (Phases 37–45); what remains is **wiring, one result-type fix, and a handful of deletions** — implementation work, not open architecture.
+**GO — DELIVERED.** The content and authored-timing/opacity models were freeze-ready (Phases 37–45); the SDK was then built out through the phases below. All are landed (Phases 46–55).
 
-Exact phases (each: implement → verify → byte-identical demo + `describeFramework()` → stop → review):
+Phases as built (each: implement → verify → byte-identical demo + `describeFramework()` → review → commit):
 
-- **Phase S0 — One design decision (no code). ✅ SETTLED.** `processRequest` ↔ `compile` resolved as a **separate front-end** (transport validation is not folded into `compile`). Recorded permanently in Decision Records: DR-S0.
-- **Phase S1 — Correctness fixes (internal).** Fix the version-baseline bug; define a bespoke internal result without the `schema` leak; delete `RequestEnvelope`, `ExecutionContext`/`Environment` exports, `ExecutionInput.locale`; demote `executeOrThrow`/`executeTyped*` to internal.
-- **Phase S2 — `createCompiler` + `compile` + `describe`.** Build the instance over `execute`, with typed `compile<M>` inference; define `CompileRequest`/`CompileResult`.
-- **Phase S3 — `define*` renames + public entry (`.`).**
-- **Phase S4 — `./inspect` subpath** (React-free `describeFramework` + `processRequest`).
-- **Phase S5 — Cleanup** (`branding/`, stub dirs, god-barrel, `Registry.get`) — parallelizable, non-blocking.
+- **Phase S0 — One design decision (no code). ✅ SETTLED (Phase 48-era, DR-S0).** `processRequest` ↔ `compile` resolved as a **separate front-end** (transport validation is not folded into `compile`). Recorded permanently in Decision Records: DR-S0.
+- **Phase S1 — Correctness fixes (internal). ✅ DONE (Phases 46–48).** Fixed the version-baseline bug (`BASELINE_REQUEST_VERSION`); removed the reserved `locale` plumbing and the internal `ExecutionContext`/`Environment` barrel exports; deleted the dead `RequestEnvelope`. *(The `ExecutionResult.schema` leak was intentionally kept internal — the public `CompileResult` simply omits it; `executeOrThrow`/`executeTyped*` were already off the public surface, so no demotion was needed.)*
+- **Phase S2 — `createCompiler` + `compile` + `describe`. ✅ DONE (Phase 49).** Instance built over `execute` with typed `compile<M>` inference; `CompileRequest`/`CompileResult` defined; plain-map config (Phase 51).
+- **Phase S3 — `define*` + public entry (`.`). ✅ DONE (Phases 50–52).** `define*` authoring vocabulary; `createCompiler` plain-map config; the frozen `.` surface (8 runtime + 38 type exports, surface-locked).
+- **Phase S4 — `./inspect` subpath. ✅ DONE (Phase 53).** React-free transport validation (`processRequest` + `CURRENT_REQUEST_VERSION` + request types + `FrameworkDescriptor` type). Runtime independence enforced by a committed guard; declaration-level references accepted per DR-S4. *(Corrected from the Rev-1 wording — `describeFramework` the function is not here.)*
+- **Phase S5 — Cleanup. ✅ DONE (Phases 54–55) / partially deferred.** Deleted `src/branding/` + the six empty stub dirs (Phase 54); completed the `create*→define*` migration and removed all compatibility aliases (Phase 55). **Deferred (non-blocking):** the composition god-barrel shrink and `Registry.get()` trim were intentionally left for a later phase.
 
 *(Rev 1's separate "freeze decision on Phase F" phase is dropped — Phases 44/45 already resolved it. `TemplateOutput`/`SceneConfigBase`/`SceneDefinition` are ready to freeze as they stand at HEAD `30ab67a`.)*
 
