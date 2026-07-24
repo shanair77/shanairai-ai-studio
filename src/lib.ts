@@ -1,39 +1,71 @@
 /**
- * lib — the package's library entry (Phase 28: packaging).
+ * lib — the package's public SDK entry (`.`), Phase S3.3.
  *
- * SIDE-EFFECT FREE BY CONSTRUCTION. Importing this module must never register a Remotion root,
- * load fonts, mount compositions, touch the DOM, or mutate global state. The application entry
+ * SIDE-EFFECT FREE BY CONSTRUCTION. Importing this module must never register a Remotion root, load
+ * fonts, mount compositions, touch the DOM, or mutate global state. The application entry
  * (`src/index.ts`, which calls `registerRoot`) is deliberately NOT the package entry.
  *
- * Scope is intentionally MINIMAL for this phase — `errors`, `registry`, and the Request Processing
- * front-end. The full public surface (execution, metadata, templates, parameters, composition) is
- * Phase 29 work. Those layers are no longer blocked from export: the font side effect now lives in
- * `config/fonts/bootstrap`, which only the application entry imports (invariant #9), so no framework
- * layer performs I/O on import. Widening this entry is a deliberate Phase 29 decision, not an
- * automatic consequence of that fix.
+ * This is the INTENTIONALLY SMALL primary surface: the compiler (`createCompiler` → `compile` /
+ * `describe`) and the `define*` authoring API, plus exactly the contract types those signatures
+ * reference so the declaration surface is self-contained. Reflection is `compiler.describe()`; the
+ * standalone `describeFramework` and the transport front-end (`processRequest`) are deferred to the
+ * React-free `./inspect` entry (Phase S4). Engine internals — `execute`, `buildComposition`,
+ * `createRegistry`, `CompositionSchema`, resolvers, report builders, stage helpers — stay internal.
  */
 
-// ── errors: DomainError + JSON-safe diagnostics + Result (zero dependencies) ──────────────────
-export { DomainError, sanitize, ok, err } from "./errors";
-export type { DiagnosticValue, DomainErrorInit, Result } from "./errors";
+// ══ Runtime — compiler ══════════════════════════════════════════════════════════════════════════
+export { createCompiler } from "./compiler";
 
-// ── registry: the generic registry kernel ─────────────────────────────────────────────────────
-export { createRegistry } from "./registry";
+// ══ Runtime — authoring (`define*` is the canonical vocabulary) ══════════════════════════════════
+export { defineTemplate } from "./templates";
+export { defineScene } from "./composition";
+export { defineTransition } from "./transitions";
+export { defineBrand } from "./brand";
+export { defineAsset, defineAssetKit } from "./assets";
+
+// ══ Runtime — error contract ════════════════════════════════════════════════════════════════════
+export { DomainError } from "./errors";
+
+// ══ Types — compiler contract ═══════════════════════════════════════════════════════════════════
+export type { Compiler, CompilerConfig, CompileRequest, CompileResult } from "./compiler";
+
+// ══ Types — authoring definitions (`define*` inputs / returns) ══════════════════════════════════
+export type {
+  TemplateDefinition,
+  TemplateOutput,
+  TemplateContext,
+  TemplateParams,
+  TemplateCapabilities,
+  TemplateMap,
+} from "./templates";
+export type { SceneDefinition, SceneMap } from "./composition";
+export type { TransitionDefinition, TransitionMap } from "./transitions";
+export type { BrandDefinition, BrandMap } from "./brand";
+export type { AssetDefinition, AssetKit, AssetMap, AssetCategory, AssetSource } from "./assets";
+export type { ParameterSchema, ParameterDefinition, ParameterTypeMap, ValidatorMap } from "./parameters";
+
+// ══ Types — authoring config fields ═════════════════════════════════════════════════════════════
+export type {
+  BuiltComposition,
+  VideoConfigInput,
+  MusicConfig,
+  TimingConfig,
+  TransitionConfig,
+} from "./composition";
+export type { FormatName } from "./config/Layout";
+export type { ThemeMode } from "./config/Theme";
+
+// ══ Types — diagnostics (consume `CompileResult.report`) ════════════════════════════════════════
+// Only the aggregate `ExecutionReport` is exported; its element subtypes (issue/warning/span/stage)
+// stay reachable through the declaration graph and can be promoted to named exports later without a
+// breaking change — consistent with the `FrameworkDescriptor` treatment.
+export type { ExecutionReport } from "./execution";
+
+// ══ Types — inspection (`Compiler.describe()` return) ═══════════════════════════════════════════
+export type { FrameworkDescriptor } from "./metadata";
+
+// ══ Types — registry kernel (reachable via `AssetKit`; the runtime `createRegistry` stays internal) ══
 export type { Registry, DefinitionMap } from "./registry";
 
-// ── requests: the untrusted-input front-end (syntax, versioning, normalization) ────────────────
-export { processRequest, processRequestOrThrow, CURRENT_REQUEST_VERSION } from "./requests";
-export type {
-  RawInput,
-  RawExecutionRequest,
-  NormalizedExecutionRequest,
-  RequestStage,
-  RequestIssue,
-  RequestWarning,
-  RequestSpan,
-  RequestReport,
-  RequestResult,
-  RequestContext,
-  RequestSchemaVersion,
-  Migration,
-} from "./requests";
+// ══ Types — error contract support ══════════════════════════════════════════════════════════════
+export type { DiagnosticValue, DomainErrorInit } from "./errors";
