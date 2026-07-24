@@ -41,10 +41,10 @@ resolveBrand(brand?): ResolvedBrand           // { name?, theme, mark? }
 **Registries + kernel (re-exported):**
 ```ts
 sceneRegistry: Registry<BuiltinSceneMap>
-createSceneDefinition<P>(spec): SceneDefinition<P>
+defineScene<P>(spec): SceneDefinition<P>
 builtinScenes: BuiltinSceneMap
 transitionRegistry: Registry<BuiltinTransitionMap>
-createTransitionDefinition<Options>(spec): TransitionDefinition<Options>
+defineTransition<Options>(spec): TransitionDefinition<Options>
 builtinTransitions: BuiltinTransitionMap
 createRegistry<M>(entries): Registry<M>
 ```
@@ -75,7 +75,7 @@ merges its output and delegates to `buildComposition` (the single assembly pipel
 **never** return React. See [ADR-005](./adr/ADR-005-template-engine.md).
 
 ```ts
-createTemplateDefinition<P>(spec: TemplateDefinition<P>): TemplateDefinition<P>   // identity; captures P
+defineTemplate<P>(spec: TemplateDefinition<P>): TemplateDefinition<P>   // identity; captures P
 templateRegistry: Registry<TemplateMap>                                          // empty default (ships none)
 
 buildFromTemplate<M extends TemplateMap>(spec: TemplateCompositionFor<M>, templates: Registry<M>): BuiltComposition
@@ -107,9 +107,9 @@ type TemplateContext = { width: number; height: number; fps: number; brand?: str
 ### Example
 ```ts
 import { createRegistry } from "./registry";
-import { buildFromTemplate, createTemplateDefinition } from "./templates";
+import { buildFromTemplate, defineTemplate } from "./templates";
 
-const promo = createTemplateDefinition({
+const promo = defineTemplate({
   name: "promo",
   capabilities: { formats: ["horizontal"], providesTransitions: true, minScenes: 2 },
   validate: (p: { title: string }) => { if (!p.title) throw new Error("promo: `title` required."); },
@@ -156,8 +156,8 @@ category) — never resolving or loading. Attach a schema to a template via `Tem
 
 ### Example
 ```ts
-import { createTemplateDefinition } from "./templates";
-const promo = createTemplateDefinition({
+import { defineTemplate } from "./templates";
+const promo = defineTemplate({
   name: "promo",
   parameters: { parameters: [
     { key: "title", type: "string", required: true, constraints: { min: 1, max: 80 } },
@@ -252,7 +252,7 @@ Shared shell + helpers: `SceneFrame`, types `SceneFrameProps`, `SceneBaseProps`,
 ## `transitions`
 
 ```ts
-createTransitionDefinition<Options>(spec): TransitionDefinition<Options>
+defineTransition<Options>(spec): TransitionDefinition<Options>
 transitionRegistry: Registry<BuiltinTransitionMap>
 builtinTransitions   // none · fade · dissolve · slide · wipe · clockWipe · iris
 dissolve(): TransitionPresentation   // custom transparency-safe cross-dissolve

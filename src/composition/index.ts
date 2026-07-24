@@ -39,6 +39,7 @@ export {
 export {
   transitionRegistry,
   builtinTransitions,
+  defineTransition,
   createTransitionDefinition,
   type TransitionDefinition,
   type TransitionCapabilities,
@@ -50,7 +51,9 @@ export {
 } from "../transitions";
 
 export {
+  defineAssetKit,
   createAssetKit,
+  defineAsset,
   createAssetDefinition,
   assetRegistry,
   AssetRegistryProvider,
@@ -81,6 +84,7 @@ export {
 
 
 export {
+  defineBrand,
   createBrandDefinition,
   brandRegistry,
   resolveBrand,
@@ -95,6 +99,7 @@ export {
 
 export {
   sceneRegistry,
+  defineScene,
   createSceneDefinition,
   builtinScenes,
   type SceneComponent,

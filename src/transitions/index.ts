@@ -8,6 +8,7 @@
  */
 
 export {
+  defineTransition,
   createTransitionDefinition,
   type TransitionDefinition,
   type TransitionCapabilities,

@@ -68,7 +68,7 @@ Add to the `builtinScenes` map (the single source of truth):
 ```ts
 export const builtinScenes = {
   // …existing…
-  stat: createSceneDefinition<StatSceneProps>({ component: StatScene }),
+  stat: defineScene<StatSceneProps>({ component: StatScene }),
 } satisfies SceneMap;
 ```
 Now `{ scene: "stat", props: { value: "42%", label: "…" } }` is fully typed everywhere.
@@ -77,7 +77,7 @@ Now `{ scene: "stat", props: { value: "42%", label: "…" } }` is fully typed ev
 
 ```ts
 const studio = sceneRegistry.extend({
-  stat: createSceneDefinition<StatSceneProps>({ component: StatScene, defaultDuration: 4 }),
+  stat: defineScene<StatSceneProps>({ component: StatScene, defaultDuration: 4 }),
 });
 buildComposition({ id, scenes: [{ scene: "stat", props: { value: "42%" } }] }, studio);
 ```
@@ -85,7 +85,7 @@ buildComposition({ id, scenes: [{ scene: "stat", props: { value: "42%" } }] }, s
 ### 4. Transparency (optional)
 
 If a scene renders transparently (translucent surface / overlay), mark it so the opacity
-contract applies: `createSceneDefinition<…>({ component, opaque: false })`, or per instance
+contract applies: `defineScene<…>({ component, opaque: false })`, or per instance
 `{ scene: "stat", opaque: false }`. See [TRANSITIONS.md](./TRANSITIONS.md).
 
 ### 5. Test

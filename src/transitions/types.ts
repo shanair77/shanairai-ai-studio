@@ -38,9 +38,15 @@ export type TransitionDefinition<Options> = {
 };
 
 /** Bind a presentation + capabilities into a typed transition definition. */
-export const createTransitionDefinition = <Options = void>(
+export const defineTransition = <Options = void>(
   spec: TransitionDefinition<Options>,
 ): TransitionDefinition<Options> => spec;
+
+/**
+ * Internal compatibility alias for the pre-SDK name. `defineTransition` is the canonical authoring
+ * name (Phase S3); remaining internal call sites migrate in a later cleanup commit.
+ */
+export const createTransitionDefinition = defineTransition;
 
 /** A map of transition name → definition. Prop/option type erased to `any` per entry. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

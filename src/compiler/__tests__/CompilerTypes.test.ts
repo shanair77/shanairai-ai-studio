@@ -7,17 +7,17 @@
 
 import { describe, expect, it } from "vitest";
 import { createRegistry } from "../../registry";
-import { createTemplateDefinition } from "../../templates";
+import { defineTemplate } from "../../templates";
 import { createCompiler } from "..";
 
 type HeroParams = { title: string; subtitle?: string };
 type ListParams = { items: string[] };
 
-const heroT = createTemplateDefinition({
+const heroT = defineTemplate({
   name: "hero",
   build: (p: HeroParams) => ({ scenes: [{ scene: "hero", duration: 1, props: { title: p.title } }] }),
 });
-const listT = createTemplateDefinition({
+const listT = defineTemplate({
   name: "list",
   build: (p: ListParams) => ({ scenes: p.items.map((t) => ({ scene: "centered", duration: 1, props: { title: t } })) }),
 });

@@ -41,8 +41,8 @@ tests are part of the change, not an afterthought.
 
 ## Naming conventions
 
-- **Definitions/factories:** single verb `create` + precise noun — `createSceneDefinition`,
-  `createTransitionDefinition`, `createRegistry` (ADR-001). Future families follow
+- **Definitions/factories:** single verb `create` + precise noun — `defineScene`,
+  `defineTransition`, `createRegistry` (ADR-001). Future families follow
   `create<X>Definition`.
 - **Registries:** `<x>Registry` (e.g. `sceneRegistry`, `transitionRegistry`).
 - **Maps:** `builtin<X>s` (e.g. `builtinScenes`, `builtinTransitions`); `<X>Map` for the type.

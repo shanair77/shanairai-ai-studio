@@ -78,7 +78,7 @@ export type SceneResolver = {
 const DEFAULT_SCENE_DURATION = theme.timing.scene.base;
 
 /** Bind a scene component (+ optional default duration / opacity) into a typed definition. */
-export const createSceneDefinition = <P>(spec: {
+export const defineScene = <P>(spec: {
   component: ComponentType<P>;
   defaultDuration?: number;
   opaque?: boolean;
@@ -87,6 +87,12 @@ export const createSceneDefinition = <P>(spec: {
   defaultDuration: spec.defaultDuration ?? DEFAULT_SCENE_DURATION,
   ...(spec.opaque !== undefined ? { opaque: spec.opaque } : {}),
 });
+
+/**
+ * Internal compatibility alias for the pre-SDK name. `defineScene` is the canonical authoring name
+ * (Phase S3); remaining internal call sites migrate in a later cleanup commit.
+ */
+export const createSceneDefinition = defineScene;
 
 /** The built-in scenes — the single definition site (replaces the old registration array). */
 export const builtinScenes = {

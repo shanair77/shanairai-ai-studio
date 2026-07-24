@@ -9,6 +9,12 @@
 import { type TemplateDefinition, type TemplateParams } from "./types";
 
 /** Bind a template pack, preserving its param type `P` for typed authoring + selection. */
-export const createTemplateDefinition = <P extends TemplateParams>(
+export const defineTemplate = <P extends TemplateParams>(
   spec: TemplateDefinition<P>,
 ): TemplateDefinition<P> => spec;
+
+/**
+ * Internal compatibility alias for the pre-SDK name. `defineTemplate` is the canonical authoring name
+ * (Phase S3); remaining internal call sites migrate in a later cleanup commit.
+ */
+export const createTemplateDefinition = defineTemplate;

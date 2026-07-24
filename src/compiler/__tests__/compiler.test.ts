@@ -9,13 +9,13 @@
 
 import { describe, expect, it } from "vitest";
 import { createRegistry } from "../../registry";
-import { createTemplateDefinition } from "../../templates";
+import { defineTemplate } from "../../templates";
 import { execute } from "../../execution";
 import { describeFramework } from "../../metadata";
 import { createCompiler } from "..";
 
 const templates = createRegistry({
-  basic: createTemplateDefinition({
+  basic: defineTemplate({
     name: "basic",
     parameters: { parameters: [{ key: "title", type: "string", required: true }] },
     build: (p: { title: string }) => ({

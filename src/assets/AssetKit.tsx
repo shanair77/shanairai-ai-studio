@@ -138,7 +138,7 @@ const BoxedImage: React.FC<{ src: string; box: BoxProps; defaultFit: Fit }> = ({
   return createElement("div", { style: boxStyle }, createElement(Img, { src, style: mediaStyle }));
 };
 
-export const createAssetKit = <M extends AssetMap>(
+export const defineAssetKit = <M extends AssetMap>(
   map: M,
   options?: { resolvers?: AssetSourceResolver[] },
 ): AssetKit<M> => {
@@ -225,3 +225,9 @@ export const createAssetKit = <M extends AssetMap>(
     Logo,
   };
 };
+
+/**
+ * Internal compatibility alias for the pre-SDK name. `defineAssetKit` is the canonical authoring name
+ * (Phase S3); remaining internal call sites migrate in a later cleanup commit.
+ */
+export const createAssetKit = defineAssetKit;

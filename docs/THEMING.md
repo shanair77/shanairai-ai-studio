@@ -60,7 +60,7 @@ style={{ color: theme.colors.textPrimary, ...theme.typography.textStyles.h1 }}
 Brand theming (register a brand, then select it by name):
 ```ts
 const brands = createRegistry({
-  midnight: createBrandDefinition({
+  midnight: defineBrand({
     name: "Midnight", mode: "light",
     theme: { colors: { background: "#0E1B2B", textPrimary: "#E8F0FF", accent: "#00E0C6" } },
   }),

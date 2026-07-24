@@ -78,11 +78,11 @@ Register it (built-in) in `src/composition/SceneRegistry.ts`, or per-video via `
 
 Full walkthrough: [BUILDING_CUSTOM_TRANSITIONS.md](./BUILDING_CUSTOM_TRANSITIONS.md). A custom
 transition is a `TransitionPresentation` (from `@remotion/transitions`) plus capability
-metadata, registered with `createTransitionDefinition`:
+metadata, registered with `defineTransition`:
 
 ```ts
 const custom = transitionRegistry.extend({
-  softDissolve: createTransitionDefinition({
+  softDissolve: defineTransition({
     presentation: () => dissolve(),               // reuse or write your own presentation
     capabilities: { affectsEntering: true, affectsExiting: true, requiresOpaqueIncoming: false, supportsTransparency: true },
   }),
@@ -103,7 +103,7 @@ name (never inlined):
 
 ```ts
 const brands = createRegistry({
-  midnight: createBrandDefinition({
+  midnight: defineBrand({
     name: "Midnight",
     mode: "light",
     theme: { colors: { background: "#0E1B2B", textPrimary: "#E8F0FF", accent: "#00E0C6" } },
@@ -126,7 +126,7 @@ URL), then referenced by that name:
 
 ```ts
 const assets = createRegistry({
-  bed: createAssetDefinition({ category: "audio", source: "audio/bed.mp3" }),
+  bed: defineAsset({ category: "audio", source: "audio/bed.mp3" }),
 });
 
 buildComposition(
@@ -146,9 +146,9 @@ configuration. It never returns React — `buildFromTemplate` merges its output 
 
 ```ts
 import { createRegistry } from "./registry";
-import { buildFromTemplate, createTemplateDefinition } from "./templates";
+import { buildFromTemplate, defineTemplate } from "./templates";
 
-const promo = createTemplateDefinition({
+const promo = defineTemplate({
   name: "promo",
   format: "horizontal",
   capabilities: { formats: ["horizontal", "square"], providesTransitions: true, minScenes: 2, maxScenes: 4 },
@@ -187,7 +187,7 @@ clean, defaulted, deeply-readonly values. It's additive: templates without a sch
 params + imperative `validate` path.
 
 ```ts
-const promo = createTemplateDefinition({
+const promo = defineTemplate({
   name: "promo",
   parameters: {
     parameters: [

@@ -29,7 +29,7 @@ export {
   type ParamsOf,
 } from "./types";
 
-export { createTemplateDefinition } from "./definition";
+export { defineTemplate, createTemplateDefinition } from "./definition";
 export { templateRegistry } from "./TemplateRegistry";
 // Public stage helpers (ADR-007) — the Execution Engine drives these in order; `templates` never
 // imports `execution`, and exposes no sequencing function of its own.

@@ -30,7 +30,7 @@ flowchart LR
 |---|---|
 | `CompositionSchema.ts` | The declarative shape (typed via registries) + `validateComposition`. |
 | `VideoConfig.ts` | `resolveVideoConfig` — format preset / explicit dims / duration → `{ width, height, fps, durationInFrames? }`. |
-| `SceneRegistry.ts` | Typed scene registry (`sceneRegistry`, `createSceneDefinition`, `builtinScenes`). |
+| `SceneRegistry.ts` | Typed scene registry (`sceneRegistry`, `defineScene`, `builtinScenes`). |
 | `Timeline.ts` | `resolveTimeline` — scenes + boundary transitions + clamped frames + total. |
 | `CompositionBuilder.ts` | `buildComposition` — validates, resolves, assembles the tree, returns `BuiltComposition`. |
 
@@ -58,15 +58,15 @@ Everything is built with `React.createElement` — no hardcoded JSX.
 ## Examples
 
 ```ts
-import { buildComposition, createBrandDefinition, sceneRegistry, transitionRegistry } from "./composition";
+import { buildComposition, defineBrand, sceneRegistry, transitionRegistry } from "./composition";
 import { createRegistry } from "./registry";
-import { createAssetDefinition } from "./assets";
+import { defineAsset } from "./assets";
 
 // Brands and assets are registered and referenced by name (never inlined).
 const brands = createRegistry({
-  promo: createBrandDefinition({ name: "Promo", mode: "dark", theme: { colors: { accent: "#00E0C6" } } }),
+  promo: defineBrand({ name: "Promo", mode: "dark", theme: { colors: { accent: "#00E0C6" } } }),
 });
-const assets = createRegistry({ bed: createAssetDefinition({ category: "audio", source: "audio/bed.mp3" }) });
+const assets = createRegistry({ bed: defineAsset({ category: "audio", source: "audio/bed.mp3" }) });
 
 const built = buildComposition(
   {
@@ -92,7 +92,7 @@ const built = buildComposition(
 Custom registries via the second overload:
 
 ```ts
-const studio = sceneRegistry.extend({ myScene: createSceneDefinition<MyProps>({ component: MyScene }) });
+const studio = sceneRegistry.extend({ myScene: defineScene<MyProps>({ component: MyScene }) });
 buildComposition({ id, scenes: [{ scene: "myScene", props: { … } }] }, studio);
 ```
 

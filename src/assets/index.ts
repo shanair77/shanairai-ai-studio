@@ -26,7 +26,7 @@ export {
   type Fit,
 } from "./types";
 
-export { createAssetDefinition, assetRegistry } from "./definition";
+export { defineAsset, createAssetDefinition, assetRegistry } from "./definition";
 
 export {
   LocalAssetResolver,
@@ -40,6 +40,7 @@ export { resolveAsset, assertCategory, validateMetadata } from "./resolve";
 export { audioVolume } from "./audio";
 
 export {
+  defineAssetKit,
   createAssetKit,
   AssetRegistryProvider,
   useAssetRegistry,

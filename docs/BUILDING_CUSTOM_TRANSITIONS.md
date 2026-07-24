@@ -9,7 +9,7 @@ type-safely. Sources: `src/transitions/*`. Concepts: [TRANSITIONS.md](./TRANSITI
 ## Concepts
 
 A transition is a **`TransitionPresentation`** (from `@remotion/transitions`) plus **capability
-metadata**, wrapped in a `TransitionDefinition` via `createTransitionDefinition`:
+metadata**, wrapped in a `TransitionDefinition` via `defineTransition`:
 
 ```ts
 type TransitionDefinition<Options> = {
@@ -51,7 +51,7 @@ factory's `ctx` argument: `presentation: (_o, ctx) => clockWipe({ width: ctx.wid
 
 As a built-in (`src/transitions/TransitionRegistry.ts`, in the `builtinTransitions` map):
 ```ts
-softDissolve: createTransitionDefinition({
+softDissolve: defineTransition({
   presentation: () => softDissolve(),
   capabilities: { affectsEntering: true, affectsExiting: true, requiresOpaqueIncoming: false, supportsTransparency: true },
 }),
@@ -60,7 +60,7 @@ softDissolve: createTransitionDefinition({
 …or per-video (no core change):
 ```ts
 const custom = transitionRegistry.extend({
-  plumVeil: createTransitionDefinition<{ softness?: number }>({
+  plumVeil: defineTransition<{ softness?: number }>({
     presentation: (o) => plumVeil({ softness: o?.softness }),
     capabilities: { affectsEntering: true, affectsExiting: true, requiresOpaqueIncoming: false, supportsTransparency: true },
   }),
@@ -70,9 +70,9 @@ buildComposition({ id, transitions: { type: "plumVeil", options: { softness: 0.4
 
 ### 3. Options typing
 
-`createTransitionDefinition<Options>` captures the options type; the config's
+`defineTransition<Options>` captures the options type; the config's
 `transition.options` is then typed per transition (e.g. `{ direction?: SlideDirection }` for
-`slide`). Options-less transitions use `createTransitionDefinition({ … })` (Options = `void`).
+`slide`). Options-less transitions use `defineTransition({ … })` (Options = `void`).
 
 ### 4. Capabilities & the opacity contract
 

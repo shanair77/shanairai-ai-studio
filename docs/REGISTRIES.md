@@ -17,12 +17,12 @@ misspelled name or prop is a compile error, not a silent failure.
 ```mermaid
 graph TD
   KERNEL["registry kernel<br/>createRegistry · Registry&lt;M&gt;"]
-  KERNEL --> SCENES["sceneRegistry<br/>createSceneDefinition&lt;Props&gt;"]
-  KERNEL --> TRANS["transitionRegistry<br/>createTransitionDefinition&lt;Options&gt;"]
-  KERNEL -. future .-> ASSET["assetRegistry<br/>createAssetDefinition"]
-  KERNEL -. future .-> BRAND["brandRegistry<br/>createBrandDefinition"]
+  KERNEL --> SCENES["sceneRegistry<br/>defineScene&lt;Props&gt;"]
+  KERNEL --> TRANS["transitionRegistry<br/>defineTransition&lt;Options&gt;"]
+  KERNEL -. future .-> ASSET["assetRegistry<br/>defineAsset"]
+  KERNEL -. future .-> BRAND["brandRegistry<br/>defineBrand"]
   KERNEL -. future .-> EFFECT["effectRegistry<br/>createEffectDefinition"]
-  KERNEL -. future .-> TEMPLATE["templateRegistry<br/>createTemplateDefinition"]
+  KERNEL -. future .-> TEMPLATE["templateRegistry<br/>defineTemplate"]
   SCENES --> SCHEMA["CompositionSchema<br/>(scenes[].scene + props typed)"]
   TRANS --> SCHEMA2["CompositionSchema<br/>(transition.type + options typed)"]
 ```
@@ -57,14 +57,14 @@ Every family follows the same recipe:
 3. A **`satisfies`-checked map** + a default instance via `createRegistry`, plus a
    `ConfigFor<M>` mapped-union when the family participates in the schema.
 
-### `createSceneDefinition` (scenes)
+### `defineScene` (scenes)
 
 ```ts
 export type SceneDefinition<P> = { component: React.ComponentType<P>; defaultDuration: number; opaque?: boolean };
 
 export const builtinScenes = {
-  hero:  createSceneDefinition<HeroSceneProps>({ component: HeroScene }),
-  quote: createSceneDefinition<QuoteSceneProps>({ component: QuoteScene }),
+  hero:  defineScene<HeroSceneProps>({ component: HeroScene }),
+  quote: defineScene<QuoteSceneProps>({ component: QuoteScene }),
   // …
 } satisfies SceneMap;
 
@@ -74,7 +74,7 @@ export const sceneRegistry = createRegistry(builtinScenes);
 `CompositionSchema` derives `SceneConfigFor<M>` — a union discriminated on `scene`, where each
 name accepts exactly that scene's props. See [BUILDING_CUSTOM_SCENES.md](./BUILDING_CUSTOM_SCENES.md).
 
-### `createTransitionDefinition` (transitions)
+### `defineTransition` (transitions)
 
 ```ts
 export type TransitionDefinition<Options> = {
@@ -84,9 +84,9 @@ export type TransitionDefinition<Options> = {
 };
 
 export const builtinTransitions = {
-  fade:     createTransitionDefinition({ presentation: () => fade(), capabilities: { … } }),
-  dissolve: createTransitionDefinition({ presentation: () => dissolve(), capabilities: { … } }),
-  slide:    createTransitionDefinition<SlideOptions>({ presentation: (o) => slide({ direction: o?.direction }), capabilities: { … } }),
+  fade:     defineTransition({ presentation: () => fade(), capabilities: { … } }),
+  dissolve: defineTransition({ presentation: () => dissolve(), capabilities: { … } }),
+  slide:    defineTransition<SlideOptions>({ presentation: (o) => slide({ direction: o?.direction }), capabilities: { … } }),
   // …
 } satisfies TransitionMap;
 
@@ -101,7 +101,7 @@ See [BUILDING_CUSTOM_TRANSITIONS.md](./BUILDING_CUSTOM_TRANSITIONS.md).
 
 ```ts
 const studio = sceneRegistry.extend({
-  testimonialWall: createSceneDefinition<TestimonialWallProps>({ component: TestimonialWall, defaultDuration: 6 }),
+  testimonialWall: defineScene<TestimonialWallProps>({ component: TestimonialWall, defaultDuration: 6 }),
 });
 buildComposition({ id, scenes: [{ scene: "testimonialWall", props: { … } }] }, studio);
 ```
@@ -113,11 +113,11 @@ Parameter Types are implemented; Effects remains future.
 
 | Family | Definition + factory | Default instance | Config discriminant |
 |---|---|---|---|
-| Scenes | `SceneDefinition` / `createSceneDefinition` | `sceneRegistry` | `scene` |
-| Transitions | `TransitionDefinition` / `createTransitionDefinition` | `transitionRegistry` | `transition` (`type`) |
-| **Assets** | `AssetDefinition` / `createAssetDefinition` | `assetRegistry` | `asset` |
-| **Brands** | `BrandDefinition` / `createBrandDefinition` | `brandRegistry` | `brand` |
-| **Templates** | `TemplateDefinition` / `createTemplateDefinition` | `templateRegistry` | `template` |
+| Scenes | `SceneDefinition` / `defineScene` | `sceneRegistry` | `scene` |
+| Transitions | `TransitionDefinition` / `defineTransition` | `transitionRegistry` | `transition` (`type`) |
+| **Assets** | `AssetDefinition` / `defineAsset` | `assetRegistry` | `asset` |
+| **Brands** | `BrandDefinition` / `defineBrand` | `brandRegistry` | `brand` |
+| **Templates** | `TemplateDefinition` / `defineTemplate` | `templateRegistry` | `template` |
 | **Parameter Types** | `ParameterTypeDefinition` / `createParameterTypeDefinition` | `parameterTypeRegistry` | `type` |
 | Effects _(future)_ | `EffectDefinition` / `createEffectDefinition` | `effectRegistry` | `effect` |
 
