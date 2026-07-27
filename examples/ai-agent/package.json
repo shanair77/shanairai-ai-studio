@@ -1,0 +1,25 @@
+{
+  "name": "@ai-studio-examples/ai-agent",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "AI Studio example \u2014 ai-agent",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@shanairai/ai-studio": "^0.1.0-alpha.0",
+    "@remotion/google-fonts": "^4.0.489",
+    "@remotion/transitions": "^4.0.489",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "^4.0.489"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.0"
+  }
+}

@@ -11,5 +11,5 @@
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true
   },
-  "exclude": ["remotion.config.ts", "vitest.config.ts", "**/__tests__/**"]
+  "exclude": ["remotion.config.ts", "vitest.config.ts", "**/__tests__/**", "examples/**"]
 }
