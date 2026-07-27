@@ -2,9 +2,21 @@
   "name": "@shanairai/ai-studio",
   "version": "0.1.0-alpha.0",
   "description": "A registry-driven declarative compiler for programmatic video: describe a video as data, compile it to a Remotion composition.",
+  "homepage": "https://github.com/shanairai/ai-studio#readme",
+  "bugs": {
+    "url": "https://github.com/shanairai/ai-studio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shanairai/ai-studio.git"
+  },
   "license": "MIT",
+  "author": "Shanair Johnson",
   "private": false,
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "remotion",
     "video",
@@ -70,6 +82,7 @@
     "build": "remotion bundle",
     "build:lib": "tsup",
     "prepack": "npm run build:lib",
+    "prepublishOnly": "npm run verify",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc",
     "test": "vitest run",
