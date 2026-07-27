@@ -54,11 +54,6 @@
     "react": "^19.0.0",
     "remotion": "^4.0.489"
   },
-  "peerDependenciesMeta": {
-    "@remotion/google-fonts": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@remotion/cli": "4.0.489",
     "@remotion/eslint-config-flat": "4.0.489",
