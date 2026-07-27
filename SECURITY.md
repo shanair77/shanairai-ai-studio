@@ -13,7 +13,7 @@ AI Studio is in **alpha** (`0.1.0-alpha.x`). Security fixes are applied to the l
 
 **Please do not open a public issue for security vulnerabilities.**
 
-Report privately through GitHub's [private vulnerability reporting](https://github.com/shanairai/ai-studio/security/advisories/new) (Security → Advisories → *Report a vulnerability*).
+Report privately through GitHub's [private vulnerability reporting](https://github.com/shanair77/shanairai-ai-studio/security/advisories/new) (Security → Advisories → *Report a vulnerability*).
 
 Please include:
 

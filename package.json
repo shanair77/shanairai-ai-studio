@@ -2,13 +2,13 @@
   "name": "@shanairai/ai-studio",
   "version": "0.1.0-alpha.0",
   "description": "A registry-driven declarative compiler for programmatic video: describe a video as data, compile it to a Remotion composition.",
-  "homepage": "https://github.com/shanairai/ai-studio#readme",
+  "homepage": "https://github.com/shanair77/shanairai-ai-studio#readme",
   "bugs": {
-    "url": "https://github.com/shanairai/ai-studio/issues"
+    "url": "https://github.com/shanair77/shanairai-ai-studio/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shanairai/ai-studio.git"
+    "url": "git+https://github.com/shanair77/shanairai-ai-studio.git"
   },
   "license": "MIT",
   "author": "Shanair Johnson",
