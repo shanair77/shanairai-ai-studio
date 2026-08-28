@@ -1,6 +1,6 @@
 {
   "name": "@shanairai/ai-studio",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "description": "A registry-driven declarative compiler for programmatic video: describe a video as data, compile it to a Remotion composition.",
   "homepage": "https://github.com/shanair77/shanairai-ai-studio#readme",
   "bugs": {
@@ -59,13 +59,13 @@
     "./package.json": "./package.json"
   },
   "peerDependencies": {
-    "@remotion/bundler": "^4.0.489",
-    "@remotion/google-fonts": "^4.0.489",
-    "@remotion/renderer": "^4.0.489",
-    "@remotion/tailwind-v4": "^4.0.489",
-    "@remotion/transitions": "^4.0.489",
+    "@remotion/bundler": "4.0.489",
+    "@remotion/google-fonts": "4.0.489",
+    "@remotion/renderer": "4.0.489",
+    "@remotion/tailwind-v4": "4.0.489",
+    "@remotion/transitions": "4.0.489",
     "react": "^19.0.0",
-    "remotion": "^4.0.489"
+    "remotion": "4.0.489"
   },
   "devDependencies": {
     "@remotion/bundler": "4.0.489",
@@ -99,7 +99,9 @@
     "test:typecheck": "tsc -p tsconfig.test.json",
     "test:watch": "vitest",
     "verify": "npm run lint && npm run test:typecheck && npm run test",
-    "test:render": "vitest run --config vitest.render.config.ts"
+    "test:render": "vitest run --config vitest.render.config.ts",
+    "aurelle:scan-video": "tsx scripts/aurelle-scan-video.ts",
+    "aurelle:stills": "tsx scripts/aurelle-stills.ts"
   },
   "sideEffects": [
     "*.css",
