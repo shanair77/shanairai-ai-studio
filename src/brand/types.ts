@@ -37,8 +37,19 @@ export type BrandDefinition<M extends AssetMap = AssetMap> = {
   meta?: { handles?: Record<string, string>; legal?: string; url?: string };
 };
 
-/** A map of brand name → definition. */
-export type BrandMap = Record<string, BrandDefinition>;
+/**
+ * A map of brand name → definition.
+ *
+ * The value's asset-kit map is erased to `any` for the same reason `BrandRegistry`
+ * erases it below, and `TemplateMap` erases its param type: `AssetKit<M>` holds a
+ * `Registry<M>`, which is invariant in `M`, so a real brand pack — whose kit has a
+ * concrete map of fifty named assets — is not assignable to `BrandDefinition<AssetMap>`.
+ * Defaulting rather than erasing made this type unable to hold any brand actually
+ * shipped, which is what a `BrandMap` exists to hold. Each brand's real asset names
+ * are still recovered from its own definition, never from this constraint.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type BrandMap = Record<string, BrandDefinition<any>>;
 
 /**
  * Erased runtime brand lookup (mirrors SceneResolver / AssetRegistry). `BrandDefinition<any>`

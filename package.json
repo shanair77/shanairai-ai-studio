@@ -46,18 +46,33 @@
       "import": "./dist/inspect.js",
       "default": "./dist/inspect.js"
     },
+    "./render": {
+      "types": "./dist/render.d.ts",
+      "import": "./dist/render.js",
+      "default": "./dist/render.js"
+    },
+    "./packs": {
+      "types": "./dist/packs.d.ts",
+      "import": "./dist/packs.js",
+      "default": "./dist/packs.js"
+    },
     "./package.json": "./package.json"
   },
   "peerDependencies": {
+    "@remotion/bundler": "^4.0.489",
     "@remotion/google-fonts": "^4.0.489",
+    "@remotion/renderer": "^4.0.489",
+    "@remotion/tailwind-v4": "^4.0.489",
     "@remotion/transitions": "^4.0.489",
     "react": "^19.0.0",
     "remotion": "^4.0.489"
   },
   "devDependencies": {
+    "@remotion/bundler": "4.0.489",
     "@remotion/cli": "4.0.489",
     "@remotion/eslint-config-flat": "4.0.489",
     "@remotion/google-fonts": "4.0.489",
+    "@remotion/renderer": "4.0.489",
     "@remotion/tailwind-v4": "4.0.489",
     "@remotion/transitions": "4.0.489",
     "@types/react": "19.2.7",
@@ -69,6 +84,7 @@
     "remotion": "4.0.489",
     "tailwindcss": "4.0.0",
     "tsup": "^8.5.1",
+    "tsx": "^4.23.12",
     "typescript": "5.9.3",
     "vitest": "^4.1.10"
   },
@@ -83,10 +99,25 @@
     "test": "vitest run",
     "test:typecheck": "tsc -p tsconfig.test.json",
     "test:watch": "vitest",
-    "verify": "npm run lint && npm run test:typecheck && npm run test"
+    "verify": "npm run lint && npm run test:typecheck && npm run test",
+    "acquire:jetset": "tsx scripts/acquire-jetset-audio.ts",
+    "aurelle:scan-video": "tsx scripts/aurelle-scan-video.ts",
+    "aurelle:stills": "tsx scripts/aurelle-stills.ts",
+    "test:render": "vitest run --config vitest.render.config.ts"
   },
   "sideEffects": [
     "*.css",
     "**/config/fonts/bootstrap.ts"
-  ]
+  ],
+  "peerDependenciesMeta": {
+    "@remotion/bundler": {
+      "optional": true
+    },
+    "@remotion/renderer": {
+      "optional": true
+    },
+    "@remotion/tailwind-v4": {
+      "optional": true
+    }
+  }
 }

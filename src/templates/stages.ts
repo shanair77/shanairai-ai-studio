@@ -88,7 +88,7 @@ export const resolveTemplateCanvas = (
     format: spec.format ?? template.format,
     width: spec.width,
     height: spec.height,
-    fps: spec.fps,
+    fps: spec.fps ?? template.fps,
     duration: spec.duration,
     durationInFrames: spec.durationInFrames,
   };
@@ -227,10 +227,18 @@ export const assembleTemplateSchema = (
   const defaults = resolveTemplateDefaults(spec, output);
   return {
     ...videoInput,
+    // The template's own length, unless the caller stated one. Spread after
+    // `videoInput` because that is where the caller's value arrives.
+    ...(videoInput.duration === undefined && videoInput.durationInFrames === undefined && output.duration !== undefined
+      ? { duration: output.duration }
+      : {}),
     id: spec.id,
     theme: spec.theme,
     brand: spec.brand,
     scenes: output.scenes,
+    // Straight through, deliberately: `audio` has no caller-override step to run
+    // it past. See `TemplateOutput.audio` for why it is not treated like `music`.
+    ...(output.audio !== undefined ? { audio: output.audio } : {}),
     transitions: defaults.transitions,
     music: defaults.music,
     timing: defaults.timing,

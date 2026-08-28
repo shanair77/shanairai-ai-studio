@@ -13,11 +13,11 @@ type HeroParams = { title: string; subtitle?: string };
 type ListParams = { items: string[] };
 
 const heroT = defineTemplate({
-  name: "hero",
+  name: "hero", version: "test",
   build: (p: HeroParams) => ({ scenes: [{ scene: "hero", duration: 1, props: { title: p.title } }] }),
 });
 const listT = defineTemplate({
-  name: "list",
+  name: "list", version: "test",
   build: (p: ListParams) => ({ scenes: p.items.map((t) => ({ scene: "centered", duration: 1, props: { title: t } })) }),
 });
 

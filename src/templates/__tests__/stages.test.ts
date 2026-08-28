@@ -16,7 +16,7 @@ import type { TemplateCompositionBase, TemplateOutput } from "../types";
 type BasicParams = { title: string; body?: string };
 
 const basic = defineTemplate({
-  name: "basic",
+  name: "basic", version: "test",
   format: "horizontal",
   capabilities: { formats: ["horizontal", "square"], providesTransitions: true, minScenes: 2, maxScenes: 3 },
   validate: (p: BasicParams) => { if (!p.title) throw new Error("basic: `title` is required."); },
@@ -31,13 +31,13 @@ const basic = defineTemplate({
 
 // No default transition (exercises the brand/framework tiers).
 const plain = defineTemplate({
-  name: "plain",
+  name: "plain", version: "test",
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }),
 });
 
 // A scene-level transition on the middle boundary (exercises "scene wins").
 const triple = defineTemplate({
-  name: "triple",
+  name: "triple", version: "test",
   build: () => ({
     scenes: [
       { scene: "hero", duration: 1, props: {} },
@@ -49,43 +49,43 @@ const triple = defineTemplate({
 });
 
 const requiresBrand = defineTemplate({
-  name: "requiresBrand",
+  name: "requiresBrand", version: "test",
   capabilities: { requiresBrand: true },
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }),
 });
 
 // Capability must be checked BEFORE build — this build would throw if ever reached.
 const guard = defineTemplate({
-  name: "guard",
+  name: "guard", version: "test",
   capabilities: { requiresBrand: true },
   build: () => { throw new Error("guard build must not run"); },
 });
 
 const tooFew = defineTemplate({
-  name: "tooFew",
+  name: "tooFew", version: "test",
   capabilities: { minScenes: 2 },
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }] }),
 });
 
 const tooMany = defineTemplate({
-  name: "tooMany",
+  name: "tooMany", version: "test",
   capabilities: { maxScenes: 1 },
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }),
 });
 
 const badDecl = defineTemplate({
-  name: "badDecl",
+  name: "badDecl", version: "test",
   capabilities: { variableLength: false, minScenes: 2, maxScenes: 3 },
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }),
 });
 
 const emptyOut = defineTemplate({
-  name: "emptyOut",
+  name: "emptyOut", version: "test",
   build: () => ({ scenes: [] }),
 });
 
 const malformed = defineTemplate({
-  name: "malformed",
+  name: "malformed", version: "test",
   build: () => ({}) as TemplateOutput,
 });
 

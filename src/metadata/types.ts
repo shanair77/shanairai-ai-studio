@@ -47,6 +47,13 @@ export type BrandDescriptor = DescriptorIdentity & {
 /** Template metadata projection — `previewParams` is sanitized to keep the descriptor JSON-safe. */
 export type TemplateMetaSummary = { description?: string; category?: string; previewParams?: DiagnosticValue };
 export type TemplateDescriptor = DescriptorIdentity & {
+  /**
+   * The registered implementation's version.
+   *
+   * Present so an agent reading `describe()` can pin exactly what it inspected
+   * — the catalogue and the render request speak about the same thing.
+   */
+  version: string;
   format?: FormatName;
   capabilities?: TemplateCapabilities;
   parameters?: ParameterSchema;

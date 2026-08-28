@@ -15,6 +15,7 @@ import { type FormatName } from "../config/Layout";
 import { type ThemeMode } from "../config/Theme";
 import { type ParameterSchema } from "../parameters";
 import {
+  type AudioCue,
   type MusicConfig,
   type SceneConfigBase,
   type TimingConfig,
@@ -47,6 +48,38 @@ export type TemplateOutput = {
   timing?: TimingConfig;
   /** Music the template wires by name (a caller override outranks it). */
   music?: MusicConfig;
+  /**
+   * The template's own sound design — narration, ambience and effects, positioned
+   * against the cut the template just emitted.
+   *
+   * `music` was here from the start and this was not, which made a whole class of
+   * template impossible to express: any template whose scenes are timed against
+   * narration could emit the picture but not the track it was cut to. The cues
+   * belong to the same authored artefact as the scenes — a J-cut is a statement
+   * about a specific boundary in a specific edit — so splitting them across the
+   * template and the caller would leave neither able to keep them in sync.
+   *
+   * Unlike `music`, there is no caller override. A caller who replaces one cue
+   * of a designed track has almost certainly broken its relationship to the cut,
+   * and `music` — a single bed under the whole piece — is the case where
+   * substitution is actually meaningful.
+   */
+  audio?: AudioCue[];
+  /**
+   * The piece's total length in seconds, when the template knows it exactly.
+   *
+   * Omitting this lets the timeline derive a length from the scenes, which is
+   * the right default and is NOT the same number. Deriving converts each scene
+   * to frames and sums, so every scene whose seconds do not land on a frame
+   * boundary rounds up: the 30-second Jet Set cutdown derives to 722 frames
+   * against a picture lock of 720. Two frames is inaudible and is still a
+   * different film from the one that was approved.
+   *
+   * So a template that was cut to a duration states it, and one that is simply
+   * as long as its content does not. A caller's explicit duration still wins —
+   * same precedence as `music`.
+   */
+  duration?: number;
 };
 
 /**
@@ -82,8 +115,38 @@ export type TemplateMetadata<P extends TemplateParams = TemplateParams> = {
 /** A template pack, generic over its param type `P` for compile-time authoring safety. */
 export type TemplateDefinition<P extends TemplateParams = TemplateParams> = {
   name: string;
+  /**
+   * The template implementation's identity, and the reason it is REQUIRED.
+   *
+   * A render job that named only a template would silently change what it
+   * produces the moment somebody edited the template — including a job already
+   * in flight for a paying customer. Carrying a version means a caller can pin
+   * one, and a mismatch is refused before any work is done rather than
+   * discovered afterwards in the output.
+   *
+   * Deliberately an opaque string, not a semantic-version policy. Nothing here
+   * parses it, orders it, or ranges over it; the only operation is equality.
+   * A registry service, remote resolution and migration machinery are all out
+   * of scope — deterministic identity is the whole requirement.
+   *
+   * Bump it whenever `build` would produce a different composition for the same
+   * params. Leaving it unchanged across such an edit is the one mistake this
+   * field cannot catch.
+   */
+  version: string;
   /** Default canvas format the template targets. */
   format?: FormatName;
+  /**
+   * Default frame rate, when the template's material has one.
+   *
+   * Same precedence as `format` — the caller's value wins — and here for the
+   * same reason, one step further. A format preset seeds an fps, and for a
+   * template cut against 24fps footage that preset's 30 is not a stylistic
+   * default but a defect: the pulldown freezes every fifth frame. The template
+   * knows its own cadence and the caller does not, so it is the template that
+   * states it. Omit it whenever the material is cadence-agnostic.
+   */
+  fps?: number;
   /** Machine-readable capabilities (checked before/after `build`). */
   capabilities?: TemplateCapabilities;
   /**

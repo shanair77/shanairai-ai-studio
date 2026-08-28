@@ -19,7 +19,7 @@ describe("resolveTemplateParameters — single pipeline pass", () => {
     };
     const validators = validatorRegistry.extend({ counting });
     const template = defineTemplate({
-      name: "t",
+      name: "t", version: "test",
       parameters: { parameters: [{ key: "title", type: "string", required: true, validators: ["counting"] }] },
       build: (p: { title: string }) => ({ scenes: [{ scene: "hero", duration: 1, props: { title: p.title } }] }),
     });
@@ -37,7 +37,7 @@ describe("resolveTemplateParameters — single pipeline pass", () => {
     };
     const validators = validatorRegistry.extend({ warn });
     const template = defineTemplate({
-      name: "t",
+      name: "t", version: "test",
       parameters: {
         parameters: [
           { key: "title", type: "string", default: "Untitled", validators: ["warn"] },

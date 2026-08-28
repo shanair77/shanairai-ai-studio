@@ -26,7 +26,7 @@ const traceStatus = (r: ReturnType<typeof execute>, stage: string) =>
 describe("invalid template default → Stage 2 (check-template-capabilities)", () => {
   const badConstraint = createRegistry({
     t: defineTemplate({
-      name: "t",
+      name: "t", version: "test",
       parameters: { parameters: [{ key: "count", type: "number", default: 99, constraints: { min: 1, max: 5 } }] },
       build: (p: { count: number }) => ({ scenes: scenes(String(p.count)) }),
     }),
@@ -45,7 +45,7 @@ describe("invalid template default → Stage 2 (check-template-capabilities)", (
   it("2. a default failing intrinsic type validation fails at Stage 2", () => {
     const templates = createRegistry({
       t: defineTemplate({
-        name: "t",
+        name: "t", version: "test",
         parameters: { parameters: [{ key: "accent", type: "color", default: "#ZZZ" }] },
         build: () => ({ scenes: scenes("x") }),
       }),
@@ -65,7 +65,7 @@ describe("invalid template default → Stage 2 (check-template-capabilities)", (
     const validators = validatorRegistry.extend({ "no-foo": noFoo });
     const templates = createRegistry({
       t: defineTemplate({
-        name: "t",
+        name: "t", version: "test",
         parameters: { parameters: [{ key: "slug", type: "string", default: "foobar", validators: ["no-foo"] }] },
         build: () => ({ scenes: scenes("x") }),
       }),
@@ -79,7 +79,7 @@ describe("invalid template default → Stage 2 (check-template-capabilities)", (
   it("4. a valid default succeeds and reaches Stage 3", () => {
     const templates = createRegistry({
       t: defineTemplate({
-        name: "t",
+        name: "t", version: "test",
         parameters: { parameters: [{ key: "count", type: "number", default: 3, constraints: { min: 1, max: 5 } }] },
         build: (p: { count: number }) => ({ scenes: scenes(String(p.count)) }),
       }),
@@ -93,7 +93,7 @@ describe("invalid template default → Stage 2 (check-template-capabilities)", (
   it("5. caller-supplied invalid input still fails at Stage 3 (schema is valid)", () => {
     const templates = createRegistry({
       t: defineTemplate({
-        name: "t",
+        name: "t", version: "test",
         parameters: { parameters: [{ key: "count", type: "number", default: 3, constraints: { min: 1, max: 5 } }] },
         build: (p: { count: number }) => ({ scenes: scenes(String(p.count)) }),
       }),

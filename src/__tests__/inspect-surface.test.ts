@@ -12,9 +12,12 @@
 import { execSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join, normalize as pnormalize, relative } from "node:path";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import * as inspect from "../inspect";
+// The walker moved to a shared module when `render-surface.test.ts` needed the same
+// analysis; the guarantees asserted below are unchanged.
+import { runtimeClosure } from "./import-graph";
 
 const ROOT = process.cwd();
 const SRC = join(ROOT, "src");
@@ -36,75 +39,9 @@ describe("inspect surface — runtime exports", () => {
   });
 });
 
-// ── Static runtime-import-graph walker (value + side-effect edges only; type-only edges excluded) ──
-const STMT = /(?:^|\n)\s*(import|export)\b(.*?)\bfrom\s+"([^"]+)"/gs;
-const SIDE_EFFECT = /(?:^|\n)\s*import\s+"([^"]+)"/g;
-
-const isRuntimeEdge = (kw: string, clause: string): boolean => {
-  const c = clause.trim();
-  if (kw === "export") return !c.startsWith("type"); // `export type {…}` is erased
-  if (c.startsWith("type")) return false; // `import type {…}` is erased
-  const brace = c.match(/\{([\s\S]*)\}/);
-  if (brace) {
-    const nonBrace = c.slice(0, brace.index).replace(/,$/, "").trim();
-    if (nonBrace && nonBrace !== "type") return true; // default import alongside braces
-    const specs = brace[1].split(",").map((s) => s.trim()).filter(Boolean);
-    return specs.length > 0 && !specs.every((s) => /^type\s/.test(s)); // some value specifier
-  }
-  return true; // default / namespace import
-};
-
-const resolveRel = (fromFile: string, spec: string): string | null => {
-  if (!spec.startsWith(".")) return null; // bare dep — handled by caller
-  const base = pnormalize(join(dirname(fromFile), spec));
-  for (const cand of [`${base}.ts`, `${base}.tsx`, join(base, "index.ts"), join(base, "index.tsx")]) {
-    try {
-      readFileSync(cand);
-      return cand;
-    } catch {
-      /* try next */
-    }
-  }
-  return null;
-};
-
-const runtimeClosure = (entryRel: string) => {
-  const seen = new Set<string>();
-  const bare = new Set<string>();
-  const tsx: string[] = [];
-  const stack = [join(SRC, entryRel)];
-  while (stack.length) {
-    const f = stack.pop()!;
-    if (seen.has(f)) continue;
-    seen.add(f);
-    if (f.endsWith(".tsx")) tsx.push(relative(SRC, f));
-    let src: string;
-    try {
-      src = readFileSync(f, "utf8");
-    } catch {
-      continue;
-    }
-    for (const m of src.matchAll(STMT)) {
-      if (!isRuntimeEdge(m[1], m[2])) continue;
-      if (m[3].startsWith(".")) {
-        const t = resolveRel(f, m[3]);
-        if (t) stack.push(t);
-      } else {
-        bare.add(m[3]);
-      }
-    }
-    for (const m of src.matchAll(SIDE_EFFECT)) {
-      const t = resolveRel(f, m[1]);
-      if (t) stack.push(t);
-      else if (!m[1].startsWith(".")) bare.add(m[1]);
-    }
-  }
-  return { files: [...seen].map((f) => relative(SRC, f)), bare: [...bare], tsx };
-};
-
 describe("inspect surface — React-free guard", () => {
   it("the runtime closure imports no React, Remotion, @remotion/*, or .tsx", () => {
-    const { bare, tsx } = runtimeClosure("inspect.ts");
+    const { bare, tsx } = runtimeClosure(SRC, "inspect.ts");
     const banned = bare.filter((d) => d === "react" || d === "remotion" || d.startsWith("@remotion/"));
     expect(banned, `forbidden runtime deps: ${banned.join(", ")}`).toEqual([]);
     expect(tsx, `React component files in runtime closure: ${tsx.join(", ")}`).toEqual([]);

@@ -49,7 +49,7 @@ const scenes = (title: string) => [
 
 const templates = createRegistry({
   usesCustomType: defineTemplate({
-    name: "usesCustomType",
+    name: "usesCustomType", version: "test",
     // NOTE: `ParameterTypeName` is a CLOSED union of the 14 builtin names, so a schema cannot name
     // a custom type without a cast — a pre-existing Parameter Engine limitation, out of scope here.
     // The registry resolves it by string at runtime, which is what this suite exercises.
@@ -57,7 +57,7 @@ const templates = createRegistry({
     build: (p: { handle: string }) => ({ scenes: scenes(p.handle) }),
   }),
   usesCustomValidator: defineTemplate({
-    name: "usesCustomValidator",
+    name: "usesCustomValidator", version: "test",
     parameters: { parameters: [{ key: "title", type: "string", required: true, validators: ["no-foo"] }] },
     build: (p: { title: string }) => ({ scenes: scenes(p.title) }),
   }),

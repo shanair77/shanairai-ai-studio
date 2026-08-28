@@ -17,7 +17,7 @@ import { createCompiler } from "..";
 
 const templates = {
   basic: defineTemplate({
-    name: "basic",
+    name: "basic", version: "test",
     parameters: { parameters: [{ key: "title", type: "string", required: true }] },
     build: (p: { title: string }) => ({
       scenes: [
@@ -134,7 +134,7 @@ describe("createCompiler — configuration extends the framework defaults", () =
     const c = createCompiler({
       templates: {
         mixed: defineTemplate({
-          name: "mixed",
+          name: "mixed", version: "test",
           // "custom" is user-supplied; "outro" is a builtin that must still resolve.
           build: () => ({ scenes: [{ scene: "custom", duration: 1 }, { scene: "outro", duration: 1 }] }),
         }),
@@ -152,7 +152,7 @@ describe("createCompiler — configuration extends the framework defaults", () =
     const base = sceneRegistry.keys().length;
     const c = createCompiler({
       templates: {
-        solo: defineTemplate({ name: "solo", build: () => ({ scenes: [{ scene: "hero" }] }) }),
+        solo: defineTemplate({ name: "solo", version: "test", build: () => ({ scenes: [{ scene: "hero" }] }) }),
       },
       // Same key as the builtin: overrides it, and shortens the default duration from 5s to 2s.
       scenes: { hero: defineScene<{ title?: string }>({ component: () => null, defaultDuration: 2 }) },
@@ -175,7 +175,7 @@ describe("createCompiler — configuration extends the framework defaults", () =
     const c = createCompiler({
       templates: {
         t: defineTemplate({
-          name: "t",
+          name: "t", version: "test",
           parameters: {
             parameters: [
               { key: "handle", type: "slug" as ParameterTypeName, required: true },
@@ -203,7 +203,7 @@ describe("createCompiler — configuration extends the framework defaults", () =
     const c = createCompiler({
       templates: {
         t: defineTemplate({
-          name: "t",
+          name: "t", version: "test",
           parameters: { parameters: [{ key: "title", type: "string", required: true }] },
           build: (p: { title: string }) => ({ scenes: [{ scene: "hero", duration: 1, props: { title: p.title } }] }),
         }),

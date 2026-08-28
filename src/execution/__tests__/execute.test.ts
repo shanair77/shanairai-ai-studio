@@ -13,7 +13,7 @@ import type { ExecutionRequest, ExecutionSpan } from "../types";
 
 // ── Fixtures (test-only) ───────────────────────────────────────────────────────────────────────
 const withSchema = defineTemplate({
-  name: "withSchema",
+  name: "withSchema", version: "test",
   parameters: { parameters: [
     { key: "title", type: "string", required: true },
     { key: "subtitle", type: "string", default: "—" },
@@ -25,17 +25,17 @@ const withSchema = defineTemplate({
 });
 
 const legacy = defineTemplate({
-  name: "legacy",
+  name: "legacy", version: "test",
   validate: (p: { title?: string }) => { if (!p.title) throw new Error("legacy: title required"); },
   build: (p: { title?: string }) => ({ scenes: [{ scene: "hero", duration: 1, props: { title: p.title } }, { scene: "outro", duration: 1, props: {} }] }),
 });
 
-const throwsInBuild = defineTemplate({ name: "throwsInBuild", build: () => { throw new Error("kaboom in build"); } });
-const requiresBrand = defineTemplate({ name: "requiresBrand", capabilities: { requiresBrand: true }, build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }) });
-const emptyOut = defineTemplate({ name: "emptyOut", build: () => ({ scenes: [] }) });
-const badMusic = defineTemplate({ name: "badMusic", build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }], music: {} as MusicConfig }) });
+const throwsInBuild = defineTemplate({ name: "throwsInBuild", version: "test", build: () => { throw new Error("kaboom in build"); } });
+const requiresBrand = defineTemplate({ name: "requiresBrand", version: "test", capabilities: { requiresBrand: true }, build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }) });
+const emptyOut = defineTemplate({ name: "emptyOut", version: "test", build: () => ({ scenes: [] }) });
+const badMusic = defineTemplate({ name: "badMusic", version: "test", build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }], music: {} as MusicConfig }) });
 const softWarn = defineTemplate({
-  name: "softWarn",
+  name: "softWarn", version: "test",
   parameters: { parameters: [{ key: "mode", type: "string", validators: ["softCheck"] }] },
   build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }),
 });

@@ -46,7 +46,7 @@ const brands = createRegistry({
 
 const templates = createRegistry({
   promo: defineTemplate({ // display name ("Promo") ≠ key ("promo")
-    name: "Promo",
+    name: "Promo", version: "test",
     format: "horizontal",
     capabilities: { formats: ["horizontal", "square"], requiresBrand: true, minScenes: 2 },
     parameters: { parameters: [{ key: "title", type: "string", required: true }] },
@@ -54,7 +54,7 @@ const templates = createRegistry({
     build: () => ({ scenes: [{ scene: "hero", duration: 1, props: {} }] }),
   }),
   boom: defineTemplate({
-    name: "boom",
+    name: "boom", version: "test",
     validate: () => { throw new Error("validate boom"); },
     build: () => { throw new Error("build boom"); },
   }),

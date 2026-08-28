@@ -19,7 +19,7 @@ type P = { title: string };
 const templates = createRegistry({
   // Declares BOTH a parameter schema and a validate hook, so no stage is conditionally skipped.
   full: defineTemplate({
-    name: "full",
+    name: "full", version: "test",
     parameters: { parameters: [{ key: "title", type: "string", required: true }] },
     validate: (p: P) => {
       if (!p.title) throw new Error("title required");
@@ -33,7 +33,7 @@ const templates = createRegistry({
   }),
   // Throws inside build() → halts at `run-template`.
   boom: defineTemplate({
-    name: "boom",
+    name: "boom", version: "test",
     build: () => {
       throw new Error("boom");
     },

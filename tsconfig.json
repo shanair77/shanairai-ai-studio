@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
     "target": "ES2018",
-    "module": "commonjs",
+    // The package is `"type": "module"` and tsup emits ESM; typechecking it as
+    // CommonJS meant `import.meta` — which the render entry needs to locate its own
+    // files on disk — was a type error in code that runs correctly. `bundler`
+    // resolution matches how esbuild actually resolves the extensionless relative
+    // imports used throughout `src`.
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "strict": true,
     "noEmit": true,
@@ -11,5 +17,15 @@
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true
   },
-  "exclude": ["remotion.config.ts", "vitest.config.ts", "**/__tests__/**", "examples/**"]
+  // `__integration__` is excluded for the same reason `__tests__` is: these are test
+  // sources, typechecked by `tsconfig.test.json` against the test `lib`/`types`, not
+  // part of the library build.
+  "exclude": [
+    "remotion.config.ts",
+    "vitest.config.ts",
+    "vitest.render.config.ts",
+    "**/__tests__/**",
+    "**/__integration__/**",
+    "examples/**"
+  ]
 }

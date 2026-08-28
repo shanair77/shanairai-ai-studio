@@ -22,7 +22,7 @@ const schema: ParameterSchema = {
 // Schema-backed template: build reads resolved params (defaults applied).
 let seen: Record<string, unknown> | undefined;
 const withSchema = defineTemplate({
-  name: "withSchema",
+  name: "withSchema", version: "test",
   parameters: schema,
   build: (p: { title: string; subtitle?: string; count?: number }) => {
     seen = { ...p };
@@ -32,7 +32,7 @@ const withSchema = defineTemplate({
 
 // Legacy template: no schema, imperative validate only.
 const legacy = defineTemplate({
-  name: "legacy",
+  name: "legacy", version: "test",
   validate: (p: { title?: string }) => { if (!p.title) throw new Error("legacy: title required"); },
   build: (p: { title?: string }) => ({ scenes: [{ scene: "hero", duration: 1, props: { title: p.title } }, { scene: "outro", duration: 1, props: {} }] }),
 });
@@ -40,7 +40,7 @@ const legacy = defineTemplate({
 // Both schema + imperative validate — schema runs first, then validate.
 const order: string[] = [];
 const both = defineTemplate({
-  name: "both",
+  name: "both", version: "test",
   parameters: { parameters: [{ key: "title", type: "string", required: true }] },
   validate: (p: { title: string }) => { order.push(`validate:${p.title}`); },
   build: () => { order.push("build"); return { scenes: [{ scene: "hero", duration: 1, props: {} }, { scene: "outro", duration: 1, props: {} }] }; },

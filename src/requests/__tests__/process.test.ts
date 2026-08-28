@@ -149,7 +149,7 @@ describe("processRequest — determinism & parity", () => {
   it("hands off to execute identically to a hand-built request", () => {
     const templates = createRegistry({
       basic: defineTemplate({
-        name: "basic",
+        name: "basic", version: "test",
         parameters: { parameters: [{ key: "title", type: "string", required: true }] },
         build: (p: { title: string }) => ({ scenes: [{ scene: "hero", duration: 1, props: { title: p.title } }, { scene: "outro", duration: 1, props: {} }], transitions: { type: "dissolve", duration: 0.5 } }),
       }),
