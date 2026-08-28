@@ -9,6 +9,8 @@
  */
 
 import { loadFont as loadCormorantGaramond } from "@remotion/google-fonts/CormorantGaramond";
+import { loadFont as loadFraunces } from "@remotion/google-fonts/Fraunces";
+import { loadFont as loadInstrumentSans } from "@remotion/google-fonts/InstrumentSans";
 import { loadFont as loadJost } from "@remotion/google-fonts/Jost";
 import { loadFont as loadPlayfairDisplay } from "@remotion/google-fonts/PlayfairDisplay";
 import { loadFont as loadPoppins } from "@remotion/google-fonts/Poppins";
@@ -26,6 +28,8 @@ const LOADERS: Record<string, GoogleLoadFont> = {
   "Cormorant Garamond": loadCormorantGaramond as unknown as GoogleLoadFont,
   Poppins: loadPoppins as unknown as GoogleLoadFont,
   Jost: loadJost as unknown as GoogleLoadFont,
+  Fraunces: loadFraunces as unknown as GoogleLoadFont,
+  "Instrument Sans": loadInstrumentSans as unknown as GoogleLoadFont,
 };
 
 export const GoogleFontProvider: FontProvider = {

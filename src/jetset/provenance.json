@@ -1,0 +1,361 @@
+{
+  "project": "Jet Set Adventures - 60s Master",
+  "model": "veo3_1_lite (Google Veo 3.1 Lite) - 9:16, generate_audio:false, 720x1280 @24fps",
+  "pictureBudgetCeiling": 180,
+  "takes": [
+    {
+      "shot": "1.1",
+      "asset": "a1DeskExhale",
+      "jobId": "89e6b8f9-274a-4ec3-bd19-a822a5e1ef89",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "accepted",
+      "note": "Exhale performance reads; warm linen and window light. Became the canonical look for Act 1."
+    },
+    {
+      "shot": "1.2",
+      "asset": "a1HandStill",
+      "jobId": "b1437898-c1d7-4483-b2d0-41e45abbcf82",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "rejected",
+      "reason": "Hand clawed and hovering, not resting. Raking light over-rendered the skin into a scaly texture. No clear contact shadow."
+    },
+    {
+      "shot": "1.2",
+      "asset": "a1HandStill",
+      "jobId": "376b56ad-a486-439d-9710-3232b6fdf4d7",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "rejected",
+      "reason": "Burned-in timecode-like artifact bottom-left, inside the visible frame. Location also drifted from desk to sofa."
+    },
+    {
+      "shot": "1.2",
+      "asset": "a1HandStill",
+      "jobId": "361cde61-11e8-4186-8bc3-50ac9b4af849",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "startImage": "0c1e52f6-2914-4ec5-babd-e32ef0be10ff",
+      "note": "start_image from 1.1 last frame held the desk, wardrobe and light. Correct anatomy and contact shadow."
+    },
+    {
+      "shot": "1.3",
+      "asset": "a1ReachPhone",
+      "jobId": "6befe498-65fb-49de-8e98-20707cbb1a04",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "rejected",
+      "reason": "Beautiful shot but a different woman from 1.1 - slimmer face, different hairline and hair texture. Adjacent face shots cannot drift."
+    },
+    {
+      "shot": "1.3",
+      "asset": "a1ReachPhone",
+      "jobId": "d263bd7c-6c63-4f20-9ef8-5138e4dcf34f",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "startImage": "0c1e52f6-2914-4ec5-babd-e32ef0be10ff",
+      "note": "Identity, desk, mug, papers and light all match 1.1 exactly."
+    },
+    {
+      "shot": "2.1",
+      "asset": "a2BalconyDoors",
+      "jobId": "cd5a4f67-2f53-4b38-9428-3d5b78459c99",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "accepted",
+      "note": "HERO. Reveal lands on palms, turquoise shallows and pale sand. Clean upper frame for typography."
+    },
+    {
+      "shot": "2.2",
+      "asset": "a2SandWalk",
+      "jobId": "cb90243f-8038-41c6-a83e-cc054ff4f521",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Sand grains on wet feet, correct contact shadow, linen sarong drapes and moves correctly."
+    },
+    {
+      "shot": "2.3",
+      "asset": "a2YachtLaugh",
+      "jobId": "4144e499-1a7a-450a-ad02-a1ef76c27611",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "rejected",
+      "reason": "Group lined up grinning directly at the lens - the posed stock look the brief forbids. Read as swimwear catalogue rather than candid travel."
+    },
+    {
+      "shot": "2.3",
+      "asset": "a2YachtLaugh",
+      "jobId": "38c37035-2b8c-4eea-8546-5736522892f0",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Regenerated with explicit anti-posing direction. Group faces outward, two hands genuinely clasped, linen resort wear, candid laughter in profile."
+    },
+    {
+      "shot": "2.4",
+      "asset": "a2Champagne",
+      "jobId": "89f8df35-565c-4fb0-b6a5-8b907cc2900e",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Real liquid physics and bubbles, condensation on the bottle, golden light over turquoise water."
+    },
+    {
+      "shot": "3.1",
+      "asset": "a3AccraStreet",
+      "jobId": "cb63da0d-f748-4522-afd0-0d9c36bc60c0",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "rejected",
+      "note": "Tro-tro, wax-print stacks, enamel produce bowls, raffia bag, box braids. Reads as Accra specifically. Shop signage renders as gibberish text - mitigated with focalY 0.62 and a 1.06-1.12 KenBurns push that carries it out of frame.",
+      "reason": "V2 QA: 3.1 gibberish signage remained fully in frame (focal/KenBurns mitigation failed); 4.1 open blazer with no top plus elongated proportions (Meta/TikTok ad-review risk)."
+    },
+    {
+      "shot": "3.2",
+      "asset": "a3FabricDetail",
+      "jobId": "6dd9ba16-760f-460a-9c85-abd05472e7af",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Wax-print head-wrap being tied, correct hand anatomy, racked kente bolts behind."
+    },
+    {
+      "shot": "3.3",
+      "asset": "a3RooftopFood",
+      "jobId": "5f7f2169-df7b-4a16-a183-b3b232b3aacb",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Jollof and whole grilled tilapia, string lights, Accra skyline at dusk."
+    },
+    {
+      "shot": "3.4",
+      "asset": "a3NightDance",
+      "jobId": "bfa5e6f3-0206-4b7f-a1bc-0ef5ac87fb00",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Djembe drums, wax-print dress, genuine unposed joy. Best cultural-immersion shot."
+    },
+    {
+      "shot": "4.1",
+      "asset": "a4HotelArrival",
+      "jobId": "27a871f7-a48e-40e5-9fb3-9ff416ec94f0",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "rejected",
+      "note": "HERO. Burj Khalifa correct, gold lobby light, marble reflections, brass luggage trolley.",
+      "reason": "V2 QA: 3.1 gibberish signage remained fully in frame (focal/KenBurns mitigation failed); 4.1 open blazer with no top plus elongated proportions (Meta/TikTok ad-review risk)."
+    },
+    {
+      "shot": "4.2",
+      "asset": "a4Skyline",
+      "jobId": "0d9931c7-22a5-4aef-a828-c7452733e76a",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Burj dominant, Sheikh Zayed Road light trails, blue hour. Clean upper frame for type."
+    },
+    {
+      "shot": "4.3",
+      "asset": "a4RooftopDinner",
+      "jobId": "db32eccf-e851-4735-acc5-ff947c82319c",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "rejected",
+      "reason": "Skyline was generic twin-tower nightscape, not recognisably Dubai. Also defaulted the only Dubai couple beat to a white couple, which is the wrong read for this brand's campaign."
+    },
+    {
+      "shot": "4.3",
+      "asset": "a4RooftopDinner",
+      "jobId": "b9aa580d-f663-4dea-9140-8ceff3de6dcd",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Black couple, Burj clearly behind, laughing at each other not the lens."
+    },
+    {
+      "shot": "4.4",
+      "asset": "a4Desert",
+      "jobId": "837fe153-5361-4cc7-ad1a-ff5778d125f2",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "rejected",
+      "reason": "Heavy fake-film vignette, dark border and dust/scratch overlay clashing with the clean grade of every other shot. Vehicle too small in frame."
+    },
+    {
+      "shot": "4.4",
+      "asset": "a4Desert",
+      "jobId": "0a16a869-01d9-4956-bb0f-554f73c4c500",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Land Cruiser prominent on the ridge, sand streaming, clean full-bleed image with no overlay."
+    },
+    {
+      "shot": "5.1",
+      "asset": "a5Arrivals",
+      "jobId": "dad55fdf-f73f-45b1-a15a-df154c5f7ea0",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Four Black women, luggage, sunglasses going on, attention on each other."
+    },
+    {
+      "shot": "5.2",
+      "asset": "a5PoolJump",
+      "jobId": "4b481f4b-56ec-4a07-b245-f44e8c5d7969",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Real water physics and spray, Brickell-style tower, hard Miami sun."
+    },
+    {
+      "shot": "5.3",
+      "asset": "a5Birthday",
+      "jobId": "70d83221-cb02-46ed-babd-ba1dd58111ef",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Sparkler flare and light falloff correct, faces turned to the dessert not the camera."
+    },
+    {
+      "shot": "5.4",
+      "asset": "a5Boardwalk",
+      "jobId": "c157ecf0-136c-4d3c-b3c8-623f6856fcaa",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "rejected",
+      "reason": "Second couple beat also defaulted to a white couple; combined with 4.3 it pushed Black travellers into group shots only. Her face was also fully hidden."
+    },
+    {
+      "shot": "5.4",
+      "asset": "a5Boardwalk",
+      "jobId": "57e18f05-cd9c-4abd-b04b-0c56a4232407",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Black couple, clasped hands with correct anatomy, Art Deco pastels and moored boats read as Miami."
+    },
+    {
+      "shot": "5.5",
+      "asset": "a5NightOut",
+      "jobId": "d8e1975c-67d7-4af6-84e1-83a98f4c29a3",
+      "duration": 4,
+      "credits": 4,
+      "verdict": "accepted",
+      "note": "Neon pink/blue, genuine laughter, facing each other."
+    },
+    {
+      "shot": "6.1",
+      "asset": "a6BalconySunset",
+      "jobId": "ecc493a8-8edc-44b5-8adf-15aef52aab13",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "rejected",
+      "note": "HERO payoff. Wind in dress and hair, sea stacks, golden light. Continuity compromise: reads slightly lighter-skinned than the Act 1 traveller, but she is backlit and from behind 40s later in a different country.",
+      "reason": "Superseded: 6.1 and 6.2 were not the same woman as each other, the weakest continuity link in the film."
+    },
+    {
+      "shot": "6.2",
+      "asset": "a6FaceProfile",
+      "jobId": "da81edd1-f92b-481f-a661-68de37c06c20",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "rejected",
+      "note": "Best shot in the film. Genuine private smile, visible pores, real rim light and catchlight, natural eye movement.",
+      "reason": "Superseded: 6.1 and 6.2 were not the same woman as each other, the weakest continuity link in the film."
+    },
+    {
+      "shot": "7.1",
+      "asset": "a7CoastPullback",
+      "jobId": "c264a880-fd5e-4be0-aa31-ba4e463e6f0c",
+      "duration": 8,
+      "credits": 8,
+      "verdict": "accepted",
+      "note": "Calm aerial, open sky and water across the upper two thirds exactly as needed for the endcard type."
+    },
+    {
+      "shot": "6.1",
+      "asset": "a6BalconySunset",
+      "jobId": "48514808-9a3d-45e7-87d2-67c0af37078d",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "rejected",
+      "note": "Reshot with the turn written into the action: she begins turning at the end so the final frame carries a readable three-quarter profile. That frame is the chain seed for 6.2.",
+      "reason": "Superseded by the V3 payoff continuity fix: the pair matched each other but not the Act 1 traveller, so the story never closed on the same face."
+    },
+    {
+      "shot": "6.2",
+      "asset": "a6FaceProfile",
+      "jobId": "650aff27-f4bc-45e8-be9c-d0c1057beeb5",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "rejected",
+      "startImage": "d8096832-49ea-46b5-ad96-c972a3b9586e",
+      "note": "START_IMAGE CHAINED from 6.1's final frame. Same face, dress, straps, bodice seam, hair and rim light carry exactly. Private smile lands at the end; lower third stays clear for the payoff line. The 0.8s dissolve joins a frame to itself, so the cut is seamless.",
+      "reason": "Superseded by the V3 payoff continuity fix: the pair matched each other but not the Act 1 traveller, so the story never closed on the same face."
+    },
+    {
+      "shot": "3.1",
+      "asset": "a3AccraStreet",
+      "jobId": "e201131b-630d-441d-80d8-b785e37f53f5",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "accepted",
+      "note": "V3 reshoot. Explicit no-text instruction plus a low camera angle removed all signage. Ghana flag now carries the authenticity. Cream linen shirt and hair-worn-back match the Act 1 traveller's wardrobe family."
+    },
+    {
+      "shot": "4.1",
+      "asset": "a4HotelArrival",
+      "jobId": "1087e2af-454b-4543-ab4c-8e01a3b1c0b0",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "accepted",
+      "note": "V3 reshoot. Fully closed blazer over a high-necked top, natural head-to-body proportions. Burj correct, doorman and marble reflections intact."
+    },
+    {
+      "shot": "bridge",
+      "asset": "(reference still)",
+      "jobId": "bcbd411d-4562-4771-8323-97771a557a68",
+      "model": "nano_banana_pro",
+      "duration": 0,
+      "credits": 1,
+      "verdict": "accepted",
+      "note": "Identity bridge. A clear face frame from 1.1 (t=1.4s) was fed to Nano Banana Pro as an image_reference to place the SAME woman at the sunset balcony in cream linen. This still is the anchor both payoff shots derive from."
+    },
+    {
+      "shot": "6.1",
+      "asset": "a6BalconySunset",
+      "jobId": "00df35a0-60fe-40f4-b7c4-b5c0c95b9aa2",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "rejected",
+      "reason": "Identity was correct but she drifted to face away from camera; the last on-screen frame had no readable profile, leaving nothing to chain 6.2 from."
+    },
+    {
+      "shot": "6.1",
+      "asset": "a6BalconySunset",
+      "jobId": "b42773cd-7424-4565-93a2-48d64a2e45a4",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "accepted",
+      "startImage": "bcbd411d-4562-4771-8323-97771a557a68",
+      "note": "Seeded from the identity bridge, with the turn rewritten to LAND at the end so the final on-screen frame (t=4.45s) holds a lit three-quarter profile."
+    },
+    {
+      "shot": "6.2",
+      "asset": "a6FaceProfile",
+      "jobId": "3deca482-1107-4508-9f5b-fedb9badda4a",
+      "duration": 6,
+      "credits": 6,
+      "verdict": "accepted",
+      "startImage": "5ed26fd2-26d0-4e10-8ac8-5b225874642c",
+      "note": "CHAINED from 6.1's last on-screen frame. Same face, dress, railing and light; private smile lands at ~3.7s with the lower third clear for the payoff line."
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "project": "Jet Set Adventures — derivative cuts",
+  "state": "CUTDOWNS LOCKED",
+  "derivedFrom": "JetSet-Master-60 — see picture-lock.json and audio-lock.json. Every shot treatment is read from the master at build time via derive.ts; the cutdowns restate only durations.",
+  "cuts": [
+    {
+      "id": "JetSet-Cutdown-30",
+      "lockedRender": "out/jet-set-adventures-30s.mp4",
+      "composition": {
+        "width": 1080,
+        "height": 1920,
+        "fps": 24,
+        "durationInFrames": 720,
+        "durationSeconds": 30
+      },
+      "editorial": {
+        "shots": 10,
+        "dissolves": 1,
+        "sumSceneSeconds": 30.8,
+        "sumTransitionSeconds": 0.8
+      },
+      "shots": [
+        {
+          "label": "1.1 desk exhale",
+          "duration": 3.2
+        },
+        {
+          "label": "2.1 balcony doors",
+          "duration": 2.2
+        },
+        {
+          "label": "2.2 sand walk · BREATHE",
+          "duration": 2.4
+        },
+        {
+          "label": "3.1 accra market",
+          "duration": 2.2
+        },
+        {
+          "label": "3.2 head-wrap · DISCOVER",
+          "duration": 2.4
+        },
+        {
+          "label": "4.1 hotel arrival · LIVE",
+          "duration": 2.4
+        },
+        {
+          "label": "5.2 pool jump",
+          "duration": 2.2
+        },
+        {
+          "label": "6.1 balcony sunset",
+          "duration": 4.2
+        },
+        {
+          "label": "6.2 profile · YOUR NEXT STORY",
+          "duration": 4
+        },
+        {
+          "label": "7.1 endcard",
+          "duration": 5.6
+        }
+      ],
+      "music": {
+        "asset": "musicBed",
+        "startAt": 3.2,
+        "trimBefore": 56,
+        "volume": 0.55,
+        "loop": false,
+        "fadeIn": 0.2,
+        "fadeOut": 2.5,
+        "ducking": {
+          "level": 0.28,
+          "ramp": 0.35
+        }
+      },
+      "cues": [
+        {
+          "asset": "vo01Hook",
+          "role": "voiceover",
+          "startAt": 0.6
+        },
+        {
+          "asset": "vo02Breathe",
+          "role": "voiceover",
+          "startAt": 5.5
+        },
+        {
+          "asset": "vo09NextStory",
+          "role": "voiceover",
+          "startAt": 19.9
+        },
+        {
+          "asset": "vo10Signoff",
+          "role": "voiceover",
+          "startAt": 24.3
+        },
+        {
+          "asset": "ambRoomTone",
+          "role": "ambience",
+          "startAt": 0,
+          "duration": 3.4,
+          "volume": 4,
+          "fadeIn": 0.5,
+          "fadeOut": 0.8,
+          "loop": false
+        },
+        {
+          "asset": "sfxWhoosh",
+          "role": "sfx",
+          "startAt": 2.72,
+          "volume": 0.35,
+          "fadeOut": 0.3
+        },
+        {
+          "asset": "ambOcean",
+          "role": "ambience",
+          "startAt": 2.6,
+          "duration": 5.2,
+          "volume": 0.27,
+          "fadeIn": 0.4,
+          "fadeOut": 1.2,
+          "loop": false
+        },
+        {
+          "asset": "ambAccra",
+          "role": "ambience",
+          "startAt": 7.4,
+          "duration": 5,
+          "volume": 0.3,
+          "fadeIn": 0.4,
+          "fadeOut": 1,
+          "loop": false
+        },
+        {
+          "asset": "sfxLuggage",
+          "role": "sfx",
+          "startAt": 12.5,
+          "volume": 0.26,
+          "fadeIn": 0.2,
+          "fadeOut": 0.5
+        },
+        {
+          "asset": "sfxSplash",
+          "role": "sfx",
+          "startAt": 15.2,
+          "volume": 0.9
+        },
+        {
+          "asset": "ambBalconyWind",
+          "role": "ambience",
+          "startAt": 16.5,
+          "duration": 13.5,
+          "volume": 0.48,
+          "fadeIn": 0.6,
+          "fadeOut": 2,
+          "loop": false
+        }
+      ],
+      "verification": {
+        "integratedLoudnessLufs": -17.8,
+        "truePeakDb": -2.3,
+        "loudnessRangeLu": 7.4,
+        "quietestSecondDb": -25.8,
+        "speechCheck": "ASR returns VO 1, 2, 9, 10 verbatim and nothing else.",
+        "note": "Music in-point 56s is the bed's sustained late section. An in-point of 24.8s, which rode the decay onto the payoff as the master does, measured a five-second hole at -33 to -37 dBFS across 14-19s. No in-point fits the breakdown into a 30s cut."
+      }
+    },
+    {
+      "id": "JetSet-Cutdown-15",
+      "lockedRender": "out/jet-set-adventures-15s.mp4",
+      "composition": {
+        "width": 1080,
+        "height": 1920,
+        "fps": 24,
+        "durationInFrames": 360,
+        "durationSeconds": 15
+      },
+      "editorial": {
+        "shots": 7,
+        "dissolves": 1,
+        "sumSceneSeconds": 15.8,
+        "sumTransitionSeconds": 0.8
+      },
+      "shots": [
+        {
+          "label": "1.1 desk exhale",
+          "duration": 2
+        },
+        {
+          "label": "2.2 sand walk · BREATHE",
+          "duration": 2.2
+        },
+        {
+          "label": "3.2 head-wrap · DISCOVER",
+          "duration": 2
+        },
+        {
+          "label": "4.1 hotel arrival · LIVE",
+          "duration": 2
+        },
+        {
+          "label": "6.1 balcony sunset",
+          "duration": 2.6
+        },
+        {
+          "label": "6.2 profile · YOUR NEXT STORY",
+          "duration": 2.4
+        },
+        {
+          "label": "7.1 endcard",
+          "duration": 2.6
+        }
+      ],
+      "music": {
+        "asset": "musicBed",
+        "startAt": 2,
+        "trimBefore": 69,
+        "volume": 0.55,
+        "loop": false,
+        "fadeIn": 0.2,
+        "fadeOut": 2,
+        "ducking": {
+          "level": 0.28,
+          "ramp": 0.35
+        }
+      },
+      "cues": [
+        {
+          "asset": "vo01Hook",
+          "role": "voiceover",
+          "startAt": 0.4
+        },
+        {
+          "asset": "vo10Signoff",
+          "role": "voiceover",
+          "startAt": 9
+        },
+        {
+          "asset": "ambRoomTone",
+          "role": "ambience",
+          "startAt": 0,
+          "duration": 2.2,
+          "volume": 4,
+          "fadeIn": 0.4,
+          "fadeOut": 0.6,
+          "loop": false
+        },
+        {
+          "asset": "sfxWhoosh",
+          "role": "sfx",
+          "startAt": 1.52,
+          "volume": 0.35,
+          "fadeOut": 0.3
+        },
+        {
+          "asset": "ambOcean",
+          "role": "ambience",
+          "startAt": 1.4,
+          "duration": 2.8,
+          "volume": 0.27,
+          "fadeIn": 0.3,
+          "fadeOut": 0.8,
+          "loop": false
+        },
+        {
+          "asset": "ambBalconyWind",
+          "role": "ambience",
+          "startAt": 7.7,
+          "duration": 7.3,
+          "volume": 0.48,
+          "fadeIn": 0.5,
+          "fadeOut": 2,
+          "loop": false
+        }
+      ],
+      "verification": {
+        "integratedLoudnessLufs": -16.8,
+        "truePeakDb": -1.9,
+        "loudnessRangeLu": 7.7,
+        "speechCheck": "ASR returns VO 1 and VO 10 verbatim and nothing else.",
+        "note": "Typography carries Breathe / Discover / Your Next Story; only the question and the sign-off are narrated."
+      }
+    }
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "project": "Jet Set Adventures — 60s Master",
+  "state": "AUDIO LOCKED",
+  "lockedRender": "out/jet-set-adventures-AUDIO-LOCK-v1.mp4",
+  "picture": "PICTURE LOCKED — see picture-lock.json. Audio conforms to the picture, never the reverse.",
+  "music": {
+    "asset": "musicBed",
+    "file": "jetset/audio/music/bed-afrobeat-lyria-02953.wav",
+    "bytes": 15247950,
+    "sha256_16": "45c2f3b663966fe7",
+    "provenance": "Artlist AI generation, Lyria 3 Pro, seed 02953. Selected from 8 auditions against the locked picture.",
+    "rejected": "The 3 catalogue candidates (Malibu / Take a Break / Clear Skies) were rejected: all carried an audible spoken Artlist preview watermark at ~20s intervals.",
+    "licenceVerified": true,
+    "licenceNote": "Artlist AI-generation commercial-use terms confirmed by the account holder, 2026-08-25.",
+    "startAt": 8.38,
+    "trimBefore": 2.5,
+    "volume": 0.55,
+    "loop": false,
+    "fadeIn": 0.2,
+    "fadeOut": 2.5,
+    "ducking": {
+      "level": 0.28,
+      "ramp": 0.35
+    }
+  },
+  "voiceover": [
+    {
+      "asset": "vo01Hook",
+      "file": "jetset/audio/vo/vo-01-hook.wav",
+      "bytes": 404912,
+      "sha256_16": "ae096f328a4875eb",
+      "role": "voiceover",
+      "startAt": 1.2,
+      "label": "VO 1 · hook"
+    },
+    {
+      "asset": "vo02Breathe",
+      "file": "jetset/audio/vo/vo-02-breathe.wav",
+      "bytes": 422444,
+      "sha256_16": "51ea4357698dbc92",
+      "role": "voiceover",
+      "startAt": 9.4,
+      "label": "VO 2 · breathe"
+    },
+    {
+      "asset": "vo03Discover",
+      "file": "jetset/audio/vo/vo-03-discover.wav",
+      "bytes": 460844,
+      "sha256_16": "ffc5edff41b1536c",
+      "role": "voiceover",
+      "startAt": 18.9,
+      "label": "VO 3 · discover"
+    },
+    {
+      "asset": "vo04Live",
+      "file": "jetset/audio/vo/vo-04-live.wav",
+      "bytes": 583724,
+      "sha256_16": "cf2b347b38789678",
+      "role": "voiceover",
+      "startAt": 28.4,
+      "label": "VO 4 · live"
+    },
+    {
+      "asset": "vo05Occasions",
+      "file": "jetset/audio/vo/vo-05-occasions.wav",
+      "bytes": 307244,
+      "sha256_16": "123480859aec6c7a",
+      "role": "voiceover",
+      "startAt": 37.6,
+      "label": "VO 5 · occasions"
+    },
+    {
+      "asset": "vo06OrMaybe",
+      "file": "jetset/audio/vo/vo-06-ormaybe.wav",
+      "bytes": 218924,
+      "sha256_16": "55a4490d3df9afe9",
+      "role": "voiceover",
+      "startAt": 42.9,
+      "label": "VO 6 · or maybe"
+    },
+    {
+      "asset": "vo07JustBecause",
+      "file": "jetset/audio/vo/vo-07-justbecause.wav",
+      "bytes": 218924,
+      "sha256_16": "9bca4e381d4768b1",
+      "role": "voiceover",
+      "startAt": 46.3,
+      "label": "VO 7 · just because"
+    },
+    {
+      "asset": "vo09NextStory",
+      "file": "jetset/audio/vo/vo-09-nextstory.wav",
+      "bytes": 384044,
+      "sha256_16": "6f73388649bd4c66",
+      "role": "voiceover",
+      "startAt": 49.4,
+      "label": "VO 9 · next story"
+    },
+    {
+      "asset": "vo10Signoff",
+      "file": "jetset/audio/vo/vo-10-signoff.wav",
+      "bytes": 545324,
+      "sha256_16": "7240e0a415683389",
+      "role": "voiceover",
+      "startAt": 54.15,
+      "label": "VO 10 · sign-off"
+    }
+  ],
+  "ambience": [
+    {
+      "asset": "ambRoomTone",
+      "file": "jetset/audio/ambience/ambRoomTone.wav",
+      "bytes": 2116878,
+      "sha256_16": "a35f5d497d05ea8f",
+      "role": "ambience",
+      "startAt": 0,
+      "duration": 8.6,
+      "volume": 4,
+      "fadeIn": 0.5,
+      "fadeOut": 1,
+      "loop": false,
+      "label": "AMB · room tone"
+    },
+    {
+      "asset": "ambOcean",
+      "file": "jetset/audio/ambience/ambOcean.wav",
+      "bytes": 2469678,
+      "sha256_16": "c206995e8f7d12c3",
+      "role": "ambience",
+      "startAt": 7.78,
+      "duration": 7.3,
+      "volume": 0.27,
+      "fadeIn": 0.4,
+      "fadeOut": 1.2,
+      "loop": false,
+      "label": "AMB · ocean (J-cut)"
+    },
+    {
+      "asset": "ambAccra",
+      "file": "jetset/audio/ambience/ambAccra.wav",
+      "bytes": 2469678,
+      "sha256_16": "31c1b87fbcf74040",
+      "role": "ambience",
+      "startAt": 17.6,
+      "duration": 6.98,
+      "volume": 0.3,
+      "fadeIn": 0.4,
+      "fadeOut": 1,
+      "loop": false,
+      "label": "AMB · Accra street (J-cut)"
+    },
+    {
+      "asset": "ambBalconyWind",
+      "file": "jetset/audio/ambience/ambBalconyWind.wav",
+      "bytes": 3175278,
+      "sha256_16": "858ac2b073d580dc",
+      "role": "ambience",
+      "startAt": 45.4,
+      "duration": 14.6,
+      "volume": 0.48,
+      "fadeIn": 0.6,
+      "fadeOut": 2,
+      "loop": false,
+      "label": "AMB · balcony wind (L-cut)"
+    }
+  ],
+  "sfx": [
+    {
+      "asset": "sfxPhoneTap",
+      "file": "jetset/audio/sfx/sfxPhoneTap.wav",
+      "bytes": 84750,
+      "sha256_16": "6b6e8923a11db007",
+      "role": "sfx",
+      "startAt": 7,
+      "volume": 0.2,
+      "label": "SFX · phone tap"
+    },
+    {
+      "asset": "sfxWhoosh",
+      "file": "jetset/audio/sfx/sfxWhoosh.wav",
+      "bytes": 261150,
+      "sha256_16": "a61cdcaafc041d9a",
+      "role": "sfx",
+      "startAt": 7.9,
+      "volume": 0.35,
+      "fadeOut": 0.3,
+      "label": "SFX · whoosh"
+    },
+    {
+      "asset": "sfxLuggage",
+      "file": "jetset/audio/sfx/sfxLuggage.wav",
+      "bytes": 529278,
+      "sha256_16": "db5da2a0a339e7f4",
+      "role": "sfx",
+      "startAt": 27.7,
+      "volume": 0.26,
+      "fadeIn": 0.2,
+      "fadeOut": 0.5,
+      "label": "SFX · luggage on marble"
+    },
+    {
+      "asset": "sfxSplash",
+      "file": "jetset/audio/sfx/sfxSplash.wav",
+      "bytes": 352878,
+      "sha256_16": "453eb503175549ea",
+      "role": "sfx",
+      "startAt": 37.6,
+      "volume": 0.9,
+      "label": "SFX · pool splash"
+    }
+  ],
+  "verification": {
+    "integratedLoudnessLufs": -17.6,
+    "truePeakDb": -1.3,
+    "loudnessRangeLu": 8.5,
+    "trueReleaseDb": 13.3,
+    "endcardRecoveryDb": 13.8,
+    "speechCheck": "ASR of the finished master returns the Soraya script verbatim and nothing else — no watermark.",
+    "cueLevelsVerified": "All 8 sound-design cues measured within 0.2 dB of target in isolation; inter-cue gaps measured -180 dBFS."
+  }
+}

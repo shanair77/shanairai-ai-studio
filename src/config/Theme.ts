@@ -18,7 +18,7 @@ import {
   withAlpha,
   type SemanticColors,
 } from "./Colors";
-import { typography } from "./Typography";
+import { typography, type FontFamilies } from "./Typography";
 import { animation } from "./Animation";
 import { timing } from "./Timing";
 import { layout } from "./Layout";
@@ -55,12 +55,24 @@ export type ThemeMode = keyof typeof themes;
  * string) so a brand-merged theme — whose overridden colors are arbitrary strings — is a
  * valid `Theme`. All other slices keep their concrete token types.
  */
-export type Theme = Omit<typeof theme, "colors"> & { colors: SemanticColors };
+export type Theme = Omit<typeof theme, "colors" | "typography"> & {
+  colors: SemanticColors;
+  typography: Omit<typeof typography, "fontFamilies" | "textStyles"> & {
+    fontFamilies: FontFamilies;
+    textStyles: { [K in keyof typeof typography.textStyles]: Omit<(typeof typography.textStyles)[K], "fontFamily"> & { fontFamily: string } };
+  };
+};
 
 /**
  * A brand supplies overrides; this is the shape the brand system will produce
  * before injecting it through context. Kept here so the token contract lives in one place.
+ *
+ * `typography.fontFamilies` overrides only the FAMILY STACKS, deliberately not the sizes,
+ * weights or tracking — those are the design system's proportions and a brand swapping its
+ * typeface should inherit them rather than redesign the scale. A brand that overrides a family
+ * must also declare the matching faces in its `fonts` manifest, or the stack falls back.
  */
 export type ThemeOverrides = {
   colors?: Partial<SemanticColors>;
+  typography?: { fontFamilies?: Partial<FontFamilies> };
 };

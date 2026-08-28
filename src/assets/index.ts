@@ -37,7 +37,7 @@ export {
 
 export { resolveAsset, assertCategory, validateMetadata } from "./resolve";
 
-export { audioVolume } from "./audio";
+export { audioVolume, duckedVolume, mergeDuckWindows, duckAmount, type DuckWindow } from "./audio";
 
 export {
   defineAssetKit,

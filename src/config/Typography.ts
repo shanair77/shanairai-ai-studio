@@ -121,6 +121,12 @@ export const typography = {
   textStyles,
 } as const;
 
+/**
+ * The font-family contract: the fixed set of role keys, each mapping to any family stack.
+ * Keys derive from `fontFamilies` (so the key set stays in sync) while values are `string` —
+ * a brand may point a role at any stack. Mirrors how `SemanticColors` handles colour roles.
+ */
+export type FontFamilies = Record<keyof typeof fontFamilies, string>;
 export type FontSizeToken = keyof typeof fontSizes;
 export type TextStyleToken = keyof typeof textStyles;
 export type Typography = typeof typography;

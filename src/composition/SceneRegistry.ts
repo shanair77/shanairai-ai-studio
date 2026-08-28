@@ -20,6 +20,7 @@ import {
   GalleryScene,
   HeroScene,
   LogoRevealScene,
+  MediaScene,
   OutroScene,
   QuoteScene,
   SplitScene,
@@ -30,6 +31,7 @@ import {
   type GallerySceneProps,
   type HeroSceneProps,
   type LogoRevealSceneProps,
+  type MediaSceneProps,
   type OutroSceneProps,
   type QuoteSceneProps,
   type SplitSceneProps,
@@ -90,6 +92,7 @@ export const defineScene = <P>(spec: {
 
 /** The built-in scenes — the single definition site (replaces the old registration array). */
 export const builtinScenes = {
+  media: defineScene<MediaSceneProps>({ component: MediaScene, defaultDuration: theme.timing.scene.short }),
   hero: defineScene<HeroSceneProps>({ component: HeroScene }),
   centered: defineScene<CenteredSceneProps>({ component: CenteredScene }),
   split: defineScene<SplitSceneProps>({ component: SplitScene }),

@@ -63,3 +63,51 @@ describe("resolveBrand", () => {
     expect(resolveBrand().renderLogo).toBeUndefined();
   });
 });
+
+describe("typography overrides", () => {
+  it("leaves the base theme untouched when no typography override is given", () => {
+    const r = resolveBrand({ name: "B", theme: { colors: { accent: "#123456" } } });
+    expect(r.theme.typography.fontFamilies.display).toBe(theme.typography.fontFamilies.display);
+    expect(r.theme.colors.accent).toBe("#123456");
+  });
+
+  it("overrides a family stack and re-points the text styles that use it", () => {
+    const r = resolveBrand({
+      name: "B",
+      theme: { typography: { fontFamilies: { display: '"Fraunces", serif' } } },
+    });
+    expect(r.theme.typography.fontFamilies.display).toBe('"Fraunces", serif');
+    // display/h1/h2 all name the `display` family, so all three follow it.
+    expect(r.theme.typography.textStyles.display.fontFamily).toBe('"Fraunces", serif');
+    expect(r.theme.typography.textStyles.h1.fontFamily).toBe('"Fraunces", serif');
+    expect(r.theme.typography.textStyles.h2.fontFamily).toBe('"Fraunces", serif');
+  });
+
+  it("does not disturb styles that name a different family", () => {
+    const r = resolveBrand({
+      name: "B",
+      theme: { typography: { fontFamilies: { display: '"Fraunces", serif' } } },
+    });
+    expect(r.theme.typography.textStyles.body.fontFamily).toBe(theme.typography.fontFamilies.body);
+    expect(r.theme.typography.textStyles.overline.fontFamily).toBe(theme.typography.fontFamilies.accent);
+  });
+
+  it("keeps sizes, weights and tracking — a brand swaps the typeface, not the scale", () => {
+    const r = resolveBrand({
+      name: "B",
+      theme: { typography: { fontFamilies: { body: '"Instrument Sans", sans-serif' } } },
+    });
+    expect(r.theme.typography.textStyles.body.fontSize).toBe(theme.typography.textStyles.body.fontSize);
+    expect(r.theme.typography.textStyles.body.fontWeight).toBe(theme.typography.textStyles.body.fontWeight);
+    expect(r.theme.typography.textStyles.body.letterSpacing).toBe(theme.typography.textStyles.body.letterSpacing);
+  });
+
+  it("merges colours and typography together", () => {
+    const r = resolveBrand({
+      name: "B",
+      theme: { colors: { accent: "#E7A63F" }, typography: { fontFamilies: { display: '"Fraunces", serif' } } },
+    });
+    expect(r.theme.colors.accent).toBe("#E7A63F");
+    expect(r.theme.typography.textStyles.h1.fontFamily).toBe('"Fraunces", serif');
+  });
+});

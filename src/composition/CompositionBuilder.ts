@@ -28,11 +28,15 @@ import {
   assetRegistry,
   assertCategory,
   audioVolume,
+  duckedVolume,
   resolveAsset,
   type AssetRegistry,
+  type DuckWindow,
 } from "../assets";
 import {
   validateComposition,
+  type AudioCue,
+  type AudioRole,
   type CompositionSchema,
   type CompositionSchemaBase,
   type CompositionSchemaFor,
@@ -129,31 +133,138 @@ const assembleRuns = (timeline: Timeline, ctx: TransitionContext): React.ReactNo
   return runs;
 };
 
+/** Resolve a named audio asset to a file src, failing clearly on the wrong category/kind. */
+const audioSrc = (name: string, assets: AssetRegistry): string => {
+  const def = assets.require(name); // throws with a clear message if missing
+  assertCategory(name, def, ["audio"]);
+  const resolved = resolveAsset(name, def);
+  if (resolved.kind !== "file") {
+    throw new Error(`Audio asset "${name}" did not resolve to a file-backed source.`);
+  }
+  return resolved.src;
+};
+
+/** Seconds → frames for the optional trim fields shared by music and cues. */
+const trimProps = (
+  trimBefore: number | undefined,
+  trimAfter: number | undefined,
+  fps: number,
+): Record<string, unknown> => ({
+  ...(trimBefore !== undefined ? { trimBefore: secondsToFrames(trimBefore, fps) } : {}),
+  ...(trimAfter !== undefined ? { trimAfter: secondsToFrames(trimAfter, fps) } : {}),
+});
+
+/** A cue resolved to its frame window and `<Audio>` props. */
+type ResolvedCue = {
+  key: string;
+  from: number;
+  durationInFrames: number;
+  role: AudioRole;
+  name: string;
+  props: Record<string, unknown>;
+};
+
+const DEFAULT_DUCK_LEVEL = 0.28;
+const DEFAULT_DUCK_RAMP = 0.35;
+const DEFAULT_DUCK_ROLES: AudioRole[] = ["voiceover"];
+
+/**
+ * Resolve positioned audio cues. Each cue's fade envelope is computed against ITS OWN length,
+ * because the `<Audio>` sits inside a positioned `<Sequence>` and therefore sees frames relative
+ * to the cue rather than to the composition.
+ */
+const resolveAudioCues = (
+  cues: AudioCue[],
+  assets: AssetRegistry,
+  fps: number,
+  totalFrames: number,
+): ResolvedCue[] =>
+  cues.map((cue, i) => {
+    if (!cue.asset) {
+      throw new DomainError({
+        code: "invalid-composition",
+        message: `AudioCue[${i}]: \`asset\` is required.`,
+        path: `audio[${i}].asset`,
+      });
+    }
+    const src = audioSrc(cue.asset, assets);
+    const from = Math.max(0, secondsToFrames(cue.startAt ?? 0, fps));
+    const requested =
+      cue.duration !== undefined ? secondsToFrames(cue.duration, fps) : totalFrames - from;
+    // Clamp so a cue can never extend past the composition, which would silently drop it.
+    const durationInFrames = Math.max(1, Math.min(requested, Math.max(1, totalFrames - from)));
+    const role = cue.role ?? "sfx";
+
+    return {
+      key: `cue-${i}`,
+      from,
+      durationInFrames,
+      role,
+      name: cue.label ?? `${role}: ${cue.asset}`,
+      props: {
+        src,
+        volume: audioVolume(
+          cue.volume ?? 1,
+          secondsToFrames(cue.fadeIn ?? 0, fps),
+          secondsToFrames(cue.fadeOut ?? 0, fps),
+          durationInFrames,
+        ),
+        loop: cue.loop ?? false,
+        ...trimProps(cue.trimBefore, cue.trimAfter, fps),
+      },
+    };
+  });
+
+/** The frame windows music should duck beneath, taken from cues in the configured roles. */
+const duckWindowsFrom = (cues: ResolvedCue[], roles: AudioRole[]): DuckWindow[] =>
+  cues
+    .filter((c) => roles.includes(c.role))
+    .map((c) => ({ start: c.from, end: c.from + c.durationInFrames }));
+
 /** Resolve music into `<Audio>` props from a named audio asset in the registry. */
 const resolveMusicProps = (
   music: MusicConfig,
   assets: AssetRegistry,
   fps: number,
   durationInFrames: number,
+  windows: DuckWindow[],
 ): Record<string, unknown> => {
   if (!music.asset) {
     throw new DomainError({ code: "invalid-composition", message: "MusicConfig: `asset` is required.", path: "music.asset" });
   }
-  const def = assets.require(music.asset); // throws with a clear message if missing
-  assertCategory(music.asset, def, ["audio"]);
-  const resolved = resolveAsset(music.asset, def);
-  if (resolved.kind !== "file") {
-    throw new Error(`Music asset "${music.asset}" did not resolve to a file-backed source.`);
-  }
-  const src = resolved.src;
+  const src = audioSrc(music.asset, assets);
+  const base = music.volume ?? 1;
+  const fadeIn = secondsToFrames(music.fadeIn ?? 0, fps);
+  const fadeOut = secondsToFrames(music.fadeOut ?? 0, fps);
+  const duck = music.ducking;
+  const startFrame = Math.max(0, secondsToFrames(music.startAt ?? 0, fps));
+  // Inside a positioned Sequence the volume callback sees sequence-relative frames, so the duck
+  // windows — which are measured in absolute composition frames — have to be rebased to match.
+  const rebased = startFrame === 0 ? windows : windows.map((w) => ({ start: w.start - startFrame, end: w.end - startFrame }));
+  const playFrames = Math.max(1, durationInFrames - startFrame);
 
-  const trimBeforeSeconds = music.trimBefore;
+  // Music is a direct child of the root (never inside a Sequence), so its volume callback
+  // receives ABSOLUTE composition frames — which is exactly the space the duck windows are in.
+  const volume =
+    duck && rebased.length > 0
+      ? duckedVolume(
+          base,
+          fadeIn,
+          fadeOut,
+          playFrames,
+          rebased,
+          duck.level ?? DEFAULT_DUCK_LEVEL,
+          secondsToFrames(duck.ramp ?? DEFAULT_DUCK_RAMP, fps),
+        )
+      : audioVolume(base, fadeIn, fadeOut, playFrames);
+
   return {
     src,
-    volume: audioVolume(music.volume ?? 1, secondsToFrames(music.fadeIn ?? 0, fps), secondsToFrames(music.fadeOut ?? 0, fps), durationInFrames),
+    volume,
+    startFrame,
+    playFrames,
     loop: music.loop ?? true,
-    ...(trimBeforeSeconds !== undefined ? { trimBefore: secondsToFrames(trimBeforeSeconds, fps) } : {}),
-    ...(music.trimAfter !== undefined ? { trimAfter: secondsToFrames(music.trimAfter, fps) } : {}),
+    ...trimProps(music.trimBefore, music.trimAfter, fps),
   };
 };
 
@@ -197,14 +308,39 @@ export function buildComposition(
     config.music ?? (brand.audio?.music ? { asset: brand.audio.music } : undefined);
   const { fps } = video;
   const ctx: TransitionContext = { width: video.width, height: video.height };
-  const musicProps = music ? resolveMusicProps(music, assets, fps, durationInFrames) : undefined;
+  const cues = resolveAudioCues(config.audio ?? [], assets, fps, durationInFrames);
+  const duckRoles = music?.ducking?.under ?? DEFAULT_DUCK_ROLES;
+  const musicProps = music
+    ? resolveMusicProps(music, assets, fps, durationInFrames, duckWindowsFrom(cues, duckRoles))
+    : undefined;
 
   const Root: React.FC = () => {
     const layers: React.ReactNode[] = [];
 
     if (musicProps) {
-      layers.push(createElement(Audio, { key: "music", ...musicProps }));
+      const { startFrame, playFrames, ...audioProps } = musicProps as { startFrame: number; playFrames: number } & Record<string, unknown>;
+      layers.push(
+        startFrame > 0
+          ? createElement(
+              Sequence,
+              { key: "music", from: startFrame, durationInFrames: playFrames, name: "music" },
+              createElement(Audio, audioProps),
+            )
+          : createElement(Audio, { key: "music", ...audioProps }),
+      );
     }
+
+    // Positioned cues sit as siblings of the scene runs, so they are free to cross scene
+    // boundaries — which is what makes J-cuts and L-cuts possible.
+    cues.forEach((cue) => {
+      layers.push(
+        createElement(
+          Sequence,
+          { key: cue.key, from: cue.from, durationInFrames: cue.durationInFrames, name: cue.name },
+          createElement(Audio, cue.props),
+        ),
+      );
+    });
 
     assembleRuns(timeline, ctx).forEach((run) => layers.push(run));
 

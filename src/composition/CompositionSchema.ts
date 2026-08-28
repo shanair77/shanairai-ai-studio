@@ -42,9 +42,66 @@ export type TransitionConfigBase = {
   options?: unknown;
 };
 
+/**
+ * What a cue is FOR in the mix. This is not decoration — `voiceover` cues are what the builder
+ * derives music-ducking windows from, so tagging a line correctly is what makes the mix work.
+ */
+export type AudioRole = "voiceover" | "sfx" | "ambience";
+
+/**
+ * One positioned sound on the timeline: narration, a Foley hit, or an ambience bed.
+ *
+ * `startAt` is absolute composition time in SECONDS, deliberately independent of scene
+ * boundaries — that is what makes J-cuts and L-cuts expressible. A cue that starts before the
+ * scene it belongs to (ocean arriving under the previous shot) is simply a smaller `startAt`;
+ * one that runs past its scene is a longer `duration`. No special syntax, no new concept.
+ */
+export type AudioCue = {
+  /** Named audio asset, resolved from the asset registry. */
+  asset: string;
+  /** Mix role. Default "sfx". `voiceover` additionally drives music ducking. */
+  role?: AudioRole;
+  /** When the cue begins, in seconds from the start of the composition. Default 0. */
+  startAt?: number;
+  /** How long the cue occupies the timeline, in seconds. Omit to run to the end. */
+  duration?: number;
+  /** 0–1 playback volume. Default 1. */
+  volume?: number;
+  /** Loop the source for the cue's whole length (ambience beds). Default false. */
+  loop?: boolean;
+  /** Seconds trimmed from the start of the source. */
+  trimBefore?: number;
+  /** Seconds trimmed from the end of the source. */
+  trimAfter?: number;
+  /** Fade-in over this many seconds. */
+  fadeIn?: number;
+  /** Fade-out over this many seconds. */
+  fadeOut?: number;
+  /** Optional label for the Studio timeline. */
+  label?: string;
+};
+
+/** How music should duck beneath other cues. */
+export type DuckingConfig = {
+  /** Volume to duck TO (absolute, not a multiplier). Default 0.28. */
+  level?: number;
+  /** Ramp in and out of the duck, in seconds. Default 0.35. */
+  ramp?: number;
+  /** Which cue roles trigger the duck. Default ["voiceover"]. */
+  under?: AudioRole[];
+};
+
 export type MusicConfig = {
   /** Named audio asset, resolved from the asset registry. */
   asset?: string;
+  /**
+   * When the bed enters, in seconds from the start of the composition. Default 0.
+   *
+   * A film may deliberately open without music — narration over room tone, with the bed arriving
+   * on a cut. Expressing that needs a start offset; without one the only options are music from
+   * frame zero or no music at all. Duck windows are rebased onto the offset automatically.
+   */
+  startAt?: number;
   /** 0–1 playback volume. Default 1. */
   volume?: number;
   /** Loop the track for the whole composition. Default true. */
@@ -57,6 +114,8 @@ export type MusicConfig = {
   fadeIn?: number;
   /** Fade-out duration in seconds (frame-driven volume envelope). */
   fadeOut?: number;
+  /** Duck beneath narration. Omit for no ducking. */
+  ducking?: DuckingConfig;
 };
 
 export type TimingConfig = {
@@ -95,6 +154,11 @@ export type CompositionSchemaFor<M extends SceneMap> = VideoConfigInput & {
   brand?: string;
   /** Background music for the whole composition. */
   music?: MusicConfig;
+  /**
+   * Positioned sound cues — narration, sound design, ambience — laid over the whole
+   * composition independently of scene boundaries. See `AudioCue`.
+   */
+  audio?: AudioCue[];
   /** Ordered scenes that make up the video. */
   scenes: SceneConfigFor<M>[];
   /** Default transition applied between consecutive scenes. Default `{ type: "none" }`. */
@@ -124,6 +188,7 @@ export type CompositionSchemaBase = VideoConfigInput & {
   theme?: ThemeMode;
   brand?: string;
   music?: MusicConfig;
+  audio?: AudioCue[];
   scenes: SceneConfigBase[];
   transitions?: TransitionConfigBase;
   timing?: TimingConfig;
@@ -142,4 +207,20 @@ export const validateComposition = (config: CompositionSchemaBase): void => {
       throw new DomainError({ code: "invalid-composition", message: `CompositionSchema "${config.id}": scenes[${i}] is missing a scene name.`, path: `scenes[${i}].scene` });
     }
   });
+  if (config.audio !== undefined) {
+    if (!Array.isArray(config.audio)) {
+      throw new DomainError({ code: "invalid-composition", message: `CompositionSchema "${config.id}": \`audio\` must be an array of cues.`, path: "audio" });
+    }
+    config.audio.forEach((cue, i) => {
+      if (!cue || typeof cue.asset !== "string" || cue.asset.length === 0) {
+        throw new DomainError({ code: "invalid-composition", message: `CompositionSchema "${config.id}": audio[${i}] is missing an \`asset\` name.`, path: `audio[${i}].asset` });
+      }
+      if (cue.startAt !== undefined && (!Number.isFinite(cue.startAt) || cue.startAt < 0)) {
+        throw new DomainError({ code: "invalid-composition", message: `CompositionSchema "${config.id}": audio[${i}].startAt must be a non-negative number of seconds.`, path: `audio[${i}].startAt`, actual: cue.startAt });
+      }
+      if (cue.duration !== undefined && (!Number.isFinite(cue.duration) || cue.duration <= 0)) {
+        throw new DomainError({ code: "invalid-composition", message: `CompositionSchema "${config.id}": audio[${i}].duration must be a positive number of seconds.`, path: `audio[${i}].duration`, actual: cue.duration });
+      }
+    });
+  }
 };

@@ -15,8 +15,30 @@ import { type BrandDefinition, type ResolvedBrand } from "./types";
 
 const THEMES = themes as unknown as Record<ThemeMode, Theme>;
 
-const mergeTheme = (base: Theme, overrides?: ThemeOverrides): Theme =>
-  overrides?.colors ? { ...base, colors: { ...base.colors, ...overrides.colors } } : base;
+/**
+ * Fold a brand's overrides onto a base theme. Colors merge by role; font families merge by
+ * role and are re-projected through `textStyles`, so overriding `display` actually changes what
+ * a `<Headline>` renders in — the token set stays the single source of truth for size and weight.
+ */
+const mergeTheme = (base: Theme, overrides?: ThemeOverrides): Theme => {
+  if (!overrides) return base;
+  const colors = overrides.colors ? { ...base.colors, ...overrides.colors } : base.colors;
+  const families = overrides.typography?.fontFamilies;
+  if (!families) return colors === base.colors ? base : { ...base, colors };
+
+  const fontFamilies = { ...base.typography.fontFamilies, ...families };
+  // Re-point every text style at the (possibly overridden) family it names.
+  const textStyles = Object.fromEntries(
+    Object.entries(base.typography.textStyles).map(([role, style]) => {
+      const key = (Object.keys(base.typography.fontFamilies) as Array<keyof typeof fontFamilies>).find(
+        (f) => base.typography.fontFamilies[f] === style.fontFamily,
+      );
+      return [role, key ? { ...style, fontFamily: fontFamilies[key] } : style];
+    }),
+  ) as Theme["typography"]["textStyles"];
+
+  return { ...base, colors, typography: { ...base.typography, fontFamilies, textStyles } };
+};
 
 /** Merge a brand definition (or nothing) into the engine-facing resolved brand. */
 export const resolveBrand = <M extends AssetMap = AssetMap>(

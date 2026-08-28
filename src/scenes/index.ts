@@ -11,6 +11,7 @@
  * escape hatch, so one scene serves any subject — real estate, mortgage, travel, AI
  * influencers, AI agents, storytelling, corporate, education — by swapping the content in.
  *
+ * MediaScene      — footage-led shot: full-bleed plate + restrained lower third.
  * HeroScene       — opening statement (HeroReveal title + stagger).
  * CenteredScene   — general centered message block.
  * SplitScene      — two panes side by side (stacks in portrait).
@@ -25,6 +26,7 @@
  * SceneFrame and its shared helpers are exported too, for building further scenes.
  */
 
+export { MediaScene, type MediaSceneProps } from "./MediaScene";
 export { HeroScene, type HeroSceneProps } from "./HeroScene";
 export { CenteredScene, type CenteredSceneProps } from "./CenteredScene";
 export { SplitScene, type SplitSceneProps } from "./SplitScene";

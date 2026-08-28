@@ -33,6 +33,9 @@ export {
   type TransitionConfigBase,
   type TransitionType,
   type MusicConfig,
+  type AudioCue,
+  type AudioRole,
+  type DuckingConfig,
   type TimingConfig,
   validateComposition,
 } from "./CompositionSchema";

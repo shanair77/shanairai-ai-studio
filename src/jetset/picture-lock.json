@@ -1,0 +1,238 @@
+{
+  "project": "Jet Set Adventures - 60s Master",
+  "state": "PICTURE LOCKED",
+  "lockedRender": "out/jet-set-PICTURE-FIX-v4-malibu.mp4",
+  "composition": {
+    "id": "JetSet-Master-60",
+    "width": 1080,
+    "height": 1920,
+    "fps": 24,
+    "durationInFrames": 1440,
+    "durationSeconds": 60,
+    "codec": "h264"
+  },
+  "editorial": {
+    "shotsInMaster": 17,
+    "averageShotSeconds": 3.58,
+    "dissolves": 1,
+    "crossFadeSeconds": 0.8,
+    "hardCuts": 15,
+    "sourceTrims": 2
+  },
+  "pictureAssets": [
+    {
+      "file": "a1-desk-exhale.mp4",
+      "bytes": 1680686,
+      "sha256_16": "fef1ba878b129334"
+    },
+    {
+      "file": "a1-reach-phone.mp4",
+      "bytes": 1058448,
+      "sha256_16": "737f0958e37f16b3"
+    },
+    {
+      "file": "a2-balcony-doors.mp4",
+      "bytes": 2757058,
+      "sha256_16": "9da1a4145a88b0f9"
+    },
+    {
+      "file": "a2-sand-walk.mp4",
+      "bytes": 3068147,
+      "sha256_16": "da47e170d4e690b7"
+    },
+    {
+      "file": "a2-yacht-laugh.mp4",
+      "bytes": 2508676,
+      "sha256_16": "a5260eba199a1531"
+    },
+    {
+      "file": "a3-accra-street.mp4",
+      "bytes": 4878824,
+      "sha256_16": "74ed3ae966ef645d"
+    },
+    {
+      "file": "a3-fabric-detail.mp4",
+      "bytes": 1380965,
+      "sha256_16": "331a5ae6c1a694a0"
+    },
+    {
+      "file": "a3-night-dance.mp4",
+      "bytes": 4533665,
+      "sha256_16": "789679ec1643bc28"
+    },
+    {
+      "file": "a4-hotel-arrival.mp4",
+      "bytes": 2549439,
+      "sha256_16": "0e8bc60cf1515f4b"
+    },
+    {
+      "file": "a4-skyline.mp4",
+      "bytes": 2339744,
+      "sha256_16": "3814b8727b3a36f0"
+    },
+    {
+      "file": "a4-rooftop-dinner.mp4",
+      "bytes": 1435225,
+      "sha256_16": "3c5e7735c95cba91"
+    },
+    {
+      "file": "a5-pool-jump.mp4",
+      "bytes": 4273295,
+      "sha256_16": "6b51be96cdcd5849"
+    },
+    {
+      "file": "a5-night-out.mp4",
+      "bytes": 2862895,
+      "sha256_16": "43f2f93c20df417a"
+    },
+    {
+      "file": "a5-boardwalk.mp4",
+      "bytes": 2637612,
+      "sha256_16": "3571b0112de48ae2"
+    },
+    {
+      "file": "a6-balcony-sunset.mp4",
+      "bytes": 2966387,
+      "sha256_16": "69fccc2ad4e64d8f"
+    },
+    {
+      "file": "a6-face-profile.mp4",
+      "bytes": 2885233,
+      "sha256_16": "13b05b371db76295"
+    },
+    {
+      "file": "a7-coast-pullback.mp4",
+      "bytes": 7110096,
+      "sha256_16": "d4e1498f38935221"
+    }
+  ],
+  "heldNotInMaster": [
+    {
+      "file": "a1-hand-still.mp4",
+      "bytes": 1279213,
+      "sha256_16": "9891c7479ec2ce94"
+    },
+    {
+      "file": "a2-champagne.mp4",
+      "bytes": 2137678,
+      "sha256_16": "8ca5c27b9cf836ff"
+    },
+    {
+      "file": "a3-rooftop-food.mp4",
+      "bytes": 1424391,
+      "sha256_16": "b1317bb996aa8b35"
+    },
+    {
+      "file": "a4-desert.mp4",
+      "bytes": 1653252,
+      "sha256_16": "657c74602614d91d"
+    },
+    {
+      "file": "a5-arrivals.mp4",
+      "bytes": 4035528,
+      "sha256_16": "9c801b0f0099a5c2"
+    },
+    {
+      "file": "a5-birthday.mp4",
+      "bytes": 2661397,
+      "sha256_16": "ed052bdffeeab8a2"
+    }
+  ],
+  "voiceover": [
+    {
+      "file": "vo-01-hook.wav",
+      "bytes": 404912,
+      "sha256_16": "ae096f328a4875eb"
+    },
+    {
+      "file": "vo-02-breathe.wav",
+      "bytes": 422444,
+      "sha256_16": "51ea4357698dbc92"
+    },
+    {
+      "file": "vo-03-discover.wav",
+      "bytes": 460844,
+      "sha256_16": "ffc5edff41b1536c"
+    },
+    {
+      "file": "vo-04-live.wav",
+      "bytes": 583724,
+      "sha256_16": "cf2b347b38789678"
+    },
+    {
+      "file": "vo-05-occasions.wav",
+      "bytes": 307244,
+      "sha256_16": "123480859aec6c7a"
+    },
+    {
+      "file": "vo-06-ormaybe.wav",
+      "bytes": 218924,
+      "sha256_16": "55a4490d3df9afe9"
+    },
+    {
+      "file": "vo-07-justbecause.wav",
+      "bytes": 218924,
+      "sha256_16": "9bca4e381d4768b1"
+    },
+    {
+      "file": "vo-08-nowait.wav",
+      "bytes": 460844,
+      "sha256_16": "ad1d8d8a25f9df38"
+    },
+    {
+      "file": "vo-09-nextstory.wav",
+      "bytes": 384044,
+      "sha256_16": "6f73388649bd4c66"
+    },
+    {
+      "file": "vo-10-signoff.wav",
+      "bytes": 545324,
+      "sha256_16": "7240e0a415683389"
+    }
+  ],
+  "brand": [
+    {
+      "file": "logo.png",
+      "bytes": 137942,
+      "sha256_16": "d744d453a42d4d4b"
+    },
+    {
+      "file": "shanair-johnson.png",
+      "bytes": 1010011,
+      "sha256_16": "f9bb6d6c9827b75a"
+    }
+  ],
+  "outstanding": [
+    "music bed (licensed, to be supplied)",
+    "4 ambience loops (licensed)",
+    "5 one-shot SFX (licensed)"
+  ],
+  "revision": "v4 — two source in-point corrections, approved. Duration and every cut unchanged.",
+  "sourceTrims": [
+    {
+      "shot": "1.1 desk exhale",
+      "asset": "a1DeskExhale",
+      "trimBefore": 0.208,
+      "reason": "The source clip's own first frame steps 1.47x its steady-state motion — the only clip of 23 with this defect. Visible as a twitch at 0.04s because it opens the film.",
+      "measured": {
+        "frame1MotionBefore": 4.92,
+        "frame1MotionAfter": 2.2,
+        "spikeBefore": "1.55x",
+        "spikeAfter": "0.66x"
+      }
+    },
+    {
+      "shot": "5.5 night out",
+      "asset": "a5NightOut",
+      "trimBefore": 0.208,
+      "reason": "The 2.75s window ended mid-gesture on a motion spike and collided with 5.4's calm opening — read as a sudden stop under VO 6. The shifted in-point ends the window on the movement's settling ramp.",
+      "measured": {
+        "lastFrameBefore": 23.35,
+        "lastFrameAfter": 8.1,
+        "nextShot": 6.45,
+        "collapseBefore": "3.6x",
+        "collapseAfter": "1.3x"
+      }
+    }
+  ]
+}
