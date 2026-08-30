@@ -55,6 +55,16 @@ export type TemplateDescriptor = DescriptorIdentity & {
    */
   version: string;
   format?: FormatName;
+  /**
+   * The frame rate this template declares, when it declares one.
+   *
+   * Present because a format preset is NOT a safe substitute: `vertical` is
+   * 30fps and the first production template renders at 24, so a client reading
+   * the preset would miscalculate every duration it derived. Absent when the
+   * template is cadence-agnostic, which genuinely means "whatever the format
+   * says".
+   */
+  fps?: number;
   capabilities?: TemplateCapabilities;
   parameters?: ParameterSchema;
   meta?: TemplateMetaSummary;

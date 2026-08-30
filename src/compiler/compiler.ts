@@ -28,7 +28,15 @@ import { describeFramework } from "../metadata";
 import { parameterTypeRegistry, validatorRegistry } from "../parameters";
 import { templateRegistry, type TemplateMap } from "../templates";
 import { transitionRegistry } from "../transitions";
-import { type Compiler, type CompilerConfig, type CompileRequest, type CompileResult } from "./types";
+import { assembleRequirements, collectReferences } from "../requirements";
+import { resolveRegistries } from "../contracts";
+import {
+  type Compiler,
+  type CompilerConfig,
+  type CompileRequest,
+  type CompileResult,
+  type RequirementResult,
+} from "./types";
 
 const isPlainObject = (v: unknown): v is Record<string, unknown> =>
   typeof v === "object" && v !== null && !Array.isArray(v);
@@ -92,5 +100,49 @@ export function createCompiler<M extends TemplateMap>(config: CompilerConfig<M>)
         : { ok: false, report: result.report };
     },
     describe: () => describeFramework(registries),
+
+    requirementsFor(request: CompileRequest<M>): RequirementResult {
+      // The SAME guard and the SAME orchestrator `compile` uses. Not a
+      // lighter-weight validation path: a plan produced for a request the
+      // renderer would refuse is worse than no plan, because somebody would
+      // generate assets against it.
+      const violation = structuralViolation(request);
+
+      if (violation) {
+        const report = createReport(deriveExecutionId(isPlainObject(request) ? request.id : undefined));
+        report.issue("resolve-template", {
+          code: "invalid-request",
+          message: violation.message,
+          ...(violation.path !== undefined ? { path: violation.path } : {}),
+          actual: sanitize(violation.actual),
+        });
+        report.failStage("resolve-template");
+
+        return { ok: false, report: report.build() };
+      }
+
+      const result = execute(request, { registries });
+
+      if (!result.ok || result.schema === undefined) {
+        return { ok: false, report: result.report };
+      }
+
+      // `execute` hands back the resolved schema — the scenes, the audio and
+      // the music the template actually produced for these params. That is the
+      // only place the answer exists: `compile` discards it, and by the time a
+      // component would resolve an asset the plan is long overdue.
+      const resolved = resolveRegistries(registries);
+      const references = collectReferences(result.schema, resolved.scenes, resolved.brands);
+      const { requirements, unresolved } = assembleRequirements(references, config.manifest);
+
+      return {
+        ok: true,
+        template: request.template,
+        version: resolved.templates.require(request.template).version,
+        requirements,
+        unresolved,
+        report: result.report,
+      };
+    },
   };
 }

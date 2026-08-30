@@ -1,6 +1,6 @@
 {
   "name": "@shanairai/ai-studio",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "description": "A registry-driven declarative compiler for programmatic video: describe a video as data, compile it to a Remotion composition.",
   "homepage": "https://github.com/shanair77/shanairai-ai-studio#readme",
   "bugs": {

@@ -25,6 +25,8 @@ import { type ExecutionReport } from "../execution";
 import { type FrameworkDescriptor } from "../metadata";
 import { type ParameterTypeMap, type ValidatorMap } from "../parameters";
 import { type ParamsOf, type TemplateMap } from "../templates";
+import { type AssetManifest } from "../manifest";
+import { type PlannedRequirement, type UnresolvedReference } from "../requirements/types";
 
 /**
  * The content a compiler is built over — plain object maps, never registries. Registries are an
@@ -37,6 +39,16 @@ import { type ParamsOf, type TemplateMap } from "../templates";
  */
 export type CompilerConfig<M extends TemplateMap> = {
   templates: M;
+  /**
+   * What the pack's assets ARE — provenance, durations, licences, readiness.
+   *
+   * Declared here because requirement planning needs it and a pack already
+   * carries one: `productionPack` has had a manifest since the render boundary
+   * landed, and this is the type finally admitting it. Without one a plan can
+   * still say which assets a render names, but every one of them comes back
+   * unresolved — which is honest, and useless.
+   */
+  manifest?: AssetManifest;
   scenes?: SceneMap;
   transitions?: TransitionMap;
   assets?: AssetMap;
@@ -71,7 +83,47 @@ export type CompileResult =
   | { ok: false; report: ExecutionReport };
 
 /** A compiler bound to a fixed set of registries. */
+/**
+ * What a specific render would need, as a plan rather than a rendering.
+ *
+ * Answers "what assets will THIS request reference?" — which is a different
+ * question from "what does the pack contain", and the difference is roughly
+ * threefold for the first production campaign. A generator acting on the pack
+ * would produce assets nothing renders.
+ *
+ * Validated exactly as `compile` validates: same orchestrator, same stages, so
+ * a request `compile` refuses cannot produce a plausible-looking plan here.
+ * Pure — no filesystem, no probe, no bundler, no browser.
+ */
+export type RequirementResult =
+  | {
+      ok: true;
+      template: string;
+      /** The version that was planned against — the registered one. */
+      version: string;
+      /** Every asset this render names, deduplicated, in first-reference order. */
+      requirements: PlannedRequirement[];
+      /**
+       * Assets the composition names that the manifest does not describe.
+       *
+       * Reported rather than dropped: a silently omitted requirement is one a
+       * render will demand later, with nothing pointing back to the plan that
+       * failed to mention it.
+       */
+      unresolved: UnresolvedReference[];
+      report: ExecutionReport;
+    }
+  | { ok: false; report: ExecutionReport };
+
 export type Compiler<M extends TemplateMap> = {
   compile(request: CompileRequest<M>): CompileResult;
   describe(): FrameworkDescriptor;
+  /**
+   * What a specific render would need, without rendering it.
+   *
+   * Takes the same request `compile` takes, because it answers a question about
+   * the same thing — and running it through the same path is what guarantees
+   * the two cannot disagree about whether a request is valid.
+   */
+  requirementsFor(request: CompileRequest<M>): RequirementResult;
 };

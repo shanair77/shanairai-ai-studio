@@ -11,4 +11,10 @@
  */
 
 export { createCompiler } from "./compiler";
-export type { CompilerConfig, CompileRequest, CompileResult, Compiler } from "./types";
+export type {
+  CompilerConfig,
+  CompileRequest,
+  CompileResult,
+  Compiler,
+  RequirementResult,
+} from "./types";

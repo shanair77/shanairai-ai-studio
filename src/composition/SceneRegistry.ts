@@ -49,6 +49,34 @@ export type SceneComponent = ComponentType<any>;
 /** A scene bound to its component + duration, carrying its prop type `P` for inference. */
 export type SceneDefinition<P> = {
   component: ComponentType<P>;
+  /**
+   * Where this scene's props name assets, as dotted paths into its own props.
+   *
+   * ## Why this has to be declared
+   *
+   * A scene's props are the component's own, so an asset reference is a
+   * CONVENTION — `media.asset` for the media scene — rather than something the
+   * type system marks. Audio and music are different: they are resolved eagerly
+   * in `buildComposition` from `AudioCue.asset` and `MusicConfig.asset`, so
+   * those references are unambiguous. A scene's are not resolved until the
+   * component renders and calls `registry.require`, which is inside React and
+   * far too late to plan against.
+   *
+   * Declaring the paths here closes that gap without guessing. The alternatives
+   * were worse: walking props for any key called `asset` would count a prop
+   * that merely shares the name, and matching strings against the registry
+   * would count a caption that happened to equal an asset key. Both are the
+   * kind of wrong that produces a plausible plan.
+   *
+   * It belongs on the scene rather than on a template because it describes the
+   * COMPONENT — one declaration covers every template that ever uses this
+   * scene, and a per-template mapping would be the hand-maintained table this
+   * is meant to avoid.
+   *
+   * A path may cross an optional link (`media.asset` where `media` is
+   * optional); a path that resolves to nothing contributes nothing.
+   */
+  assetPaths?: readonly string[];
   /** Default length in seconds when a scene config declares none. */
   defaultDuration: number;
   /**
@@ -72,7 +100,12 @@ export type PropsOf<D> = D extends SceneDefinition<infer P> ? P : never;
 
 /** Minimal erased contract the Timeline/builder depend on (satisfied by any scene Registry). */
 export type SceneResolver = {
-  require(name: string): { component: SceneComponent; defaultDuration: number; opaque?: boolean };
+  require(name: string): {
+    component: SceneComponent;
+    defaultDuration: number;
+    opaque?: boolean;
+    assetPaths?: readonly string[];
+  };
   has(name: string): boolean;
   keys(): string[];
 };
@@ -84,15 +117,23 @@ export const defineScene = <P>(spec: {
   component: ComponentType<P>;
   defaultDuration?: number;
   opaque?: boolean;
+  assetPaths?: readonly string[];
 }): SceneDefinition<P> => ({
   component: spec.component,
   defaultDuration: spec.defaultDuration ?? DEFAULT_SCENE_DURATION,
   ...(spec.opaque !== undefined ? { opaque: spec.opaque } : {}),
+  ...(spec.assetPaths !== undefined ? { assetPaths: spec.assetPaths } : {}),
 });
 
 /** The built-in scenes — the single definition site (replaces the old registration array). */
 export const builtinScenes = {
-  media: defineScene<MediaSceneProps>({ component: MediaScene, defaultDuration: theme.timing.scene.short }),
+  media: defineScene<MediaSceneProps>({
+    component: MediaScene,
+    defaultDuration: theme.timing.scene.short,
+    // The plate. `MediaBackdrop` resolves this from the active registry when it
+    // renders; declaring it here is what lets a plan know about it beforehand.
+    assetPaths: ["media.asset"],
+  }),
   hero: defineScene<HeroSceneProps>({ component: HeroScene }),
   centered: defineScene<CenteredSceneProps>({ component: CenteredScene }),
   split: defineScene<SplitSceneProps>({ component: SplitScene }),

@@ -27,7 +27,23 @@ export { defineAsset, defineAssetKit } from "./assets";
 export { DomainError } from "./errors";
 
 // ══ Types — compiler contract ═══════════════════════════════════════════════════════════════════
-export type { Compiler, CompilerConfig, CompileRequest, CompileResult } from "./compiler";
+export type {
+  Compiler,
+  CompilerConfig,
+  CompileRequest,
+  CompileResult,
+  RequirementResult,
+} from "./compiler";
+
+// ══ Types — requirement planning ════════════════════════════════════════════════════════════════
+// What a SPECIFIC render needs, as opposed to what a pack holds. Pure, and on
+// the compiler surface rather than behind `./render`: planning must work with
+// no bundler, no browser and no renderer installed.
+export type {
+  PlannedRequirement,
+  ReferenceOrigin,
+  UnresolvedReference,
+} from "./requirements/types";
 
 // ══ Types — authoring definitions (`define*` inputs / returns) ══════════════════════════════════
 export type {

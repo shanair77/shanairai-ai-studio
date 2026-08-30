@@ -84,6 +84,7 @@ export const describeBrands = (brands: BrandRegistry = brandRegistry): BrandDesc
 const projectTemplate = (def: ReturnType<TemplateResolver["require"]>, key: string): TemplateDescriptor => {
   const d: TemplateDescriptor = { ...identity("templates", key, def.name), version: def.version };
   if (def.format !== undefined) d.format = def.format;
+  if (def.fps !== undefined) d.fps = def.fps;
   if (def.capabilities !== undefined) d.capabilities = def.capabilities;
   if (def.parameters !== undefined) d.parameters = def.parameters;
   if (def.meta !== undefined) {
