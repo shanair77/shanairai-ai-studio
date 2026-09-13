@@ -44,9 +44,11 @@ caption, handle, tagline, music, and even the shot list and cut list without edi
 
 ## Make it yours
 
-1. **Footage.** Put clips in `public/luxury/` and set each shot's `src` in
-   `src/luxury/shots.ts`. See `public/luxury/README.md` for the shot list and spec. Shots you
-   haven't filled in keep rendering as placeholder plates.
+1. **Footage.** The sixteen shots ship as Higgsfield-generated clips (Kling 3.0 pro, 9:16,
+   5 s) referenced by URL in `src/luxury/shots.ts`. Run `node scripts/download-luxury-clips.mjs`
+   once to store them in `public/luxury/` and switch the shot list to local files. To re-cast
+   a shot, drop a new clip in and change its `src`; see `public/luxury/README.md`. Any shot
+   with `src: null` renders as a placeholder plate.
 2. **Caption and handle.** Edit `defaultLuxuryReelProps` in `src/luxury/LuxuryReel.tsx`, or
    change them live in the Studio props panel.
 3. **Re-cut.** Reorder or retime `CUT_LIST`. Keep cuts between 0.5 and 1.4 s for the montage

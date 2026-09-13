@@ -1,15 +1,25 @@
 # public/luxury — footage for the LuxuryReel
 
-Drop your clips in here, then point each shot at them in `src/luxury/shots.ts`:
+The sixteen shots were generated with Higgsfield (Kling 3.0 pro, 9:16, 5 s, silent) and
+`src/luxury/shots.ts` currently points at the CDN URLs Higgsfield returned, so `npm run dev`
+plays them immediately. CDN links are not permanent — make them yours with:
+
+```bash
+node scripts/download-luxury-clips.mjs
+```
+
+It saves each clip here as `<shot id>.mp4` and rewrites `shots.ts` to the local paths.
+
+To re-cast a shot, drop a new clip in here and point the shot at it:
 
 ```ts
 { id: "lambo-arch", label: "Lamborghini · hotel entrance", src: "luxury/lambo-arch.mp4", ... }
 ```
 
-Until a shot has a `src`, the reel renders a procedural placeholder plate in that shot's
-palette so the cut, caption, and grade can still be previewed.
+Set `src: null` on any shot to fall back to a procedural placeholder plate in that shot's
+palette.
 
-## What to collect (16 shots)
+## The shot list (16 shots)
 
 | id | Footage | Feel |
 |---|---|---|
