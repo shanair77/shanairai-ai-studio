@@ -1,6 +1,7 @@
 # public/luxury — footage for the LuxuryReel
 
-The sixteen shots were generated with Higgsfield (Kling 3.0 pro, 9:16, 5 s, silent) and
+The sixteen shots were generated with Higgsfield (Kling 3.0 pro, 9:16, 5 s, silent; `chef` and
+`champagne` with Seedance 2.5 at 1080p) and
 `src/luxury/shots.ts` currently points at the CDN URLs Higgsfield returned, so `npm run dev`
 plays them immediately. CDN links are not permanent — make them yours with:
 
