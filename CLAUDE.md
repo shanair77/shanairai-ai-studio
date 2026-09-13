@@ -26,7 +26,8 @@ The render entry point is a registration chain, not a page:
 
 - `src/index.ts` calls `registerRoot(RemotionRoot)` — this is the entry Remotion loads.
 - `src/Root.tsx` (`RemotionRoot`) is where every `<Composition>` must be registered. A composition not reachable from here does not exist to the Studio or renderer.
-- `src/Composition.tsx` defines a `<Composition>` (id, `durationInFrames`, `fps`, `width`, `height`, `component`) whose `component` is the React tree rendered per frame.
+- `src/DemoVideo.tsx` registers the config-driven `Demo` composition (built by the Composition Engine from `src/demo/DemoConfig.ts`).
+- `src/luxury/` is the hand-authored `LuxuryReel` composition — a 30 s, 1080×1920 Instagram montage. Its edit is data (`shots.ts`: shot library + cut list); see `docs/LUXURY_REEL.md` and `public/luxury/README.md` for how to supply footage and re-cut it.
 
 `remotion.config.ts` configures the CLI/bundler only (image format, Tailwind, overwrite behavior). Per the file's own note, it does **not** apply when rendering via the Node APIs — pass options directly there instead. It is excluded from `tsconfig.json`.
 
