@@ -205,6 +205,7 @@ Runnable example apps are landing in an `examples/` directory alongside the alph
 | [Architecture](./docs/ARCHITECTURE.md) — layers + dependency rules | [SDK Design & Decision Records](./docs/SDK_DESIGN.md) |
 | [Registries](./docs/REGISTRIES.md) · [Composition Engine](./docs/COMPOSITION_ENGINE.md) | [Theming](./docs/THEMING.md) · [Transitions](./docs/TRANSITIONS.md) · [Fonts](./docs/FONTS.md) |
 | [Building custom scenes](./docs/BUILDING_CUSTOM_SCENES.md) · [custom transitions](./docs/BUILDING_CUSTOM_TRANSITIONS.md) | [ADRs](./docs/adr/) · [Testing](./docs/TESTING.md) |
+| [LuxuryReel](./docs/LUXURY_REEL.md) — the 30 s Instagram montage composition (`src/luxury/`) | [Footage spec](./public/luxury/README.md) |
 
 ## API stability
 
