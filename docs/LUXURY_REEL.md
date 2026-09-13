@@ -44,7 +44,7 @@ caption, handle, tagline, music, and even the shot list and cut list without edi
 
 ## Make it yours
 
-1. **Footage.** The sixteen shots ship as Higgsfield-generated clips (Kling 3.0 pro, 9:16,
+1. **Footage.** The seventeen shots ship as Higgsfield-generated clips (Kling 3.0 pro, 9:16,
    5 s) referenced by URL in `src/luxury/shots.ts`. Run `node scripts/download-luxury-clips.mjs`
    once to store them in `public/luxury/` and switch the shot list to local files. To re-cast
    a shot, drop a new clip in and change its `src`; see `public/luxury/README.md`. Any shot

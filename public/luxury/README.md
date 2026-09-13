@@ -1,6 +1,6 @@
 # public/luxury — footage for the LuxuryReel
 
-The sixteen shots were generated with Higgsfield (Kling 3.0 pro, 9:16, 5 s, silent; `chef`,
+The seventeen shots were generated with Higgsfield (Kling 3.0 pro, 9:16, 5 s, silent; `chef`,
 `champagne`, `aerial` and `watch` with Seedance 2.5 at 1080p) and
 `src/luxury/shots.ts` currently points at the CDN URLs Higgsfield returned, so `npm run dev`
 plays them immediately. CDN links are not permanent — make them yours with:
@@ -20,13 +20,14 @@ To re-cast a shot, drop a new clip in here and point the shot at it:
 Set `src: null` on any shot to fall back to a procedural placeholder plate in that shot's
 palette.
 
-## The shot list (16 shots)
+## The shot list (17 shots)
 
 | id | Footage | Feel |
 |---|---|---|
 | `lambo-arch` | Supercar idling at a hotel / villa entrance at night | warm stone, amber lanterns |
 | `chandelier` | Slow tilt across a crystal chandelier in a lounge | gold |
 | `car-interior` | Cabin with ambient LED strips (violet / magenta) | violet |
+| `couple-drive` | A Black couple in the front seats at night, her leaning in, him laughing at the wheel | warm dashboard glow |
 | `eiffel` | Eiffel Tower lit at night, from a balcony | gold on navy |
 | `skyline` | Rooftop / infinity pool with a city skyline | cool blue |
 | `rolls-dash` | Rolls-Royce or Bentley dashboard, city out the window | cream / tan |
