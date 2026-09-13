@@ -7,8 +7,8 @@
  * data edit, not a code edit.
  *
  * Every shot has a `src`: a `public/`-relative path or an `https://` URL. The shipped set
- * was generated with Higgsfield (Kling 3.0 pro, 9:16, 5 s, silent; `chef` and `champagne`
- * with Seedance 2.5 at 1080p) and points at the CDN URLs it returned; run `node scripts/download-luxury-clips.mjs` to pull them into
+ * was generated with Higgsfield (Kling 3.0 pro, 9:16, 5 s, silent; `chef`, `champagne`,
+ * `aerial` and `watch` with Seedance 2.5 at 1080p) and points at the CDN URLs it returned; run `node scripts/download-luxury-clips.mjs` to pull them into
  * `public/luxury/` and make the reel render offline. Set `src: null` on any shot to fall
  * back to a procedural "placeholder" plate in that shot's palette.
  */
@@ -62,10 +62,10 @@ export const SHOTS: Shot[] = [
   { id: "candlelit", label: "Candlelit table for two", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_165135_db882c40-d954-488e-be3f-e7d047615fcd.mp4", look: AMBER, motion: "rise" },
   { id: "chef", label: "Private chef · plating", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_201353_5e4f799f-d485-49eb-9130-2c31c016da54.mp4", look: CREAM, motion: "drift-left" },
   { id: "marina", label: "Marina · sunset yacht", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_165135_e114e740-66ad-45d7-8b97-b7afaccafba1.mp4", look: ROSE, motion: "pull-out" },
-  { id: "aerial", label: "City lights · aerial", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_165226_bc4f53d5-77a4-40a4-bb22-801f969f63c0.mp4", look: GOLD, motion: "push-in" },
+  { id: "aerial", label: "City lights · aerial", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_202122_2214946f-1034-4854-a4ba-79d6344d526e.mp4", look: GOLD, motion: "push-in" },
   { id: "bar", label: "Cocktail bar · low light", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_165226_298414ac-d485-48e7-8fd6-fdc908d15420.mp4", look: AMBER, motion: "drift-right" },
   { id: "penthouse", label: "Penthouse · night view", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_165226_76585147-9248-46d7-8911-7ec6ad37b910.mp4", look: NAVY, motion: "pull-out" },
-  { id: "watch", label: "Timepiece · macro", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_165155_196f94f5-e983-44af-9850-900ffd822a12.mp4", look: SILVER, motion: "push-in" },
+  { id: "watch", label: "Timepiece · macro", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_202038_6caa5f15-f821-4b59-a874-ce9fe59c6d65.mp4", look: SILVER, motion: "push-in" },
   { id: "jet", label: "Private jet · tarmac", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_165226_d2ec55b2-76f3-4eca-b045-74dca0cffd53.mp4", look: SILVER, motion: "drift-left" },
   { id: "lobby", label: "Hotel lobby · marble", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_165156_e5ecaf7c-0f27-4a90-9f84-c1b87a416a8d.mp4", look: CREAM, motion: "rise" },
   { id: "champagne", label: "Champagne pour", src: "https://d8j0ntlcm91z4.cloudfront.net/user_350xJ30dkMG1ZXDgehYxBNghBYM/hf_20260913_201354_86cf475b-92d1-4c1e-9f31-8233223e2bdc.mp4", look: CHAMPAGNE, motion: "push-in" },
