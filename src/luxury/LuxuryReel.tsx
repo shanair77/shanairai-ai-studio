@@ -47,7 +47,7 @@ export const WIDTH = 1080;
 export const HEIGHT = 1920;
 
 export const defaultLuxuryReelProps: LuxuryReelProps = {
-  caption: "High class.",
+  caption: "Luxury.",
   handle: "@shanair.ai",
   tagline: "Shanair.AI Films",
   music: null,
