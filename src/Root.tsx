@@ -23,6 +23,11 @@ import {
   calculateOldMoneyReelMetadata,
   defaultOldMoneyReelProps,
 } from "./oldmoney/OldMoneyReel";
+import {
+  NyelleReel,
+  calculateNyelleReelMetadata,
+  defaultNyelleReelProps,
+} from "./nyelle/NyelleReel";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -65,6 +70,16 @@ export const RemotionRoot: React.FC = () => {
         height={HEIGHT}
         defaultProps={blackwoodPromoProps}
         calculateMetadata={calculateOldMoneyReelMetadata}
+      />
+      <Composition
+        id="NyelleReel"
+        component={NyelleReel}
+        durationInFrames={30 * FPS}
+        fps={FPS}
+        width={WIDTH}
+        height={HEIGHT}
+        defaultProps={defaultNyelleReelProps}
+        calculateMetadata={calculateNyelleReelMetadata}
       />
     </>
   );

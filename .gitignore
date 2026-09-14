@@ -15,6 +15,9 @@ public/luxury/*.webm
 public/oldmoney/*.mp4
 public/oldmoney/*.mov
 public/oldmoney/*.webm
+public/nyelle/*.mp4
+public/nyelle/**/*.png
+public/nyelle/**/*.jpg
 
 # Generated commercial footage, stills, VO and music (hundreds of MB). Source and READMEs stay tracked.
 public/shanairai/
