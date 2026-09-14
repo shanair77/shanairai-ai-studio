@@ -19,6 +19,7 @@ import {
 } from "./luxury/LuxuryReel";
 import {
   OldMoneyReel,
+  blackwoodPromoProps,
   calculateOldMoneyReelMetadata,
   defaultOldMoneyReelProps,
 } from "./oldmoney/OldMoneyReel";
@@ -53,6 +54,16 @@ export const RemotionRoot: React.FC = () => {
         width={WIDTH}
         height={HEIGHT}
         defaultProps={defaultOldMoneyReelProps}
+        calculateMetadata={calculateOldMoneyReelMetadata}
+      />
+      <Composition
+        id="BlackwoodPromo"
+        component={OldMoneyReel}
+        durationInFrames={30 * FPS}
+        fps={FPS}
+        width={WIDTH}
+        height={HEIGHT}
+        defaultProps={blackwoodPromoProps}
         calculateMetadata={calculateOldMoneyReelMetadata}
       />
     </>

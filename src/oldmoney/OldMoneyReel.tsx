@@ -38,6 +38,11 @@ export type OldMoneyReelProps = {
   musicVolume: number;
   /** Seconds the end-card occupies at the tail of the reel. */
   endCardSeconds: number;
+  /**
+   * Optional second line that replaces the caption for the last `seconds` before the end-card —
+   * the one "copy beat" that turns a mood reel into a promo. `null` for none.
+   */
+  interlude: { text: string; seconds: number } | null;
   shots: ShotSpec[];
   cuts: Cut[];
 };
@@ -53,8 +58,22 @@ export const defaultOldMoneyReelProps: OldMoneyReelProps = {
   music: null,
   musicVolume: 0.8,
   endCardSeconds: 3.3,
+  interlude: null,
   shots: SHOTS,
   cuts: CUT_LIST,
+};
+
+/**
+ * The Blackwood Society promo: the same 36 clips and cut list, re-captioned. "Old money." stays
+ * as the persistent line (it is the show's engine — the money ladder against the Crown ladder),
+ * one interlude nods to the Black Letter narrator, and the end-card carries the title.
+ */
+export const blackwoodPromoProps: OldMoneyReelProps = {
+  ...defaultOldMoneyReelProps,
+  caption: "Old money.",
+  interlude: { text: "Every house keeps a letter.", seconds: 2.5 },
+  handle: "The Blackwood Society",
+  tagline: "A Shanair.AI Films series · @shanair.ai",
 };
 
 /** Cut list → absolute frame ranges. Each cut is rounded individually so nothing drifts. */
@@ -82,6 +101,7 @@ export const OldMoneyReel: React.FC<OldMoneyReelProps> = ({
   music,
   musicVolume,
   endCardSeconds,
+  interlude,
   shots,
   cuts,
 }) => {
@@ -89,6 +109,10 @@ export const OldMoneyReel: React.FC<OldMoneyReelProps> = ({
   const { fps, durationInFrames } = useVideoConfig();
   const timeline = layoutCuts(cuts, fps);
   const endCardAt = durationInFrames - Math.round(endCardSeconds * fps);
+  const interludeFrames = interlude ? Math.round(interlude.seconds * fps) : 0;
+  const interludeAt = endCardAt - interludeFrames;
+  // The persistent caption hands over to the interlude (if any), else straight to the end-card.
+  const captionOutAt = interlude ? interludeAt - 18 : endCardAt - 10;
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
@@ -110,8 +134,13 @@ export const OldMoneyReel: React.FC<OldMoneyReelProps> = ({
       <Grain />
 
       <Sequence name="Caption" layout="none">
-        <Caption text={caption} inAt={Math.round(0.5 * fps)} outAt={endCardAt - 10} />
+        <Caption text={caption} inAt={Math.round(0.5 * fps)} outAt={captionOutAt} />
       </Sequence>
+      {interlude ? (
+        <Sequence name="Interlude" from={interludeAt} durationInFrames={interludeFrames} layout="none">
+          <Caption text={interlude.text} inAt={0} outAt={interludeFrames - 12} size={60} />
+        </Sequence>
+      ) : null}
       <Sequence name="End card" from={endCardAt} layout="none">
         <EndCard handle={handle} tagline={tagline || undefined} startAt={0} />
       </Sequence>

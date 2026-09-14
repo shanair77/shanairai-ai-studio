@@ -67,6 +67,8 @@ export type CaptionProps = {
   inAt: number;
   /** Frame the caption starts fading out (for the end-card handover). */
   outAt: number;
+  /** Font size in px. The persistent caption uses 78; a longer interlude line wants ~60. */
+  size?: number;
 };
 
 /**
@@ -74,7 +76,7 @@ export type CaptionProps = {
  * light serif with a soft shadow, sat slightly above centre so it never fights the IG
  * caption block at the bottom.
  */
-export const Caption: React.FC<CaptionProps> = ({ text, inAt, outAt }) => {
+export const Caption: React.FC<CaptionProps> = ({ text, inAt, outAt, size = 78 }) => {
   const frame = useCurrentFrame();
   return (
     <AbsoluteFill style={{ pointerEvents: "none", justifyContent: "center", alignItems: "center" }}>
@@ -83,7 +85,7 @@ export const Caption: React.FC<CaptionProps> = ({ text, inAt, outAt }) => {
         style={{
           fontFamily: fontFamilies.serif,
           fontWeight: 500,
-          fontSize: 78,
+          fontSize: size,
           letterSpacing: "0.02em",
           color: "#f7f3ea",
           textShadow: "0 2px 28px rgba(0,0,0,0.65), 0 0 2px rgba(0,0,0,0.5)",
