@@ -2,6 +2,11 @@ import "./index.css";
 import { Composition } from "remotion";
 import { DemoVideo } from "./DemoVideo";
 import { ShanairPromo } from "./ShanairPromo";
+import { JetSetCampaign } from "./JetSetCampaign";
+import { JetSetAuditions } from "./JetSetAudition";
+import { JetSetCuts } from "./JetSetCuts";
+import { JetSetTwin } from "./JetSetTwin";
+import { JetSetTwinCuts } from "./JetSetTwinCuts";
 import { ShanairRemotionCommercial } from "./ShanairRemotionCommercial";
 import {
   FPS,
@@ -17,6 +22,11 @@ export const RemotionRoot: React.FC = () => {
     <>
       <DemoVideo />
       <ShanairPromo />
+      <JetSetCampaign />
+      <JetSetAuditions />
+      <JetSetCuts />
+      <JetSetTwin />
+      <JetSetTwinCuts />
       <ShanairRemotionCommercial />
       <Composition
         id="LuxuryReel"
