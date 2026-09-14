@@ -1,0 +1,39 @@
+{
+  "skill_name": "ad-production-pipeline",
+  "evals": [
+    {
+      "id": 0,
+      "name": "twenty-second-cutdown",
+      "prompt": "Create a 20-second cutdown of the existing Jet Set Adventures Twin (Shanair AI) commercial for paid social. Produce a complete, concrete production plan: exactly which files you would add or edit, the shot list with per-shot durations, how the timeline math resolves to exactly 20.000s, which audio/music you would reuse, and the exact commands to build, verify, and render it. Do NOT generate any new footage or audio or spend any generation credits — this is local assembly only. Save your plan as plan.md in your outputs directory.",
+      "expected_output": "A plan that re-times existing twin master shots by label (deriveTwin/twinShotFrom), resolves to 480 frames = 20.000s at 24fps, reuses existing twin media + a cutdown audio/music mix, registers the new composition in Root.tsx via a Cuts file, and verifies with npm run lint + ffprobe. No new generation.",
+      "files": [],
+      "assertions": [
+        "Reuses the derive pattern (deriveTwin.ts / twinShotFrom / re-timing master shots by label) instead of rebuilding scenes from scratch",
+        "Timeline math is shown and resolves to exactly 20.000s = 480 frames at 24fps",
+        "Keeps 24fps (does not switch to 30fps)",
+        "Reuses existing twin media and an existing VO/music/SFX mix; proposes no new asset generation",
+        "Registers the new composition (adds/edits a *Cuts.tsx and Root.tsx)",
+        "Verification step names npm run lint AND an ffprobe frame/duration check",
+        "Does not propose spending generation credits for a cutdown"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "new-brand-campaign",
+      "prompt": "I want to produce a new 60-second vertical commercial for a luxury spa brand, 'Lumiere Wellness', starring my Shanair AI twin, for TikTok and Reels. Give me the exact end-to-end production plan and setup: how you would lock identity, the order of operations, how you would control cost, which existing parts of this repo you would reuse versus build new, the QA you would run, and how you would produce 30s and 15s cuts afterward. Do NOT actually generate assets or spend credits yet. Save your plan as plan.md in your outputs directory.",
+      "expected_output": "A plan that locks identity first (Soul), generates VO and measures durations before timing, sets a credit ceiling and preflights cost, uses start-image chaining, reuses the repo's CompositionSchema/MediaBackdrop/brand/asset-kit/acquisition systems, keeps native fps + cut-don't-dissolve, runs the ffprobe/blackdetect/freezedetect + safe-area + watermark QA, and builds cutdowns via the derive pattern.",
+      "files": [],
+      "assertions": [
+        "Locks identity first: confirm/train a Soul before generating footage",
+        "Narration-first: generate VO then measure real durations before building timeline",
+        "Sets a credit ceiling and preflights generation cost (get_cost) before spending",
+        "Uses start-image chaining for shot-to-shot continuity",
+        "Reuses repo architecture (CompositionSchema config, MediaBackdrop, brand registry, asset kit, acquisition/normalisation) rather than a parallel build",
+        "States native fps and cut-don't-dissolve discipline",
+        "QA plan includes ffprobe spec check, black-frame and repeated-frame detection, safe-area, and watermark scan",
+        "Produces 30s/15s cuts via the derive (re-time by label) pattern, not a rebuild",
+        "Does not begin generating assets without approval / a set ceiling"
+      ]
+    }
+  ]
+}
