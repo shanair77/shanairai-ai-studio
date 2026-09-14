@@ -8,6 +8,7 @@ import { JetSetCuts } from "./JetSetCuts";
 import { JetSetTwin } from "./JetSetTwin";
 import { JetSetTwinCuts } from "./JetSetTwinCuts";
 import { ShanairRemotionCommercial } from "./ShanairRemotionCommercial";
+import { AurelleCommercial } from "./AurelleCommercial";
 import {
   FPS,
   HEIGHT,
@@ -28,6 +29,7 @@ export const RemotionRoot: React.FC = () => {
       <JetSetTwin />
       <JetSetTwinCuts />
       <ShanairRemotionCommercial />
+      <AurelleCommercial />
       <Composition
         id="LuxuryReel"
         component={LuxuryReel}
