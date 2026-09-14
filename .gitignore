@@ -12,3 +12,9 @@ takes/
 public/luxury/*.mp4
 public/luxury/*.mov
 public/luxury/*.webm
+
+# Generated commercial footage, stills, VO and music (hundreds of MB). Source and READMEs stay tracked.
+public/shanairai/
+public/jetset/
+public/aurelle/**
+!public/aurelle/README.md

@@ -1,6 +1,8 @@
 import "./index.css";
 import { Composition } from "remotion";
 import { DemoVideo } from "./DemoVideo";
+import { ShanairPromo } from "./ShanairPromo";
+import { ShanairRemotionCommercial } from "./ShanairRemotionCommercial";
 import {
   FPS,
   HEIGHT,
@@ -14,6 +16,8 @@ export const RemotionRoot: React.FC = () => {
   return (
     <>
       <DemoVideo />
+      <ShanairPromo />
+      <ShanairRemotionCommercial />
       <Composition
         id="LuxuryReel"
         component={LuxuryReel}
