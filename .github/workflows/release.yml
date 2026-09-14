@@ -77,6 +77,11 @@ jobs:
 
       - name: Publish to npm
         if: ${{ !inputs.dry-run }}
-        run: npm publish --tag "${{ inputs.dist-tag }}" --provenance --access public
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "::error::NPM_TOKEN secret is empty or not visible to this job. Check that it is a Repository secret (not an Environment/Organization-restricted secret) named exactly 'NPM_TOKEN' with a non-empty npm Automation token."
+            exit 1
+          fi
+          npm publish --tag "${{ inputs.dist-tag }}" --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
