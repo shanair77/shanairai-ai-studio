@@ -17,6 +17,11 @@ import {
   calculateLuxuryReelMetadata,
   defaultLuxuryReelProps,
 } from "./luxury/LuxuryReel";
+import {
+  OldMoneyReel,
+  calculateOldMoneyReelMetadata,
+  defaultOldMoneyReelProps,
+} from "./oldmoney/OldMoneyReel";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -39,6 +44,16 @@ export const RemotionRoot: React.FC = () => {
         height={HEIGHT}
         defaultProps={defaultLuxuryReelProps}
         calculateMetadata={calculateLuxuryReelMetadata}
+      />
+      <Composition
+        id="OldMoneyReel"
+        component={OldMoneyReel}
+        durationInFrames={30 * FPS}
+        fps={FPS}
+        width={WIDTH}
+        height={HEIGHT}
+        defaultProps={defaultOldMoneyReelProps}
+        calculateMetadata={calculateOldMoneyReelMetadata}
       />
     </>
   );
