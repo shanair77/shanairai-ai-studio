@@ -7,8 +7,9 @@
  * Reads KIE_API_KEY from the environment or from the gitignored `.env`. The key is never
  * printed and never written to disk.
  *
- * Veo returns fixed-length (8 s) clips, so `--seconds` trims the download locally with the ffmpeg
- * Remotion already ships. The untrimmed original is kept next to it.
+ * Veo 3.1 sells 4, 6 or 8 s clips (kie.ai docs, /api/v1/veo/generate `duration`). `--seconds` asks
+ * for the shortest of those at or above it and trims the rest locally with ffmpeg (the system one if
+ * it is on PATH, else Remotion's). The untrimmed original is kept next to it.
  *
  * Output lands in takes/kie/ (gitignored). This is a PRE-RENDER step: Remotion never calls it.
  */
@@ -85,12 +86,23 @@ const main = async (): Promise<void> => {
   const seconds = Number(flag("seconds", "5"));
   const aspectRatio = flag("aspect", "9:16");
   const model = flag("model", "veo3_fast");
+  if (!Number.isFinite(seconds) || seconds <= 0 || seconds > 8) {
+    console.error("--seconds must be between 0 and 8 (Veo 3.1 makes 4, 6 or 8 s clips)");
+    process.exit(1);
+  }
+  const duration = [4, 6, 8].find((tier) => tier >= seconds) ?? 8;
 
   const credits = await call<number>(key, "/chat/credit");
   console.log(`kie.ai balance: ${credits} credits`);
 
-  const { taskId } = await call<{ taskId: string }>(key, "/veo/generate", { prompt, model, aspectRatio });
-  console.log(`Submitted ${model} ${aspectRatio}: task ${taskId}`);
+  const { taskId } = await call<{ taskId: string }>(key, "/veo/generate", {
+    prompt,
+    model,
+    // snake_case per the docs; the camelCase spelling is ignored and Veo falls back to 16:9.
+    aspect_ratio: aspectRatio,
+    duration,
+  });
+  console.log(`Submitted ${model} ${aspectRatio} ${duration}s: task ${taskId}`);
 
   let url: string | undefined;
   for (let i = 0; i < 120 && !url; i++) {
@@ -107,7 +119,14 @@ const main = async (): Promise<void> => {
   const full = join(OUT_DIR, `${taskId}-full.mp4`);
   writeFileSync(full, new Uint8Array(await (await fetch(url)).arrayBuffer()));
   const trimmed = join(OUT_DIR, `${taskId}-${seconds}s.mp4`);
-  execFileSync("npx", ["remotion", "ffmpeg", "-y", "-i", full, "-t", String(seconds), "-c:v", "libx264", "-crf", "16", "-c:a", "aac", trimmed], {
+  const trimArgs = ["-y", "-i", full, "-t", String(seconds), "-c:v", "libx264", "-crf", "16", "-c:a", "aac", trimmed];
+  let systemFfmpeg = true;
+  try {
+    execFileSync("ffmpeg", ["-version"], { stdio: "ignore" });
+  } catch {
+    systemFfmpeg = false;
+  }
+  execFileSync(systemFfmpeg ? "ffmpeg" : "npx", systemFfmpeg ? trimArgs : ["remotion", "ffmpeg", ...trimArgs], {
     stdio: "ignore",
     cwd: ROOT,
   });
