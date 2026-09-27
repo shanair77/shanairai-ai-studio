@@ -102,7 +102,8 @@
     "verify": "npm run lint && npm run test:typecheck && npm run test",
     "test:render": "vitest run --config vitest.render.config.ts",
     "aurelle:scan-video": "tsx scripts/aurelle-scan-video.ts",
-    "aurelle:stills": "tsx scripts/aurelle-stills.ts"
+    "aurelle:stills": "tsx scripts/aurelle-stills.ts",
+    "kie:veo": "node --experimental-strip-types --no-warnings scripts/kie-veo.ts"
   },
   "sideEffects": [
     "*.css",
