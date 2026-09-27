@@ -19,7 +19,7 @@ import {
   type ProviderResult,
 } from "./types";
 import { probeWav, verifyAudio, type VerifyOptions } from "./verify";
-import { isWav, normalisePeak } from "./wav";
+import { isWav, normalisePeak, trimWav } from "./wav";
 
 /** Where an acquired asset lands, by kind. `public/`-relative. */
 export const destinationFor = (request: AudioRequest, ext: string): string => {
@@ -105,6 +105,14 @@ export const acquireAssets = async (
           // Fall through — verification will reject it as unreadable, with the reason recorded.
         }
       }
+    }
+
+    // A provider that cannot be asked for a length delivers whatever it delivers; a one-shot is
+    // cut to the request here, where the bytes are already PCM, so no adapter needs a transcoder.
+    // `sourceDurationSeconds` (the provider's figure) and `finalDurationSeconds` both survive in
+    // the record, so the cut is never invisible.
+    if (result.trimToRequest && !request.loop && isWav(bytes)) {
+      bytes = trimWav(bytes, request.durationSeconds).bytes;
     }
 
     // Bring the delivery to its declared peak before measuring, so verification judges the file

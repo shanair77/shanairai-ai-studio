@@ -12,7 +12,7 @@
  */
 
 export { acquireAssets, destinationFor, type AcquireOptions } from "./acquire";
-export { wrapPcmAsWav, isWav, normalisePeak } from "./wav";
+export { wrapPcmAsWav, isWav, normalisePeak, trimWav } from "./wav";
 export { verifyAudio, probeWav, loopSeamDiscontinuity, levelRangeDb, type VerifyResult, type VerifyOptions, type AudioProbe } from "./verify";
 export {
   type AudioKind,

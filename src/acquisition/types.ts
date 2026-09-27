@@ -70,6 +70,14 @@ export type ProviderResult = {
   licence: LicenceInfo;
   /** True when the asset was generated, false when sourced from a library. */
   generated: boolean;
+  /**
+   * The provider could not be told a length, so acquisition may cut the delivery to the request.
+   *
+   * Only ever shortens, and never applies to a loop — a seamless bed cut anywhere but its own end
+   * is no longer seamless. Absent means the provider honoured the length itself and the delivery
+   * is verified as delivered.
+   */
+  trimToRequest?: boolean;
   /** Small, non-secret provider facts worth keeping (model id, seed, licence id…). */
   metadata?: Record<string, string | number | boolean>;
 };

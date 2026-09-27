@@ -83,3 +83,58 @@ export const normalisePeak = (
   }
   return { bytes: out, gainDb: 20 * Math.log10(gain) };
 };
+
+/**
+ * Cut a 16-bit PCM WAV to its first `seconds`, ending on a short linear fade.
+ *
+ * For providers that cannot be told a length — Suno's sounds endpoint delivers 14–18s whatever a
+ * one-shot asks for — so the acquisition layer, not the adapter, brings the take to the request.
+ * The fade stops the cut landing as a click. Returns the file unchanged if it is not a readable
+ * 16-bit WAV or is already no longer than `seconds`; this only ever shortens.
+ *
+ * Never use it on a loop: a seamless bed cut anywhere but its own end is no longer seamless.
+ */
+export const trimWav = (
+  bytes: Uint8Array,
+  seconds: number,
+  fadeMs = 30,
+): { bytes: Uint8Array; trimmed: boolean } => {
+  const ascii = (from: number, to: number) => String.fromCharCode(...bytes.subarray(from, to));
+  if (!isWav(bytes) || !(seconds > 0)) return { bytes, trimmed: false };
+
+  let p = 12, channels = 0, sampleRate = 0, bits = 0, dataOffset = -1, dataSize = 0;
+  while (p + 8 <= bytes.length) {
+    const id = ascii(p, p + 4);
+    const size =
+      bytes[p + 4] | (bytes[p + 5] << 8) | (bytes[p + 6] << 16) | (bytes[p + 7] << 24);
+    if (id === "fmt ") {
+      channels = bytes[p + 10] | (bytes[p + 11] << 8);
+      sampleRate = bytes[p + 12] | (bytes[p + 13] << 8) | (bytes[p + 14] << 16) | (bytes[p + 15] << 24);
+      bits = bytes[p + 22] | (bytes[p + 23] << 8);
+    } else if (id === "data") {
+      dataOffset = p + 8;
+      dataSize = Math.min(size, bytes.length - dataOffset);
+      break;
+    }
+    p += 8 + size + (size % 2);
+  }
+  if (dataOffset < 0 || !channels || !sampleRate || bits !== 16) return { bytes, trimmed: false };
+
+  const bytesPerFrame = channels * 2;
+  const frames = Math.floor(dataSize / bytesPerFrame);
+  const keep = Math.round(seconds * sampleRate);
+  if (keep >= frames) return { bytes, trimmed: false };
+
+  const pcm = bytes.slice(dataOffset, dataOffset + keep * bytesPerFrame);
+  const view = new DataView(pcm.buffer);
+  const fadeFrames = Math.min(keep, Math.round((fadeMs / 1000) * sampleRate));
+  for (let f = 0; f < fadeFrames; f++) {
+    const frame = keep - fadeFrames + f;
+    const gain = 1 - (f + 1) / fadeFrames;
+    for (let c = 0; c < channels; c++) {
+      const o = (frame * channels + c) * 2;
+      view.setInt16(o, Math.round(view.getInt16(o, true) * gain), true);
+    }
+  }
+  return { bytes: wrapPcmAsWav(pcm, sampleRate, channels), trimmed: true };
+};
