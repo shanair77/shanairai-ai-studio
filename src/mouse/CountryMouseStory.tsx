@@ -42,17 +42,21 @@ import { C, FPS, SCENES, type Scene, type SceneId, cueFrame, layoutScenes, total
  * Google Fonts, so the story renders offline and behind strict proxies.
  */
 const fontFamily = "Fredoka";
-if (typeof document !== "undefined") {
-  const handle = delayRender("Loading Fredoka");
-  const face = new FontFace(fontFamily, `url(${staticFile("mouse/fonts/Fredoka-latin.woff2")}) format("woff2")`, {
-    weight: "300 700",
-  });
-  face
-    .load()
-    .then((f) => document.fonts.add(f))
-    .catch((err) => console.error("Fredoka failed to load", err))
-    .finally(() => continueRender(handle));
-}
+
+/** Loads the font once per tab, holding the render until it is ready. */
+const useStoryFont = () => {
+  const [handle] = React.useState(() => delayRender("Loading Fredoka", { timeoutInMilliseconds: 60000 }));
+  React.useEffect(() => {
+    const face = new FontFace(fontFamily, `url(${staticFile("mouse/fonts/Fredoka-latin.woff2")}) format("woff2")`, {
+      weight: "300 700",
+    });
+    face
+      .load()
+      .then((f) => document.fonts.add(f))
+      .catch((err) => console.error("Fredoka failed to load", err))
+      .finally(() => continueRender(handle));
+  }, [handle]);
+};
 
 export { FPS, HEIGHT, WIDTH } from "./story";
 
@@ -151,6 +155,7 @@ export const CountryMouseStory: React.FC<CountryMouseStoryProps> = ({
   music,
   musicVolume,
 }) => {
+  useStoryFont();
   const { fps, durationInFrames } = useVideoConfig();
   const timeline = layoutScenes(SCENES, fps);
   const available = new Set(getStaticFiles().map((f) => f.name));
