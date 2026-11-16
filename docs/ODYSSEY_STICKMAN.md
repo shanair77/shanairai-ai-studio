@@ -17,7 +17,7 @@ npx remotion still OdysseyStickman --frame=700 --scale=0.4   # spot-check one fr
 | `src/odyssey/scenes.tsx` | One component per beat, each a pure function of its local frame |
 | `src/odyssey/Stickman.tsx` | Pose-driven faceless stick figure + pose library (walk, run, cheer, row, sit…) |
 | `src/odyssey/Props.tsx` | Sea, ships, Troy's walls, the wooden horse, Cyclops cave props, pigs, Scylla, whirlpool… |
-| `public/odyssey/fonts/` | Patrick Hand (OFL) and Permanent Marker (Apache 2.0), vendored |
+| `src/odyssey/fonts.generated.ts` | Patrick Hand (OFL) and Permanent Marker (Apache 2.0), embedded as base64 |
 
 ## Editing
 

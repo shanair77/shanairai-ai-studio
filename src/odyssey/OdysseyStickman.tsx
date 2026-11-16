@@ -19,37 +19,32 @@ import React from "react";
 import {
   AbsoluteFill,
   Sequence,
-  cancelRender,
-  continueRender,
-  delayRender,
   interpolate,
-  staticFile,
   useCurrentFrame,
 } from "remotion";
+import { PATRICKHAND_WOFF2, PERMANENTMARKER_WOFF2 } from "./fonts.generated";
 import { PAPER, RED } from "./Props";
 import * as S from "./scenes";
 import { INK } from "./Stickman";
 
 /**
- * Fonts are vendored in public/odyssey/fonts (Patrick Hand — OFL, Permanent Marker —
- * Apache 2.0) so renders never depend on reaching Google Fonts.
+ * Fonts are embedded as data-URL @font-face rules (see fonts.generated.ts): no network,
+ * no fetch to wait on, and no delayRender handle that could be left uncleared.
  */
 const HAND = "Patrick Hand";
 const MARKER = "Permanent Marker";
-const loadLocalFont = (family: string, file: string) => {
-  if (typeof window === "undefined" || typeof FontFace === "undefined") return;
-  const handle = delayRender(`Loading font ${family}`);
-  const face = new FontFace(family, `url(${staticFile(file)}) format("woff2")`);
-  face
-    .load()
-    .then(() => {
-      document.fonts.add(face);
-      continueRender(handle);
-    })
-    .catch((err) => cancelRender(err));
-};
-loadLocalFont(HAND, "odyssey/fonts/PatrickHand.woff2");
-loadLocalFont(MARKER, "odyssey/fonts/PermanentMarker.woff2");
+const FONT_CSS = [
+  [HAND, PATRICKHAND_WOFF2],
+  [MARKER, PERMANENTMARKER_WOFF2],
+]
+  .map(([family, b64]) => `@font-face{font-family:"${family}";src:url(data:font/woff2;base64,${b64}) format("woff2");font-display:block;}`)
+  .join("");
+if (typeof document !== "undefined" && !document.getElementById("odyssey-fonts")) {
+  const style = document.createElement("style");
+  style.id = "odyssey-fonts";
+  style.textContent = FONT_CSS;
+  document.head.appendChild(style);
+}
 
 export const ODYSSEY_FPS = 30;
 export const ODYSSEY_WIDTH = 1080;
