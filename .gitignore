@@ -30,3 +30,7 @@ public/aurelle/**/*.wav
 # Claude Code: per-machine settings and skill eval scratch stay local; skills themselves are tracked.
 .claude/settings.local.json
 .claude/skills/*-workspace/
+
+# Country Mouse story narration/music (see public/mouse/README.md); the font and README stay tracked.
+public/mouse/*.mp3
+public/mouse/*.wav

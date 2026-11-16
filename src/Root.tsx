@@ -28,6 +28,14 @@ import {
   calculateNyelleReelMetadata,
   defaultNyelleReelProps,
 } from "./nyelle/NyelleReel";
+import {
+  CountryMouseStory,
+  calculateCountryMouseStoryMetadata,
+  defaultCountryMouseStoryProps,
+  FPS as MOUSE_FPS,
+  WIDTH as MOUSE_WIDTH,
+  HEIGHT as MOUSE_HEIGHT,
+} from "./mouse/CountryMouseStory";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -80,6 +88,16 @@ export const RemotionRoot: React.FC = () => {
         height={HEIGHT}
         defaultProps={defaultNyelleReelProps}
         calculateMetadata={calculateNyelleReelMetadata}
+      />
+      <Composition
+        id="CountryMouseStory"
+        component={CountryMouseStory}
+        durationInFrames={120 * MOUSE_FPS}
+        fps={MOUSE_FPS}
+        width={MOUSE_WIDTH}
+        height={MOUSE_HEIGHT}
+        defaultProps={defaultCountryMouseStoryProps}
+        calculateMetadata={calculateCountryMouseStoryMetadata}
       />
     </>
   );
