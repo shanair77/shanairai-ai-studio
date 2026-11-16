@@ -28,6 +28,13 @@ import {
   calculateNyelleReelMetadata,
   defaultNyelleReelProps,
 } from "./nyelle/NyelleReel";
+import {
+  ODYSSEY_DURATION,
+  ODYSSEY_FPS,
+  ODYSSEY_HEIGHT,
+  ODYSSEY_WIDTH,
+  OdysseyStickman,
+} from "./odyssey/OdysseyStickman";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -80,6 +87,14 @@ export const RemotionRoot: React.FC = () => {
         height={HEIGHT}
         defaultProps={defaultNyelleReelProps}
         calculateMetadata={calculateNyelleReelMetadata}
+      />
+      <Composition
+        id="OdysseyStickman"
+        component={OdysseyStickman}
+        durationInFrames={ODYSSEY_DURATION}
+        fps={ODYSSEY_FPS}
+        width={ODYSSEY_WIDTH}
+        height={ODYSSEY_HEIGHT}
       />
     </>
   );
