@@ -26,14 +26,14 @@ import { SoukScene } from "./SoukScene";
 import { Caption, HAND, LocationCard, ROUND, Stamp, StyleTag, type Skin } from "./shared";
 
 export const STYLE_TEST_FPS = 30;
-const SEG = 6 * STYLE_TEST_FPS;
-const CAPTION = "Welcome to the souks of Marrakech: a maze of thousands of stalls under glowing lanterns.";
+export const SEG = 6 * STYLE_TEST_FPS;
+export const CAPTION = "Welcome to the souks of Marrakech: a maze of thousands of stalls under glowing lanterns.";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
-const hasPlate = (file: string) => getStaticFiles().some((f) => f.name === file);
+export const hasPlate = (file: string) => getStaticFiles().some((f) => f.name === file);
 
-const MissingPlate: React.FC<{ file: string }> = ({ file }) => (
+export const MissingPlate: React.FC<{ file: string }> = ({ file }) => (
   <AbsoluteFill style={{ background: "#3a3046", alignItems: "center", justifyContent: "center", padding: 80 }}>
     <div style={{ fontFamily: ROUND, color: "#fff", fontSize: 46, textAlign: "center", lineHeight: 1.3 }}>
       Painted plate missing
@@ -68,7 +68,7 @@ const Plate: React.FC<{ file: string; from?: number; to?: number; origin?: strin
 };
 
 /* ------------------------------------------------------------------ style 5 */
-const JournalStyle: React.FC<{ file: string; origin: string }> = ({ file, origin }) => {
+export const JournalFrame: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const f = useCurrentFrame();
   // A pen-drawn dashed route across the page, drawing itself in.
   const routeLen = 1400;
@@ -77,7 +77,7 @@ const JournalStyle: React.FC<{ file: string; origin: string }> = ({ file, origin
     <AbsoluteFill style={{ background: "#efe6d2" }}>
       <AbsoluteFill style={{ padding: "150px 34px 34px", rotate: "-0.6deg" }}>
         <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", boxShadow: "0 10px 30px rgba(0,0,0,0.35)", border: "14px solid #fbf6ea" }}>
-          {hasPlate(file) ? <Plate file={file} origin={origin} /> : <MissingPlate file={file} />}
+          {children}
         </div>
       </AbsoluteFill>
       {/* tape on the photo corners */}
@@ -112,30 +112,17 @@ const JournalStyle: React.FC<{ file: string; origin: string }> = ({ file, origin
 };
 
 /* ------------------------------------------------------------------ style 6 */
-const DioramaStyle: React.FC<{ file: string }> = ({ file }) => {
-  if (!hasPlate(file)) {
+export const DioramaFrame: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Tilt-shift: blur only the top and bottom bands of whatever is underneath.
+  const band = (dir: "top" | "bottom") => {
+    const mask = `linear-gradient(to ${dir === "top" ? "bottom" : "top"}, black 0%, black 16%, transparent 40%)`;
     return (
-      <AbsoluteFill>
-        <MissingPlate file={file} />
-        <LocationCard skin="diorama" />
-        <Caption skin="diorama" text={CAPTION} />
-      </AbsoluteFill>
+      <AbsoluteFill style={{ backdropFilter: "blur(9px) saturate(1.1)", WebkitMaskImage: mask, maskImage: mask }} />
     );
-  }
-  // Tilt-shift: a sharp plate, plus blurred copies masked to the top and bottom bands.
-  const band = (dir: "top" | "bottom") => (
-    <Plate
-      file={file}
-      style={{
-        filter: "blur(9px) saturate(1.1)",
-        WebkitMaskImage: `linear-gradient(to ${dir === "top" ? "bottom" : "top"}, black 0%, black 18%, transparent 42%)`,
-        maskImage: `linear-gradient(to ${dir === "top" ? "bottom" : "top"}, black 0%, black 18%, transparent 42%)`,
-      }}
-    />
-  );
+  };
   return (
     <AbsoluteFill style={{ background: "#2a1a10" }}>
-      <Plate file={file} style={{ filter: "saturate(1.12) contrast(1.04)" }} />
+      <AbsoluteFill style={{ filter: "saturate(1.12) contrast(1.04)" }}>{children}</AbsoluteFill>
       {band("top")}
       {band("bottom")}
       <AbsoluteFill style={{ background: "radial-gradient(ellipse at 50% 55%, transparent 50%, rgba(30,15,5,0.45) 100%)" }} />
@@ -145,6 +132,9 @@ const DioramaStyle: React.FC<{ file: string }> = ({ file }) => {
     </AbsoluteFill>
   );
 };
+
+const PlateOrMissing: React.FC<{ file: string; origin?: string }> = ({ file, origin }) =>
+  hasPlate(file) ? <Plate file={file} origin={origin} /> : <MissingPlate file={file} />;
 
 /* ------------------------------------------------------------------ styles 2 & 3 */
 const CodeStyle: React.FC<{ skin: Extract<Skin, "flat" | "paper"> }> = ({ skin }) => (
@@ -160,10 +150,10 @@ const CodeStyle: React.FC<{ skin: Extract<Skin, "flat" | "paper"> }> = ({ skin }
 const STYLES: { id: string; n: string; name: string; note: string; El: React.FC }[] = [
   { id: "flat", n: "2", name: "Flat vector", note: "100% code · $0 per episode", El: () => <CodeStyle skin="flat" /> },
   { id: "paper", n: "3", name: "Paper cut-out", note: "100% code · $0 per episode", El: () => <CodeStyle skin="paper" /> },
-  { id: "journal-1", n: "5", name: "Illustrated journal", note: "Take 1 · AI-painted plate + code overlays", El: () => <JournalStyle file="styletest/journal-1.png" origin="50% 55%" /> },
-  { id: "journal-2", n: "5", name: "Illustrated journal", note: "Take 2 · AI-painted plate + code overlays", El: () => <JournalStyle file="styletest/journal-2.png" origin="50% 38%" /> },
-  { id: "diorama-1", n: "6", name: "Miniature diorama", note: "Take 1 · AI clay-diorama plate + code overlays", El: () => <DioramaStyle file="styletest/diorama-1.png" /> },
-  { id: "diorama-2", n: "6", name: "Miniature diorama", note: "Take 2 · AI clay-diorama plate + code overlays", El: () => <DioramaStyle file="styletest/diorama-2.png" /> },
+  { id: "journal-1", n: "5", name: "Illustrated journal", note: "Take 1 · AI-painted plate + code overlays", El: () => <JournalFrame><PlateOrMissing file="styletest/journal-1.png" origin="50% 55%" /></JournalFrame> },
+  { id: "journal-2", n: "5", name: "Illustrated journal", note: "Take 2 · AI-painted plate + code overlays", El: () => <JournalFrame><PlateOrMissing file="styletest/journal-2.png" origin="50% 38%" /></JournalFrame> },
+  { id: "diorama-1", n: "6", name: "Miniature diorama", note: "Take 1 · AI clay-diorama plate + code overlays", El: () => <DioramaFrame><PlateOrMissing file="styletest/diorama-1.png" /></DioramaFrame> },
+  { id: "diorama-2", n: "6", name: "Miniature diorama", note: "Take 2 · AI clay-diorama plate + code overlays", El: () => <DioramaFrame><PlateOrMissing file="styletest/diorama-2.png" /></DioramaFrame> },
 ];
 
 export const STYLE_TEST_DURATION = STYLES.length * SEG;
