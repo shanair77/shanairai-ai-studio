@@ -29,14 +29,13 @@ channel are found with `searchVideos` using connection `12412754`.
 Spanish versions done: The Country Mouse and the City Mouse (story `pVnY8KUZBig`, Short
 `xS6OGuYlEBE`); The Lion and the Mouse (story `5DiXCCIzdCs`, Short `FYfC9yrtbbg`).
 
-> Note (2026-11-18): The Tortoise and the Hare was made by an on-demand run that could not push to
-> GitHub, so its code/narration were not saved; only the YouTube video (2QpDzio7grQ) and the
-> Cloudinary copy exist. It was made before the 2026 spin. Do not remake it unless the owner asks.
+> Note (2026-11-18): The Tortoise and the Hare's first version (2QpDzio7grQ) lost its code and was
+> made before the 2026 spin. The owner asked for a remake, so row 2 is `todo` again (see its notes).
 
 | # | Story | Source | Setting idea | 2026 spin | Status | Date | YouTube ID |
 | - | ----- | ------ | ------------ | --------- | ------ | ---- | ---------- |
 | 1 | The Country Mouse and the City Mouse | Aesop | meadow → city | (made before the 2026 spin) | done | 2026-11-18 | jpiPKkRmM4w |
-| 2 | The Tortoise and the Hare | Aesop | park fun-run, finish line flags | Hare stops for selfies and "just one more video", then naps; Tortoise wears a little step-counter watch; a camera drone films the finish | done (video only: story code was not saved, see note) | 2026-11-18 | 2QpDzio7grQ |
+| 2 | The Tortoise and the Hare — REMAKE (2026 Edition) | Aesop | park fun-run, finish line flags | Hare stops for selfies and "just one more video", then naps; Tortoise wears a little step-counter watch; a camera drone films the finish | todo (remake requested by the owner on 2026-11-18: rebuild from scratch in `src/kids/stories/tortoise-hare/` with this 2026 spin, English + Spanish + both Shorts; title "The Tortoise and the Hare (2026 Edition)" / "La Tortuga y la Liebre (Edición 2026)"; do NOT delete the old English video 2QpDzio7grQ, the owner will) | | old: 2QpDzio7grQ |
 | 3 | The Lion and the Mouse | Aesop | savanna, net in the long grass | Lion is caught in an old tangle of litter netting; Mouse nibbles him free and they start a clean-up crew with recycling bins | done (Short: 4kb2-VZW1FI) | 2026-11-18 | BNFkTf3-3vI |
 | 4 | The Ant and the Grasshopper | Aesop | summer field → snowy winter | Grasshopper streams songs all summer while the ants run a solar-powered pantry; kind ending: the ants share and he plays at their winter party | todo | | |
 | 5 | The Three Little Pigs | English folk tale | countryside cul-de-sac | The pigs build with straw, sticks and smart bricks; the wolf huffs at a video doorbell ("Not by the hair of my chinny chin chin!"). Gentle: the wolf can't get in, gets tired and goes home; no pot, no one eaten | todo | | |
