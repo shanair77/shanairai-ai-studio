@@ -6,42 +6,10 @@
  * so re-recording a line only means updating its `voSeconds`.
  */
 
-export const FPS = 30;
-export const WIDTH = 1920;
-export const HEIGHT = 1080;
+import type { StoryScene } from "../kids/kit/timeline";
 
-/** Pastel flat palette shared by every scene. */
-export const C = {
-  ink: "#5E4B6E",
-  cream: "#FFF8EE",
-  sky: "#CDEBF7",
-  skyWarm: "#FFE3D3",
-  cloud: "#FFFFFF",
-  sun: "#FFE9A8",
-  grass: "#BDE6C4",
-  grassDark: "#9DD6AA",
-  hill: "#D3EFC9",
-  trunk: "#D9B99B",
-  trunkDark: "#C39E7E",
-  leaf: "#A8DDB5",
-  leafDark: "#8FCFA0",
-  pink: "#F8C8DC",
-  pinkDark: "#EFA3C0",
-  peach: "#FFD8C2",
-  lavender: "#D9CCF2",
-  lavenderDark: "#BFAEE6",
-  butter: "#FFF1B8",
-  butterDark: "#FBDD7E",
-  mint: "#C8F0E4",
-  blue: "#BCD8F5",
-  // characters
-  countryFur: "#E8CFB4",
-  countryBelly: "#F7E9DA",
-  cityFur: "#C9C3DE",
-  cityBelly: "#EDE9F7",
-  catFur: "#B9B3CF",
-  dogFur: "#E9C29F",
-};
+export { C } from "../kids/kit/palette";
+export { FPS, HEIGHT, WIDTH, cueFrame, layoutScenes, totalFrames } from "../kids/kit/timeline";
 
 export type SceneId =
   | "title"
@@ -54,20 +22,11 @@ export type SceneId =
   | "home"
   | "moral";
 
-export type Scene = {
-  id: SceneId;
-  label: string;
-  /** `public/`-relative narration file. Played only if present in `public/`. */
-  vo: string;
-  /** Measured length of the narration clip, in seconds. */
-  voSeconds: number;
-  /** Seconds of picture before the narration starts. */
-  lead: number;
-  /** Seconds of picture after the narration ends. */
-  tail: number;
-  /** On-screen storybook captions, in spoken order. Joined, they are the spoken line. */
-  captions: string[];
-};
+export type Scene = StoryScene & { id: SceneId };
+
+/** Spoken text of the moral scene (shown as a card, not as captions). */
+export const MORAL_SPOKEN =
+  "And the moral of the story is: a simple life, with peace and safety, is better than a fancy life full of worry. The end!";
 
 export const SCENES: Scene[] = [
   {
@@ -180,44 +139,9 @@ export const SCENES: Scene[] = [
     lead: 0.6,
     tail: 2.6,
     captions: [],
+    spoken: MORAL_SPOKEN,
   },
 ];
-
-/** Spoken text of the moral scene (shown as a card, not as captions). */
-export const MORAL_SPOKEN =
-  "And the moral of the story is: a simple life, with peace and safety, is better than a fancy life full of worry. The end!";
-
-export const sceneFrames = (s: Scene, fps: number) =>
-  Math.round((s.lead + s.voSeconds + s.tail) * fps);
-
-export const layoutScenes = (scenes: Scene[], fps: number) => {
-  let from = 0;
-  return scenes.map((scene) => {
-    const durationInFrames = sceneFrames(scene, fps);
-    const placed = { scene, from, durationInFrames };
-    from += durationInFrames;
-    return placed;
-  });
-};
-
-export const totalFrames = (scenes: Scene[], fps: number) =>
-  layoutScenes(scenes, fps).reduce((sum, s) => sum + s.durationInFrames, 0);
-
-const spokenText = (s: Scene) =>
-  s.id === "moral" ? MORAL_SPOKEN : s.captions.join(" ");
-
-/**
- * Scene-local frame at which `phrase` is (approximately) spoken. Narration pace is
- * close enough to constant that character position ≈ time position.
- */
-export const cueFrame = (s: Scene, phrase: string, fps: number): number => {
-  const text = spokenText(s);
-  const idx = text.indexOf(phrase);
-  if (idx < 0) {
-    throw new Error(`Cue "${phrase}" not found in scene "${s.id}"`);
-  }
-  return Math.round((s.lead + (idx / text.length) * s.voSeconds) * fps);
-};
 
 export const getScene = (id: SceneId): Scene => {
   const s = SCENES.find((x) => x.id === id);

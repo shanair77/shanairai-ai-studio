@@ -42,14 +42,16 @@ prop to another file, or to `null` for no music.
 
 ## Font
 
-`fonts/Fredoka-latin.woff2` is Fredoka (SIL Open Font License), self-hosted so the
-video renders without reaching Google Fonts.
+Fredoka (SIL Open Font License) is self-hosted at `public/kids/fonts/` and shared by
+every kids' story, so videos render without reaching Google Fonts.
 
 ## Render
 
 ```bash
-npx remotion render src/mouse/index.ts CountryMouseStory out/CountryMouseStory.mp4
+npx remotion render src/kids/index.ts CountryMouseStory out/CountryMouseStory.mp4
+npx remotion still src/kids/index.ts CountryMouseStoryThumbnail out/CountryMouseStory-thumb.jpg --image-format=jpeg
 ```
 
-`src/mouse/index.ts` bundles only this composition, so it does not load the web fonts
-the other compositions fetch. It is also registered in `src/Root.tsx` for the Studio.
+`src/kids/index.ts` bundles only the kids' stories, so it does not load the web fonts the
+other compositions fetch. They are also registered in `src/Root.tsx` for the Studio. New
+stories follow `.claude/skills/kids-story/SKILL.md`.

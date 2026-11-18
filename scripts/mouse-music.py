@@ -8,14 +8,20 @@ reproducible and free of licensing questions.
 
     python3 scripts/mouse-music.py public/mouse/music.wav
     ffmpeg -y -i public/mouse/music.wav -c:a libmp3lame -b:a 160k public/mouse/music.mp3
+
+Give each new story its own colour with --transpose (semitones, e.g. -3..4) and
+--bpm (72..92), and --seconds to cover the story's length (video length + 10 s):
+
+    python3 scripts/mouse-music.py public/kids/<slug>/music.wav --transpose 2 --bpm 86 --seconds 140
 """
 
-import sys
+import argparse
 
 import numpy as np
 
 SR = 44100
 BPM = 80
+TRANSPOSE = 0
 BEAT = 60 / BPM  # seconds per beat
 BAR = 3 * BEAT
 
@@ -53,15 +59,21 @@ B_MELODY = [
     [(74, 2), (71, 1)],
 ]
 
-# Form: intro, then A B alternating, outro. Later passes add a twinkle line.
-SECTIONS = [("intro", [C, C], None)]
-for i, (ch, mel) in enumerate([(A_CHORDS, A_MELODY), (B_CHORDS, B_MELODY)] * 3 + [(A_CHORDS, A_MELODY)]):
-    SECTIONS.append(("twinkle" if i >= 2 else "plain", ch, mel))
-SECTIONS.append(("outro", [C, C], [[(72, 3)], [(None, 3)]]))
+def build_form(passes=7):
+    """Intro, then A B alternating, outro. Later passes add a twinkle line."""
+    form = [("intro", [C, C], None)]
+    for i in range(passes):
+        ch, mel = (A_CHORDS, A_MELODY) if i % 2 == 0 else (B_CHORDS, B_MELODY)
+        form.append(("twinkle" if i >= 2 else "plain", ch, mel))
+    form.append(("outro", [C, C], [[(72, 3)], [(None, 3)]]))
+    return form
+
+
+SECTIONS = build_form()
 
 
 def hz(m):
-    return 440.0 * 2 ** ((m - 69) / 12)
+    return 440.0 * 2 ** ((m + TRANSPOSE - 69) / 12)
 
 
 def env(n, attack, decay):
@@ -176,7 +188,22 @@ def write_wav(path, data):
 
 
 if __name__ == "__main__":
-    out = sys.argv[1] if len(sys.argv) > 1 else "public/mouse/music.wav"
+    ap = argparse.ArgumentParser()
+    ap.add_argument("out", nargs="?", default="public/mouse/music.wav")
+    ap.add_argument("--transpose", type=int, default=0, help="semitones up/down")
+    ap.add_argument("--bpm", type=float, default=80)
+    ap.add_argument("--seconds", type=float, default=0, help="minimum length; 0 keeps the original form")
+    args = ap.parse_args()
+    BPM, TRANSPOSE = args.bpm, args.transpose
+    BEAT = 60 / BPM
+    BAR = 3 * BEAT
+    if args.seconds:
+        # each A/B pass is 8 bars; intro + outro are 4 bars
+        passes = max(3, int(np.ceil((args.seconds / BAR - 4) / 8)))
+        if passes % 2 == 0:
+            passes += 1  # end on an A pass so it resolves home
+        SECTIONS = build_form(passes)
+    out = args.out
     audio = render()
     write_wav(out, audio)
     print(f"wrote {out}: {len(audio) / SR:.1f}s")

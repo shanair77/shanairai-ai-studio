@@ -4,49 +4,29 @@
  */
 
 import React from "react";
-import {
-  AbsoluteFill,
-  Easing,
-  interpolate,
-  interpolateColors,
-  useCurrentFrame,
-  useVideoConfig,
-} from "remotion";
+import { AbsoluteFill, interpolate, interpolateColors, useCurrentFrame, useVideoConfig } from "remotion";
 import {
   Berries,
   Bubble,
   Cake,
-  Cat,
+  Camera,
   Cheese,
   Corn,
-  Dog,
   Heart,
   Jelly,
-  Mouse,
   Seeds,
   Sparkle,
   Suitcase,
-} from "./Characters";
+  clamp,
+  easeInOut,
+  easeOut,
+  popAt,
+} from "../kids/kit";
+import { Cat, Dog, Mouse } from "./Characters";
 import { CityStreet, DiningRoom, EyesInHole, FLOOR_Y, HOLE_X, Meadow, OakTree, Skyline, Sky, TABLE_Y } from "./Backgrounds";
 import { C, type Scene, cueFrame } from "./story";
 
-const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
-const easeInOut = Easing.bezier(0.45, 0, 0.55, 1);
-const easeOut = Easing.bezier(0.2, 0.8, 0.3, 1);
-
 type SceneProps = { scene: Scene };
-
-/** Gentle push-in so no shot is ever fully static. */
-const Camera: React.FC<{ from?: number; to?: number; children: React.ReactNode }> = ({ from = 1, to = 1.06, children }) => {
-  const frame = useCurrentFrame();
-  const { durationInFrames } = useVideoConfig();
-  return (
-    <AbsoluteFill style={{ scale: `${interpolate(frame, [0, durationInFrames], [from, to], clamp)}` }}>{children}</AbsoluteFill>
-  );
-};
-
-/** 0→1 over ~12 frames starting at `at`: drives Pop / Bubble entrances. */
-const popAt = (frame: number, at: number, len = 12) => interpolate(frame, [at, at + len], [0, 1], clamp);
 
 /* ───────────────────────────── 1 · Title ───────────────────────────── */
 

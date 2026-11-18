@@ -1,0 +1,33 @@
+/** The pastel flat palette every kids' story shares, so the channel has one look. */
+export const C = {
+  ink: "#5E4B6E",
+  cream: "#FFF8EE",
+  sky: "#CDEBF7",
+  skyWarm: "#FFE3D3",
+  cloud: "#FFFFFF",
+  sun: "#FFE9A8",
+  grass: "#BDE6C4",
+  grassDark: "#9DD6AA",
+  hill: "#D3EFC9",
+  trunk: "#D9B99B",
+  trunkDark: "#C39E7E",
+  leaf: "#A8DDB5",
+  leafDark: "#8FCFA0",
+  pink: "#F8C8DC",
+  pinkDark: "#EFA3C0",
+  peach: "#FFD8C2",
+  lavender: "#D9CCF2",
+  lavenderDark: "#BFAEE6",
+  butter: "#FFF1B8",
+  butterDark: "#FBDD7E",
+  mint: "#C8F0E4",
+  blue: "#BCD8F5",
+  // characters
+  countryFur: "#E8CFB4",
+  countryBelly: "#F7E9DA",
+  cityFur: "#C9C3DE",
+  cityBelly: "#EDE9F7",
+  catFur: "#B9B3CF",
+  dogFur: "#E9C29F",
+};
+

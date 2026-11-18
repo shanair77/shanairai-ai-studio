@@ -27,6 +27,7 @@ The render entry point is a registration chain, not a page:
 - `src/index.ts` calls `registerRoot(RemotionRoot)` — this is the entry Remotion loads.
 - `src/Root.tsx` (`RemotionRoot`) is where every `<Composition>` must be registered. A composition not reachable from here does not exist to the Studio or renderer.
 - `src/DemoVideo.tsx` registers the config-driven `Demo` composition (built by the Composition Engine from `src/demo/DemoConfig.ts`).
+- `src/kids/` holds the narrated pastel kids' stories for YouTube: `kit/` (shared palette, narration-cued timing, `StoryShell` for captions/page turns/ducked music, scenery, props, thumbnail frame), `registry.ts` (every story → a `<Id>` composition and `<Id>Thumbnail` still), and `index.ts` (standalone render entry). The first story lives in `src/mouse/`; new ones go in `src/kids/stories/<slug>/` following `.claude/skills/kids-story/SKILL.md`, working through `docs/kids-stories/QUEUE.md`.
 - `src/luxury/` is the hand-authored `LuxuryReel` composition — a 30 s, 1080×1920 Instagram montage. Its edit is data (`shots.ts`: shot library + cut list); see `docs/LUXURY_REEL.md` and `public/luxury/README.md` for how to supply footage and re-cut it.
 
 `remotion.config.ts` configures the CLI/bundler only (image format, Tailwind, overwrite behavior). Per the file's own note, it does **not** apply when rendering via the Node APIs — pass options directly there instead. It is excluded from `tsconfig.json`.
