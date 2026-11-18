@@ -18,6 +18,9 @@ cooked or hurt; villains are grumpy, get outsmarted, and run off or say sorry.
 Vary the settings and palettes from story to story (meadow, forest, seaside, snowy hills,
 farmyard, pond, desert, night sky) so the channel never looks like one template repeated.
 
+Playlists: Kids Stories `PLD70uhyUFwQQ` (all) · Animal Fables `PLdNhP4iIPHK8` · Fairy Tales
+`PLRD5dwbPreE4` · Story Shorts `PLVTEVa-gcp3g` · Compilations `PLXIyn2J-iB9Y`.
+
 | # | Story | Source | Setting idea | 2026 spin | Status | Date | YouTube ID |
 | - | ----- | ------ | ------------ | --------- | ------ | ---- | ---------- |
 | 1 | The Country Mouse and the City Mouse | Aesop | meadow → city | (made before the 2026 spin) | done | 2026-11-18 | jpiPKkRmM4w |

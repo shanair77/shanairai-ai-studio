@@ -4,13 +4,14 @@
 # scenario.
 #
 #   scripts/kids-publish.sh <slug> out/<StoryId>.mp4 out/<StoryId>-thumb.jpg
+#   scripts/kids-publish.sh <slug>-short out/<StoryId>Short.mp4        # no thumbnail
 #
 # The preset only allows creating new files, so each run gets a date-stamped id.
 set -euo pipefail
 
 CLOUD="${KIDS_CLOUDINARY_CLOUD:-dyyjx7cro}"
 PRESET="${KIDS_CLOUDINARY_PRESET:-kids-stories-x7k2}"
-slug="$1"; video="$2"; thumb="$3"
+slug="$1"; video="$2"; thumb="${3:-}"
 stamp="$(date -u +%Y%m%d-%H%M)"
 
 upload() { # <resource_type> <file> <public_id>
@@ -22,5 +23,6 @@ upload() { # <resource_type> <file> <public_id>
 }
 
 video_url="$(upload video "$video" "${slug}-${stamp}")"
-thumb_url="$(upload image "$thumb" "${slug}-${stamp}-thumb")"
+thumb_url=""
+if [ -n "$thumb" ]; then thumb_url="$(upload image "$thumb" "${slug}-${stamp}-thumb")"; fi
 printf '{"video_url": "%s", "thumbnail_url": "%s"}\n' "$video_url" "$thumb_url"

@@ -107,7 +107,14 @@ Create `src/kids/stories/<slug>/`:
 - `index.tsx` — `export const <Id>: React.FC<StoryAudioProps> = (p) => <StoryShell scenes={SCENES} components={...} {...p} />`,
   `default<Id>Props = storyAudioDefaults("kids/<slug>/music.mp3")`, and `<Id>Thumbnail`
   using `ThumbnailFrame` (2–3 word title lines, 2 characters, one prop; leave the title area open).
-- Add the story to `STORIES` in `src/kids/registry.ts`.
+- Add the story to `STORIES` in `src/kids/registry.ts`, and its packaging to `PACKAGING` in
+  `src/kids/series.ts`: `title` ({ en, es }), `components` (export the scene map from
+  `index.tsx`), `music`, `playlist` ("fables" or "fairy-tales") and the `short` cut (step 6b).
+- **All on-screen text** (title cards, speech bubbles, signs, moral card, thumbnail lines) goes
+  through `const t = useT(); t({ en: "Run!", es: "¡Corre!" })` so a Spanish version needs no
+  code changes. Write the Spanish string at the same time as the English one.
+- The series intro sting and outro card ("Once Upon a 2026") are added automatically by
+  `StoryShell`; don't draw your own.
 
 Rules from CLAUDE.md apply: no CSS animations or transitions — everything from
 `useCurrentFrame()` + `interpolate()`; `npm run lint` must pass (unused vars fail).
@@ -145,11 +152,23 @@ script, captions, title, description, tags and art against this list, and fix an
 If any item is uncertain, choose the safer option (rename, redesign, or cut it), and say what you
 changed in the final report.
 
+## 6b. Cut the Short
+
+Pick the 3–4 funniest or most surprising moments (45–56 s in total; the end card adds 3 s) and
+describe them in `PACKAGING[<Id>].short.segments` — see the Country Mouse entry:
+`{ scene, from?, to?, focusX?, panAt?, zoom? }`. Open on the hook (the most surprising beat),
+not the title card; end on the moral. The 1080-wide window shows ~864 px of the 1920 scene at
+the default zoom 1.25, so set `focusX` on the action and use `[from, to]` + `panAt` (seconds into
+the segment) to follow it at the right beat; use `zoom: 1` (or 0.75 for the moral card) for wide
+shots. Render 4–5 stills of `<Id>Short` and look at them: characters and bubbles in frame,
+captions readable.
+
 ## 6. Render
 
 ```bash
 npx remotion render src/kids/index.ts <Id> out/<Id>.mp4 --browser-executable=$B --log=error --concurrency=4
 npx remotion still  src/kids/index.ts <Id>Thumbnail out/<Id>-thumb.jpg --image-format=jpeg --jpeg-quality=92 --browser-executable=$B --log=error
+npx remotion render src/kids/index.ts <Id>Short out/<Id>Short.mp4 --browser-executable=$B --log=error --concurrency=4
 ```
 
 (Remotion's own Chrome download is blocked here; always pass `--browser-executable`.)
@@ -159,6 +178,7 @@ Verify: `ffprobe` shows a video and an audio stream and the expected duration.
 
 ```bash
 scripts/kids-publish.sh <slug> out/<Id>.mp4 out/<Id>-thumb.jpg   # → {"video_url", "thumbnail_url"}
+scripts/kids-publish.sh <slug>-short out/<Id>Short.mp4           # → {"video_url", "thumbnail_url": ""}
 ```
 
 Then run the Make scenario **7086309** "Kids Stories → YouTube (Private)" with
@@ -171,6 +191,13 @@ Then run the Make scenario **7086309** "Kids Stories → YouTube (Private)" with
 - `description` — 2–3 warm sentences about the story, a blank line, "The moral of the story: …",
   then 3–4 hashtags (#bedtimestories #kidsstories #storytime + one specific)
 - `tags` — comma-separated, ~10 (kids stories, bedtime stories, the fable's name, etc.)
+- `playlist_1` — `PLD70uhyUFwQQ` ("Kids Stories", every story)
+- `playlist_2` — `PLdNhP4iIPHK8` (Animal Fables) or `PLRD5dwbPreE4` (Fairy Tales)
+
+Then run the same scenario once more for **the Short**: `video_url` from the short upload, no
+`thumbnail_url`, `title` "<Story Title> 🐢 #shorts" style (≤ 100 chars, one emoji max, ends in
+#shorts), a one-line description ending "Watch the whole story on our channel! #shorts
+#bedtimestories", the same tags, `playlist_1` `PLVTEVa-gcp3g` (Story Shorts), no `playlist_2`.
 
 The scenario uploads Private, made for kids, Film & Animation, no subscriber notification, and
 sets the thumbnail (it skips the thumbnail if YouTube refuses — e.g. unverified channel).
@@ -180,9 +207,21 @@ uploads a second copy).
 Find the new video's ID with `mcp__Make__rpc_execute`: app `youtube` v4, rpc `searchVideos`,
 data `{"__IMTCONN__": 12404718, "channelId": "me", "q": "<Story Title>"}`.
 
+## 7b. Compilation (every 5th story)
+
+Count the `done` stories in QUEUE.md that have code in `src/` (all but The Tortoise and the Hare,
+which has no saved code). When that count reaches a multiple of 5, also make a compilation of
+the last 5: add `{ id: "CompilationNN", title: { en, es }, storyIds: [...] }` to `COMPILATIONS`
+in `src/kids/series.ts`, render `CompilationNN` (no new narration, no extra credits), make a
+thumbnail by rendering a still of one of its stories' thumbnails, publish it like a story with
+title "Bedtime Stories for Kids: <5 titles, shortened> | 15-Minute Collection", chapter
+timestamps in the description (each story's start: 0:00 intro, then the stories in order;
+read the start frames from `compilationLayout` or step through stills), `playlist_1`
+`PLD70uhyUFwQQ`, `playlist_2` `PLXIyn2J-iB9Y` (Compilations). Note it in QUEUE.md.
+
 ## 8. Record and report
 
 - Mark the story `done` in `docs/kids-stories/QUEUE.md` with today's date and the video ID.
 - Commit everything (code, `public/kids/<slug>/` narration + music) and push.
-- Finish with a short report: story title, the Studio link
-  `https://studio.youtube.com/video/<id>/edit`, video length, and anything that went wrong.
+- Finish with a short report: story title, the Studio links for the story **and** the Short
+  (and the compilation, if any), video lengths, and anything that went wrong.
