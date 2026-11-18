@@ -10,6 +10,8 @@ import { SCENES as COUNTRY_MOUSE_SCENES } from "../mouse/story";
 import { CountryMouseThumbnail } from "../mouse/Thumbnail";
 import { LionMouseStory, LionMouseThumbnail, defaultLionMouseStoryProps } from "./stories/lion-mouse";
 import { SCENES as LION_MOUSE_SCENES } from "./stories/lion-mouse/story";
+import { TortoiseHareStory, TortoiseHareThumbnail, defaultTortoiseHareStoryProps } from "./stories/tortoise-hare";
+import { SCENES as TORTOISE_HARE_SCENES } from "./stories/tortoise-hare/story";
 
 export type KidsStory = {
   /** Composition id (letters, digits, hyphens). */
@@ -37,5 +39,13 @@ export const STORIES: KidsStory[] = [
     defaultProps: defaultLionMouseStoryProps,
     scenes: LION_MOUSE_SCENES,
     Thumbnail: LionMouseThumbnail,
+  },
+  {
+    id: "TortoiseHareStory",
+    title: "The Tortoise and the Hare (2026 Edition)",
+    component: TortoiseHareStory,
+    defaultProps: defaultTortoiseHareStoryProps,
+    scenes: TORTOISE_HARE_SCENES,
+    Thumbnail: TortoiseHareThumbnail,
   },
 ];

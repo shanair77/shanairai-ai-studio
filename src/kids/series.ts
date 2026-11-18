@@ -8,6 +8,7 @@ import type React from "react";
 import type { Localized, ShortSpec, StoryScene } from "./kit";
 import { SCENE_COMPONENTS as COUNTRY_MOUSE_COMPONENTS } from "../mouse/CountryMouseStory";
 import { LION_MOUSE_COMPONENTS } from "./stories/lion-mouse";
+import { TORTOISE_HARE_COMPONENTS } from "./stories/tortoise-hare";
 
 /** Playlists on the channel (YouTube playlist ids live in `docs/kids-stories/QUEUE.md`). */
 export type PlaylistKey = "fables" | "fairy-tales";
@@ -50,6 +51,20 @@ export const PACKAGING: Record<string, StoryPackaging> = {
         { scene: "caught", from: 3.5, zoom: 1, focusX: 1150 },
         { scene: "rescue", focusX: [1150, 900], panAt: [2, 6] },
         { scene: "moral", to: 11.5, zoom: 0.75, focusX: 960 },
+      ],
+    },
+  },
+  TortoiseHareStory: {
+    title: { en: "The Tortoise and the Hare (2026 Edition)", es: "La Tortuga y la Liebre (Edición 2026)" },
+    components: TORTOISE_HARE_COMPONENTS as Record<string, React.FC<{ scene: StoryScene }>>,
+    music: "kids/tortoise-hare/music.mp3",
+    playlist: "fables",
+    short: {
+      segments: [
+        { scene: "selfie", from: 3, focusX: 1250 },
+        { scene: "nap", from: 6, focusX: [1100, 600], panAt: [1, 6] },
+        { scene: "finish", from: 4, zoom: 1, focusX: 1050 },
+        { scene: "moral", to: 11, zoom: 0.75, focusX: 960 },
       ],
     },
   },
