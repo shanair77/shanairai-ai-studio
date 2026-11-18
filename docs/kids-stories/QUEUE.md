@@ -31,12 +31,12 @@ Spanish versions done: The Country Mouse and the City Mouse (story `pVnY8KUZBig`
 (2026 Edition) (story `c6TyKIZrg7A`, Short `XqqUfPDK9EE`).
 
 > Note (2026-11-18): The Tortoise and the Hare was remade with the 2026 spin (code in
-> `src/kids/stories/tortoise-hare/`); the owner will delete the old video 2QpDzio7grQ.
+> `src/kids/stories/tortoise-hare/`); the old video 2QpDzio7grQ has been deleted.
 
 | # | Story | Source | Setting idea | 2026 spin | Status | Date | YouTube ID |
 | - | ----- | ------ | ------------ | --------- | ------ | ---- | ---------- |
 | 1 | The Country Mouse and the City Mouse | Aesop | meadow → city | (made before the 2026 spin) | done | 2026-11-18 | jpiPKkRmM4w |
-| 2 | The Tortoise and the Hare (2026 Edition) | Aesop | park fun-run, finish line flags | Hare stops for selfies and "just one more video", then naps; Tortoise wears a little step-counter watch; a camera drone films the finish | done (Short: 8T5T-HAseLI; remade 2026-11-18, old video 2QpDzio7grQ to be deleted by the owner) | 2026-11-18 | uOSLKnnMC2Y |
+| 2 | The Tortoise and the Hare (2026 Edition) | Aesop | park fun-run, finish line flags | Hare stops for selfies and "just one more video", then naps; Tortoise wears a little step-counter watch; a camera drone films the finish | done (Short: 8T5T-HAseLI; remade 2026-11-18, old video 2QpDzio7grQ deleted) | 2026-11-18 | uOSLKnnMC2Y |
 | 3 | The Lion and the Mouse | Aesop | savanna, net in the long grass | Lion is caught in an old tangle of litter netting; Mouse nibbles him free and they start a clean-up crew with recycling bins | done (Short: 4kb2-VZW1FI) | 2026-11-18 | BNFkTf3-3vI |
 | 4 | The Ant and the Grasshopper | Aesop | summer field → snowy winter | Grasshopper streams songs all summer while the ants run a solar-powered pantry; kind ending: the ants share and he plays at their winter party | todo | | |
 | 5 | The Three Little Pigs | English folk tale | countryside cul-de-sac | The pigs build with straw, sticks and smart bricks; the wolf huffs at a video doorbell ("Not by the hair of my chinny chin chin!"). Gentle: the wolf can't get in, gets tired and goes home; no pot, no one eaten | todo | | |
