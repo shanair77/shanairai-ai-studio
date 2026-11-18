@@ -21,6 +21,7 @@ import {
   easeInOut,
   easeOut,
   popAt,
+  useT,
 } from "../kids/kit";
 import { Cat, Dog, Mouse } from "./Characters";
 import { CityStreet, DiningRoom, EyesInHole, FLOOR_Y, HOLE_X, Meadow, OakTree, Skyline, Sky, TABLE_Y } from "./Backgrounds";
@@ -33,7 +34,12 @@ type SceneProps = { scene: Scene };
 export const TitleScene: React.FC<SceneProps> = () => {
   const frame = useCurrentFrame();
   const word = (i: number) => interpolate(frame, [8 + i * 8, 26 + i * 8], [0, 1], { ...clamp, easing: easeOut });
-  const lines = ["The Country Mouse", "and the", "City Mouse"];
+  const t = useT();
+  const lines = [
+    t({ en: "The Country Mouse", es: "El Ratón de Campo" }),
+    t({ en: "and the", es: "y el" }),
+    t({ en: "City Mouse", es: "Ratón de Ciudad" }),
+  ];
   return (
     <Meadow treeX={null}>
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", paddingBottom: 220 }}>
@@ -139,7 +145,7 @@ export const VisitScene: React.FC<SceneProps> = ({ scene }) => {
         </svg>
         <Seeds x={960} y={925} size={90} pop={popAt(frame, cue("shared") + 4)} />
         <Berries x={1060} y={925} size={100} pop={popAt(frame, cue("favorite food"))} />
-        <Bubble x={1170} y={640} tail="right" width={620} fontSize={50} text="Come to the city! We eat like kings!" pop={popAt(frame, cue("you must come"))} />
+        <Bubble x={1170} y={640} tail="right" width={620} fontSize={50} text={{ en: "Come to the city! We eat like kings!", es: "¡Ven a la ciudad! ¡Comemos como reyes!" }} pop={popAt(frame, cue("you must come"))} />
       </Meadow>
     </Camera>
   );
@@ -257,7 +263,7 @@ export const CatScene: React.FC<SceneProps> = ({ scene }) => {
           </>
         ) : null}
         <Cat x={catX} y={FLOOR_Y + 6} size={520} creep={frame > catAt ? 1 : 0} />
-        <Bubble x={830} y={TABLE_Y - 170} tail="left" width={260} fontSize={70} color={C.butter} text="Run!" pop={popAt(frame, runAt, 8) * interpolate(frame, [runAt + 40, runAt + 50], [1, 0], clamp)} />
+        <Bubble x={830} y={TABLE_Y - 170} tail="left" width={260} fontSize={70} color={C.butter} text={{ en: "Run!", es: "¡Corre!" }} pop={popAt(frame, runAt, 8) * interpolate(frame, [runAt + 40, runAt + 50], [1, 0], clamp)} />
         <EyesInHole opacity={inHole ? 1 : 0} shake={1.5} />
         <Heart x={HOLE_X - 40} y={FLOOR_Y - 200} size={70} beat={inHole ? beat : 0} />
         <Heart x={HOLE_X + 50} y={FLOOR_Y - 230} size={56} beat={inHole ? beat : 0} color={C.lavenderDark} />
@@ -294,8 +300,8 @@ export const DogScene: React.FC<SceneProps> = ({ scene }) => {
           </>
         ) : null}
         <Dog x={dogX} y={FLOOR_Y + 6} size={500} bound={frame > woof1 - 4 && frame < woof1 + 40 ? 1 : 0} bark={frame > woof1} />
-        <Bubble x={dogX + 160} y={560} tail="left" width={340} fontSize={80} color={C.butter} text="WOOF!" pop={popAt(frame, woof1, 6)} />
-        <Bubble x={dogX + 260} y={330} tail="left" width={340} fontSize={80} color={C.mint} text="WOOF!" pop={popAt(frame, woof2, 6)} />
+        <Bubble x={dogX + 160} y={560} tail="left" width={340} fontSize={80} color={C.butter} text={{ en: "WOOF!", es: "¡GUAU!" }} pop={popAt(frame, woof1, 6)} />
+        <Bubble x={dogX + 260} y={330} tail="left" width={340} fontSize={80} color={C.mint} text={{ en: "WOOF!", es: "¡GUAU!" }} pop={popAt(frame, woof2, 6)} />
         <EyesInHole opacity={hidden ? 1 : 0} shake={frame > backAt ? 4 : 1} />
       </DiningRoom>
     </Camera>
@@ -344,6 +350,7 @@ export const MoralScene: React.FC<SceneProps> = ({ scene }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const cue = (p: string) => cueFrame(scene, p, fps);
+  const t = useT();
   const card = interpolate(frame, [0, 18], [0, 1], { ...clamp, easing: easeOut });
   const body = interpolate(frame, [cue("a simple life"), cue("a simple life") + 16], [0, 1], clamp);
   const end = popAt(frame, cue("The end!"), 14);
@@ -383,9 +390,12 @@ export const MoralScene: React.FC<SceneProps> = ({ scene }) => {
             opacity: card,
           }}
         >
-          <div style={{ fontSize: 60, fontWeight: 700, color: C.lavenderDark, marginBottom: 24 }}>The Moral of the Story</div>
+          <div style={{ fontSize: 60, fontWeight: 700, color: C.lavenderDark, marginBottom: 24 }}>{t({ en: "The Moral of the Story", es: "La moraleja del cuento" })}</div>
           <div style={{ fontSize: 66, fontWeight: 600, color: C.ink, lineHeight: 1.25, opacity: body, translate: `0px ${(1 - body) * 20}px` }}>
-            A simple life with peace and safety is better than a fancy life full of worry.
+            {t({
+              en: "A simple life with peace and safety is better than a fancy life full of worry.",
+              es: "Una vida sencilla, con paz y seguridad, es mejor que una vida elegante llena de preocupaciones.",
+            })}
           </div>
         </div>
         <div
@@ -399,7 +409,7 @@ export const MoralScene: React.FC<SceneProps> = ({ scene }) => {
             textShadow: `0 8px 0 ${C.cream}`,
           }}
         >
-          The End
+          {t({ en: "The End", es: "Fin" })}
         </div>
       </AbsoluteFill>
       <Mouse kind="country" x={230} y={1060} size={260} wave={end > 0} />
