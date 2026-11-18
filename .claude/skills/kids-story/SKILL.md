@@ -207,6 +207,23 @@ uploads a second copy).
 Find the new video's ID with `mcp__Make__rpc_execute`: app `youtube` v4, rpc `searchVideos`,
 data `{"__IMTCONN__": 12404718, "channelId": "me", "q": "<Story Title>"}`.
 
+## 7a. Spanish version (only once the Spanish channel is set up)
+
+Check `docs/kids-stories/QUEUE.md` → "Spanish channel". If it says "not set up yet", skip this
+step. Otherwise:
+
+1. Translate each scene's narration into warm, simple Latin American Spanish (same beats, same
+   order, same tags like `[whispering]`). Keep caption chunks in step with the English ones.
+2. Record with voice `KUvfKweuqSul0lbDIZUB` ("Diana – Cálida, Expresiva y Profesional"),
+   `eleven_v4`, one take per scene, one flow named "<Spanish title> (narración)". Download to
+   `public/kids/<slug>/esNN.mp3` and ffprobe each.
+3. Add an `es: { vo, voSeconds, captions, spoken? }` block to every scene. Cues stay written
+   against the English text; they scale automatically.
+4. Render `<Id>Es`, `<Id>ShortEs` and `<Id>ThumbnailEs` the same way, look at a few stills,
+   publish with `scripts/kids-publish.sh <slug>-es …`, and run the **Spanish** upload scenario
+   listed in QUEUE.md with Spanish title/description/tags and the Spanish playlist IDs listed
+   there. Title format: "<Título> | Cuento para dormir para niños" (Short: "<Título> 🐢 #shorts").
+
 ## 7b. Compilation (every 5th story)
 
 Count the `done` stories in QUEUE.md that have code in `src/` (all but The Tortoise and the Hare,
