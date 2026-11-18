@@ -124,6 +124,27 @@ npx remotion still src/kids/index.ts <Id> /tmp/s-<frame>.png --frame=<frame> --s
 Fix overlaps, characters floating above the ground, text hidden behind captions, and anything
 that looks scary. Also check the thumbnail still.
 
+## 5b. Copyright check (required before rendering)
+
+The source tales are public domain; film and TV versions are not. Before rendering, check the
+script, captions, title, description, tags and art against this list, and fix anything that fails:
+
+- [ ] The story is in the queue's public-domain sources (Aesop, Grimm, Perrault, Andersen,
+      Collodi, Baum's 1900 book, traditional folk tales). Nothing else without asking the owner.
+- [ ] No character names that exist only in a film/TV version (e.g. "Aurora", "Maleficent", the
+      seven dwarfs' film names, the film mermaid/crab/sea-witch names, the film cricket's name,
+      "Tiana", "Elsa"). Use the original book names or invent new ones.
+- [ ] No film/TV character designs or costumes (e.g. Snow White's bow and yellow-and-blue dress,
+      ruby slippers, a green-skinned Oz witch, a feathered-hat swashbuckling cat). Our own flat
+      pastel designs only.
+- [ ] No song lyrics or melodies from any film or show; the music is our own lullaby script.
+- [ ] No studio logos, title lettering, taglines, or words like "Disney" in titles, descriptions
+      or tags. The plain story name is fine ("Snow White | Bedtime Story for Kids").
+- [ ] No real brands, apps or celebrities (see the 2026 spin rules).
+
+If any item is uncertain, choose the safer option (rename, redesign, or cut it), and say what you
+changed in the final report.
+
 ## 6. Render
 
 ```bash
