@@ -41,6 +41,7 @@ import {
   TravelStyleTest,
 } from "./styletest/TravelStyleTest";
 import { MOTION_TEST_DURATION, MOTION_TEST_FPS, MotionTest } from "./styletest/MotionTest";
+import { BAKEOFF_DURATION, BAKEOFF_FPS, BakeOff } from "./styletest/BakeOff";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -115,6 +116,14 @@ export const RemotionRoot: React.FC = () => {
         component={MotionTest}
         durationInFrames={MOTION_TEST_DURATION}
         fps={MOTION_TEST_FPS}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="BakeOff"
+        component={BakeOff}
+        durationInFrames={BAKEOFF_DURATION}
+        fps={BAKEOFF_FPS}
         width={1080}
         height={1920}
       />
