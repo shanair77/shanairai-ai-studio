@@ -210,7 +210,7 @@ data `{"__IMTCONN__": 12404718, "channelId": "me", "q": "<Story Title>"}`.
 ## 7a. Spanish version (only once the Spanish channel is set up)
 
 Check `docs/kids-stories/QUEUE.md` → "Spanish channel". If it says "not set up yet", skip this
-step. Otherwise:
+step. Otherwise (it is set up as of 2026-11-18), do this for every new story:
 
 1. Translate each scene's narration into warm, simple Latin American Spanish (same beats, same
    order, same tags like `[whispering]`). Keep caption chunks in step with the English ones.
@@ -220,9 +220,12 @@ step. Otherwise:
 3. Add an `es: { vo, voSeconds, captions, spoken? }` block to every scene. Cues stay written
    against the English text; they scale automatically.
 4. Render `<Id>Es`, `<Id>ShortEs` and `<Id>ThumbnailEs` the same way, look at a few stills,
-   publish with `scripts/kids-publish.sh <slug>-es …`, and run the **Spanish** upload scenario
-   listed in QUEUE.md with Spanish title/description/tags and the Spanish playlist IDs listed
-   there. Title format: "<Título> | Cuento para dormir para niños" (Short: "<Título> 🐢 #shorts").
+   publish with `scripts/kids-publish.sh <slug>-es …` (and `<slug>-es-short` for the Short),
+   and run the **Spanish** upload scenario listed in QUEUE.md (never the English one) with
+   Spanish title/description/tags and the Spanish playlist IDs listed there: playlist_1 =
+   Todos los cuentos, playlist_2 = Fábulas or Cuentos de hadas; the Short goes to Shorts only.
+   Find the Spanish video IDs with `searchVideos` on connection `12412754`, and record them in
+   QUEUE.md next to the English ones. Title format: "<Título> | Cuento para dormir para niños" (Short: "<Título> 🐢 #shorts").
 
 ## 7b. Compilation (every 5th story)
 

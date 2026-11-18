@@ -21,9 +21,13 @@ farmyard, pond, desert, night sky) so the channel never looks like one template 
 Playlists: Kids Stories `PLD70uhyUFwQQ` (all) · Animal Fables `PLdNhP4iIPHK8` · Fairy Tales
 `PLRD5dwbPreE4` · Story Shorts `PLVTEVa-gcp3g` · Compilations `PLXIyn2J-iB9Y`.
 
-Spanish channel ("Érase una vez 2026"): not set up yet. Once connected, this line will list the
-Spanish upload scenario and playlist IDs. Spanish versions done so far: The Country Mouse and
-the City Mouse (narration in `public/mouse/esNN.mp3`).
+Spanish channel ("Érase una vez 2026", YouTube channel `UC7ocqh3vOFi1sjyONjWCnaQ`): **set up**.
+Upload scenario **7091840** "Cuentos (Español) → YouTube (Private)". Playlists: Todos los
+cuentos `PLDr-D1GTGEiQ` (all) · Fábulas de animales `PLJL8Cszza_G0` · Cuentos de hadas
+`PLA7-SfQwzk2M` · Shorts `PLRzSLSseaxFs` · Recopilaciones `PLWHIQ5016jUM`. Video IDs on that
+channel are found with `searchVideos` using connection `12412754`.
+Spanish versions done: The Country Mouse and the City Mouse (story `pVnY8KUZBig`, Short
+`xS6OGuYlEBE`). To do when convenient: The Lion and the Mouse (its code is saved).
 
 > Note (2026-11-18): The Tortoise and the Hare was made by an on-demand run that could not push to
 > GitHub, so its code/narration were not saved; only the YouTube video (2QpDzio7grQ) and the
