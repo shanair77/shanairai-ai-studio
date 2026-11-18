@@ -20,6 +20,30 @@ in the kit, `src/kids/kit/` (palette, timing, StoryShell, scenery, props, thumbn
 
 Output: a ~2 minute 1920×1080 video, a 1280×720 thumbnail, and a Private YouTube upload.
 
+## The 2026 spin (house style)
+
+Every story is the classic fable with a light, modern 2026 twist: same plot, same moral, but
+set in a world today's kids recognise. Think "familiar song, fresh outfit".
+
+- **Keep the classic bones.** Same characters, same turning points, same moral. The title stays
+  the classic one ("The Tortoise and the Hare") so parents can find it.
+- **Add 2–3 modern touches, woven into the plot, not stickers on top.** Generic, everyday
+  things: a phone or tablet, video calls, a smart watch / step counter, a delivery robot,
+  drones, e-scooters and bikes, solar panels, recycling bins, food trucks, a group chat,
+  streaming a song, a vlog camera, a smart speaker. One touch should actually matter to the
+  story (e.g. the Hare stops to film selfies and watch "just one more video", then naps).
+- **Add a 2026 echo of the moral** in the moral card where it fits naturally (e.g. "Slow and
+  steady wins the race, and it's okay to put the phone down and keep going"). One short line.
+- **No real brands, apps, platforms or celebrities** (no app names, no logos, no real phones),
+  no internet slang that will date fast, no "likes"/"followers" chasing shown as a goal.
+- **Screens are never the villain or the hero by themselves.** Gentle, not preachy: tech is
+  part of life; the lesson is about the character's choices.
+- **Kind and inclusive.** Diverse modern settings (city rooftops, community gardens, skate
+  parks, food-truck streets, suburbs, farms), friendly neighbours, teamwork. Where the old
+  tale ends harshly (e.g. the Ant and the Grasshopper), choose the kinder modern ending.
+- Draw the modern props in the same flat pastel style (simple rounded shapes, no detail).
+- The QUEUE has a "2026 spin" idea per story: use it as a starting point, not a script.
+
 ## 0. Pick the story
 
 Open `docs/kids-stories/QUEUE.md`, take the first `todo`. Choose a short `slug`
@@ -28,6 +52,7 @@ Open `docs/kids-stories/QUEUE.md`, take the first `todo`. Choose a short `slug`
 
 ## 1. Write the script (8–9 scenes, ~2 minutes)
 
+- Apply the 2026 spin (above): plan the modern touches before writing.
 - Audience 3–7. Warm, simple sentences; gentle humour; a little suspense, never frightening.
   No violence, no one gets eaten or hurt, no mean-spirited jokes. Kind endings.
 - Scene 1 is the spoken title ("[warmly] The Tortoise... and the Hare."). The last scene is
@@ -116,7 +141,9 @@ Then run the Make scenario **7086309** "Kids Stories → YouTube (Private)" with
 `mcp__Make__scenarios_run` (`responsive: true`) and data:
 
 - `video_url`, `thumbnail_url` — from the script
-- `title` — "<Story Title> | Bedtime Story for Kids" (≤ 100 chars, no `<` or `>`)
+- `title` — "<Story Title> | Bedtime Story for Kids" (≤ 100 chars, no `<` or `>`); the classic
+  title, optionally with a short modern hook before the bar, e.g.
+  "The Tortoise and the Hare (2026 Edition) | Bedtime Story for Kids"
 - `description` — 2–3 warm sentences about the story, a blank line, "The moral of the story: …",
   then 3–4 hashtags (#bedtimestories #kidsstories #storytime + one specific)
 - `tags` — comma-separated, ~10 (kids stories, bedtime stories, the fable's name, etc.)
