@@ -57,7 +57,10 @@ Open `docs/kids-stories/QUEUE.md`, take the first `todo`. Choose a short `slug`
   No violence, no one gets eaten or hurt, no mean-spirited jokes. Kind endings.
 - Scene 1 is the spoken title ("[warmly] The Tortoise... and the Hare."). The last scene is
   the moral card + "The end!". 6–7 story scenes in between, each 8–18 s of narration
-  (≈ 25–50 words). Total narration ≈ 280–330 words.
+  (≈ 25–50 words). Total narration ≈ 280–330 words. Longer fairy tales (Cinderella, Jack and
+  the Beanstalk, Hansel and Gretel…) may use up to 9 story scenes and ≈ 420 words (~3 min).
+- Fairy tales: follow the softening and no-film-versions notes at the top of QUEUE.md. Use the
+  public-domain names (e.g. "Briar Rose"), never a studio's.
 - Retell in your own words. Characters are animals or simple shapes, drawn by you; never copy
   a studio's look, names or songs.
 - Each story scene's text is its `captions` array (2–4 chunks, each a phrase that fits on one
