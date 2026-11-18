@@ -7,6 +7,7 @@
 import type React from "react";
 import type { Localized, ShortSpec, StoryScene } from "./kit";
 import { SCENE_COMPONENTS as COUNTRY_MOUSE_COMPONENTS } from "../mouse/CountryMouseStory";
+import { LION_MOUSE_COMPONENTS } from "./stories/lion-mouse";
 
 /** Playlists on the channel (YouTube playlist ids live in `docs/kids-stories/QUEUE.md`). */
 export type PlaylistKey = "fables" | "fairy-tales";
@@ -35,6 +36,20 @@ export const PACKAGING: Record<string, StoryPackaging> = {
         { scene: "cat", focusX: [450, 1450], panAt: [8, 9.8] },
         { scene: "dog", zoom: 1, focusX: [1000, 1300], panAt: [8, 10] },
         { scene: "moral", to: 10.3, zoom: 0.75, focusX: 960 },
+      ],
+    },
+  },
+  LionMouseStory: {
+    title: { en: "The Lion and the Mouse", es: "El León y el Ratón" },
+    components: LION_MOUSE_COMPONENTS as Record<string, React.FC<{ scene: StoryScene }>>,
+    music: "kids/lion-mouse/music.mp3",
+    playlist: "fables",
+    short: {
+      segments: [
+        { scene: "scooter", from: 3, focusX: [500, 1200], panAt: [2, 10] },
+        { scene: "caught", from: 3.5, zoom: 1, focusX: 1150 },
+        { scene: "rescue", focusX: [1150, 900], panAt: [2, 6] },
+        { scene: "moral", to: 11.5, zoom: 0.75, focusX: 960 },
       ],
     },
   },

@@ -8,6 +8,8 @@ import type { StoryAudioProps, StoryScene } from "./kit";
 import { CountryMouseStory, defaultCountryMouseStoryProps } from "../mouse/CountryMouseStory";
 import { SCENES as COUNTRY_MOUSE_SCENES } from "../mouse/story";
 import { CountryMouseThumbnail } from "../mouse/Thumbnail";
+import { LionMouseStory, LionMouseThumbnail, defaultLionMouseStoryProps } from "./stories/lion-mouse";
+import { SCENES as LION_MOUSE_SCENES } from "./stories/lion-mouse/story";
 
 export type KidsStory = {
   /** Composition id (letters, digits, hyphens). */
@@ -27,5 +29,13 @@ export const STORIES: KidsStory[] = [
     defaultProps: defaultCountryMouseStoryProps,
     scenes: COUNTRY_MOUSE_SCENES,
     Thumbnail: CountryMouseThumbnail,
+  },
+  {
+    id: "LionMouseStory",
+    title: "The Lion and the Mouse",
+    component: LionMouseStory,
+    defaultProps: defaultLionMouseStoryProps,
+    scenes: LION_MOUSE_SCENES,
+    Thumbnail: LionMouseThumbnail,
   },
 ];
