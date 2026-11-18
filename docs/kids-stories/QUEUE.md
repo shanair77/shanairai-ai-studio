@@ -21,10 +21,14 @@ farmyard, pond, desert, night sky) so the channel never looks like one template 
 Playlists: Kids Stories `PLD70uhyUFwQQ` (all) · Animal Fables `PLdNhP4iIPHK8` · Fairy Tales
 `PLRD5dwbPreE4` · Story Shorts `PLVTEVa-gcp3g` · Compilations `PLXIyn2J-iB9Y`.
 
+> Note (2026-11-18): The Tortoise and the Hare was made by an on-demand run that could not push to
+> GitHub, so its code/narration were not saved; only the YouTube video (2QpDzio7grQ) and the
+> Cloudinary copy exist. It was made before the 2026 spin. Do not remake it unless the owner asks.
+
 | # | Story | Source | Setting idea | 2026 spin | Status | Date | YouTube ID |
 | - | ----- | ------ | ------------ | --------- | ------ | ---- | ---------- |
 | 1 | The Country Mouse and the City Mouse | Aesop | meadow → city | (made before the 2026 spin) | done | 2026-11-18 | jpiPKkRmM4w |
-| 2 | The Tortoise and the Hare | Aesop | park fun-run, finish line flags | Hare stops for selfies and "just one more video", then naps; Tortoise wears a little step-counter watch; a camera drone films the finish | todo | | |
+| 2 | The Tortoise and the Hare | Aesop | park fun-run, finish line flags | Hare stops for selfies and "just one more video", then naps; Tortoise wears a little step-counter watch; a camera drone films the finish | done (video only: story code was not saved, see note) | 2026-11-18 | 2QpDzio7grQ |
 | 3 | The Lion and the Mouse | Aesop | savanna, net in the long grass | Lion is caught in an old tangle of litter netting; Mouse nibbles him free and they start a clean-up crew with recycling bins | todo | | |
 | 4 | The Ant and the Grasshopper | Aesop | summer field → snowy winter | Grasshopper streams songs all summer while the ants run a solar-powered pantry; kind ending: the ants share and he plays at their winter party | todo | | |
 | 5 | The Three Little Pigs | English folk tale | countryside cul-de-sac | The pigs build with straw, sticks and smart bricks; the wolf huffs at a video doorbell ("Not by the hair of my chinny chin chin!"). Gentle: the wolf can't get in, gets tired and goes home; no pot, no one eaten | todo | | |
