@@ -27,6 +27,35 @@ export type StoryScene = {
   captions: string[];
   /** The spoken line when it differs from the captions (e.g. a title or moral card with no captions). */
   spoken?: string;
+  /** Spanish narration and captions (same beats, same order as the English). */
+  es?: { vo: string; voSeconds: number; captions: string[]; spoken?: string };
+  /**
+   * Set by `localizeScene`: captions to display when they differ from the cue text.
+   * Story code never sets this; cues are always written against the English text.
+   */
+  displayCaptions?: string[];
+};
+
+/**
+ * Swap in another language's narration and captions. Cues stay written against the
+ * English text, as a *fraction* of the line, so they land on the same beat in the
+ * translated narration (`cueFrame` scales by the localized `voSeconds`).
+ */
+export const localizeScene = <S extends StoryScene>(scene: S, lang: "en" | "es"): S => {
+  if (lang === "en" || !scene.es) return scene;
+  return { ...scene, vo: scene.es.vo, voSeconds: scene.es.voSeconds, displayCaptions: scene.es.captions };
+};
+
+/** Scene-local start frame of each displayed caption chunk. */
+export const captionStarts = (s: StoryScene, fps: number): number[] => {
+  const chunks = s.displayCaptions ?? s.captions;
+  const text = chunks.join(" ");
+  let pos = 0;
+  return chunks.map((c, i) => {
+    const at = i === 0 ? 0 : Math.round((s.lead + (pos / text.length) * s.voSeconds) * fps);
+    pos += c.length + 1;
+    return at;
+  });
 };
 
 export const sceneFrames = (s: StoryScene, fps: number) => Math.round((s.lead + s.voSeconds + s.tail) * fps);

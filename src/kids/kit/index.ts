@@ -7,3 +7,7 @@ export * from "./Props";
 export * from "./Scenery";
 export * from "./StoryShell";
 export * from "./Thumbnail";
+export * from "./lang";
+export * from "./brand";
+export * from "./StoryShort";
+export * from "./Compilation";

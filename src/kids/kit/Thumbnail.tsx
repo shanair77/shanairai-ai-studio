@@ -8,6 +8,8 @@
 
 import React from "react";
 import { AbsoluteFill } from "remotion";
+import { SERIES } from "./brand";
+import { useT, type Localized } from "./lang";
 import { C } from "./palette";
 import { STORY_FONT, useStoryFont } from "./StoryShell";
 
@@ -15,12 +17,12 @@ export const THUMB_WIDTH = 1280;
 export const THUMB_HEIGHT = 720;
 
 export type ThumbnailFrameProps = {
-  /** Big title, one entry per line. Short. */
-  lines: string[];
+  /** Big title, one entry per line. Short. `{ en, es }` for translated thumbnails. */
+  lines: Localized[];
   /** Colours for each line (cycled). */
   colors?: string[];
   /** Small ribbon above the title. */
-  badge?: string;
+  badge?: Localized;
   /** Which side the title sits on; the art should leave that side fairly open. */
   side?: "left" | "right" | "top";
   /** Scene art in 1920×1080 space. */
@@ -30,11 +32,12 @@ export type ThumbnailFrameProps = {
 export const ThumbnailFrame: React.FC<ThumbnailFrameProps> = ({
   lines,
   colors = [C.ink],
-  badge = "Bedtime Story",
+  badge = SERIES.badge,
   side = "top",
   children,
 }) => {
   useStoryFont();
+  const t = useT();
   const align = side === "top" ? "center" : side === "left" ? "flex-start" : "flex-end";
   return (
     <AbsoluteFill style={{ backgroundColor: C.sky, fontFamily: STORY_FONT, overflow: "hidden" }}>
@@ -61,11 +64,11 @@ export const ThumbnailFrame: React.FC<ThumbnailFrameProps> = ({
             rotate: "-2deg",
           }}
         >
-          {badge}
+          {t(badge)}
         </div>
         {lines.map((line, i) => (
           <div
-            key={line}
+            key={i}
             style={{
               fontSize: lines.length > 2 ? 88 : 104,
               fontWeight: 700,
@@ -79,7 +82,7 @@ export const ThumbnailFrame: React.FC<ThumbnailFrameProps> = ({
               marginTop: i ? -4 : 0,
             }}
           >
-            {line}
+            {t(line)}
           </div>
         ))}
       </AbsoluteFill>

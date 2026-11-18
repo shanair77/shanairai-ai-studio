@@ -6,8 +6,7 @@
  */
 
 import React from "react";
-import { type CalculateMetadataFunction } from "remotion";
-import { StoryShell, type StoryAudioProps, storyAudioDefaults, totalFrames } from "../kids/kit";
+import { StoryShell, type StoryAudioProps, storyAudioDefaults } from "../kids/kit";
 import {
   CatScene,
   DogScene,
@@ -19,7 +18,7 @@ import {
   TitleScene,
   VisitScene,
 } from "./Scenes";
-import { FPS, SCENES, type Scene, type SceneId } from "./story";
+import { SCENES, type Scene, type SceneId } from "./story";
 
 export { FPS, HEIGHT, WIDTH } from "./story";
 
@@ -27,11 +26,7 @@ export type CountryMouseStoryProps = StoryAudioProps;
 
 export const defaultCountryMouseStoryProps: CountryMouseStoryProps = storyAudioDefaults("mouse/music.mp3");
 
-export const calculateCountryMouseStoryMetadata: CalculateMetadataFunction<CountryMouseStoryProps> = () => ({
-  durationInFrames: totalFrames(SCENES, FPS),
-});
-
-const SCENE_COMPONENTS: Record<SceneId, React.FC<{ scene: Scene }>> = {
+export const SCENE_COMPONENTS: Record<SceneId, React.FC<{ scene: Scene }>> = {
   title: TitleScene,
   meadow: MeadowScene,
   visit: VisitScene,
