@@ -2,7 +2,7 @@
 
 import React from "react";
 import { C, StoryShell, ThumbnailFrame, storyAudioDefaults, type StoryAudioProps } from "../../kit";
-import { FinishArch, GROUND_Y, Park } from "./Backgrounds";
+import { GROUND_Y, Park } from "./Backgrounds";
 import { Drone, Hare, TC, Tortoise } from "./Characters";
 import {
   BragScene,
@@ -42,8 +42,7 @@ export const TortoiseHareThumbnail: React.FC = () => (
     side="top"
   >
     <Park trees={[]} bushes={[]}>
-      <FinishArch x={1500} tape={1} />
-      <Drone x={1650} y={300} size={200} flip />
+      <Drone x={1700} y={560} size={190} flip />
       <Tortoise x={1240} y={GROUND_Y + 130} size={560} medal eyes="happy" />
       <Hare x={480} y={GROUND_Y + 130} size={720} pose="sit" phone={1} screen="video" eyes="sleepy" droop={0.5} />
     </Park>

@@ -53,18 +53,18 @@ export const SCENES: Scene[] = [
     id: "title",
     label: "Title",
     vo: "kids/tortoise-hare/vo01.mp3",
-    voSeconds: 2.6,
+    voSeconds: 2.35,
     lead: 1.6,
     tail: 1.6,
     captions: [],
     spoken: "The Tortoise... and the Hare.",
-    es: { vo: "kids/tortoise-hare/es01.mp3", voSeconds: 2.6, captions: [], spoken: "La Tortuga... y la Liebre." },
+    es: { vo: "kids/tortoise-hare/es01.mp3", voSeconds: 2.51, captions: [], spoken: "La Tortuga... y la Liebre." },
   },
   {
     id: "brag",
     label: "The show-off",
     vo: "kids/tortoise-hare/vo02.mp3",
-    voSeconds: 17,
+    voSeconds: 18.05,
     lead: 0.6,
     tail: 1.0,
     captions: [
@@ -75,7 +75,7 @@ export const SCENES: Scene[] = [
     ],
     es: {
       vo: "kids/tortoise-hare/es02.mp3",
-      voSeconds: 18,
+      voSeconds: 19.33,
       captions: [
         "Había una vez, en un soleado parque de la ciudad, una liebre muy veloz a la que le encantaba presumir.",
         "«¡Soy la más rápida de todo el parque!», decía orgullosa.",
@@ -88,7 +88,7 @@ export const SCENES: Scene[] = [
     id: "start",
     label: "Ready, steady, go",
     vo: "kids/tortoise-hare/vo03.mp3",
-    voSeconds: 13,
+    voSeconds: 13.79,
     lead: 0.5,
     tail: 1.2,
     captions: [
@@ -99,7 +99,7 @@ export const SCENES: Scene[] = [
     ],
     es: {
       vo: "kids/tortoise-hare/es03.mp3",
-      voSeconds: 14,
+      voSeconds: 16.59,
       captions: [
         "Todos los amigos del parque vinieron a ver la gran carrera.",
         "Patos y ardillas llenaban el camino, y un pequeño dron con cámara zumbaba en lo alto.",
@@ -112,7 +112,7 @@ export const SCENES: Scene[] = [
     id: "selfie",
     label: "Just one more",
     vo: "kids/tortoise-hare/vo04.mp3",
-    voSeconds: 14,
+    voSeconds: 14.45,
     lead: 0.5,
     tail: 1.0,
     captions: [
@@ -123,7 +123,7 @@ export const SCENES: Scene[] = [
     ],
     es: {
       vo: "kids/tortoise-hare/es04.mp3",
-      voSeconds: 14,
+      voSeconds: 15.49,
       captions: [
         "La liebre iba tan adelantada que se detuvo bajo un árbol con sombra.",
         "«¡Hora de una selfi!» ¡Clic, clic!",
@@ -136,7 +136,7 @@ export const SCENES: Scene[] = [
     id: "nap",
     label: "The nap",
     vo: "kids/tortoise-hare/vo05.mp3",
-    voSeconds: 14,
+    voSeconds: 15.39,
     lead: 0.5,
     tail: 1.0,
     captions: [
@@ -146,7 +146,7 @@ export const SCENES: Scene[] = [
     ],
     es: {
       vo: "kids/tortoise-hare/es05.mp3",
-      voSeconds: 15,
+      voSeconds: 18.13,
       captions: [
         "Pronto se le cerraron los ojitos, y la liebre se quedó profundamente dormida, con el teléfono en la barriga.",
         "Mientras tanto, la tortuga siguió caminando. Paso, paso, paso.",
@@ -158,7 +158,7 @@ export const SCENES: Scene[] = [
     id: "pass",
     label: "Slow and steady",
     vo: "kids/tortoise-hare/vo06.mp3",
-    voSeconds: 12,
+    voSeconds: 11.0,
     lead: 0.5,
     tail: 1.0,
     captions: [
@@ -168,7 +168,7 @@ export const SCENES: Scene[] = [
     ],
     es: {
       vo: "kids/tortoise-hare/es06.mp3",
-      voSeconds: 12,
+      voSeconds: 11.81,
       captions: [
         "La tortuga pasó justo al lado de la liebre dormida.",
         "No se detuvo. No se apuró.",
@@ -180,7 +180,7 @@ export const SCENES: Scene[] = [
     id: "finish",
     label: "The finish line",
     vo: "kids/tortoise-hare/vo07.mp3",
-    voSeconds: 14,
+    voSeconds: 13.56,
     lead: 0.5,
     tail: 1.4,
     captions: [
@@ -191,7 +191,7 @@ export const SCENES: Scene[] = [
     ],
     es: {
       vo: "kids/tortoise-hare/es07.mp3",
-      voSeconds: 14,
+      voSeconds: 13.24,
       captions: [
         "De pronto, la liebre se despertó. «¡Ay, no!»",
         "Corrió tan rápido como pudo…",
@@ -204,7 +204,7 @@ export const SCENES: Scene[] = [
     id: "friends",
     label: "Side by side",
     vo: "kids/tortoise-hare/vo08.mp3",
-    voSeconds: 16,
+    voSeconds: 15.31,
     lead: 0.5,
     tail: 1.4,
     captions: [
@@ -215,7 +215,7 @@ export const SCENES: Scene[] = [
     ],
     es: {
       vo: "kids/tortoise-hare/es08.mp3",
-      voSeconds: 16,
+      voSeconds: 15.23,
       captions: [
         "La liebre llegó saltando, sin aliento.",
         "«¡Bien hecho!», dijo con una sonrisa tímida. «Debí seguir adelante.»",
@@ -228,7 +228,7 @@ export const SCENES: Scene[] = [
     id: "moral",
     label: "The moral",
     vo: "kids/tortoise-hare/vo09.mp3",
-    voSeconds: 11,
+    voSeconds: 9.09,
     lead: 0.6,
     tail: 2.6,
     captions: [],
@@ -236,7 +236,7 @@ export const SCENES: Scene[] = [
       "And the moral of the story is: slow and steady wins the race. And sometimes, it's okay to put the phone down, and keep going. The end!",
     es: {
       vo: "kids/tortoise-hare/es09.mp3",
-      voSeconds: 12,
+      voSeconds: 9.8,
       captions: [],
       spoken:
         "Y la moraleja del cuento es: despacio y sin parar se gana la carrera. Y a veces, está bien dejar el teléfono a un lado y seguir adelante. ¡Fin!",
