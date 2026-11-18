@@ -74,7 +74,7 @@ export const SCENES: Scene[] = [
     id: "title",
     label: "Title",
     vo: "mouse/vo01.mp3",
-    voSeconds: 2.8,
+    voSeconds: 2.85,
     lead: 1.6,
     tail: 1.6,
     captions: [],
@@ -83,7 +83,7 @@ export const SCENES: Scene[] = [
     id: "meadow",
     label: "The meadow",
     vo: "mouse/vo02.mp3",
-    voSeconds: 13.76,
+    voSeconds: 13.79,
     lead: 0.6,
     tail: 1.0,
     captions: [
@@ -96,7 +96,7 @@ export const SCENES: Scene[] = [
     id: "visit",
     label: "Cousin visits",
     vo: "mouse/vo03.mp3",
-    voSeconds: 17.04,
+    voSeconds: 17.08,
     lead: 0.5,
     tail: 1.0,
     captions: [
@@ -110,7 +110,7 @@ export const SCENES: Scene[] = [
     id: "journey",
     label: "The journey",
     vo: "mouse/vo04.mp3",
-    voSeconds: 8.48,
+    voSeconds: 8.52,
     lead: 0.5,
     tail: 1.4,
     captions: [
@@ -122,7 +122,7 @@ export const SCENES: Scene[] = [
     id: "feast",
     label: "The feast",
     vo: "mouse/vo05.mp3",
-    voSeconds: 16.0,
+    voSeconds: 16.04,
     lead: 0.5,
     tail: 1.0,
     captions: [
@@ -135,7 +135,7 @@ export const SCENES: Scene[] = [
     id: "cat",
     label: "The cat",
     vo: "mouse/vo06.mp3",
-    voSeconds: 16.24,
+    voSeconds: 16.27,
     lead: 0.4,
     tail: 1.0,
     captions: [
@@ -149,7 +149,7 @@ export const SCENES: Scene[] = [
     id: "dog",
     label: "The dog",
     vo: "mouse/vo07.mp3",
-    voSeconds: 12.32,
+    voSeconds: 12.36,
     lead: 0.4,
     tail: 1.0,
     captions: [
@@ -162,7 +162,7 @@ export const SCENES: Scene[] = [
     id: "home",
     label: "Going home",
     vo: "mouse/vo08.mp3",
-    voSeconds: 15.28,
+    voSeconds: 15.31,
     lead: 0.6,
     tail: 1.4,
     captions: [
@@ -176,7 +176,7 @@ export const SCENES: Scene[] = [
     id: "moral",
     label: "The moral",
     vo: "mouse/vo09.mp3",
-    voSeconds: 9.2,
+    voSeconds: 9.25,
     lead: 0.6,
     tail: 2.6,
     captions: [],

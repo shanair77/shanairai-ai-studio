@@ -65,14 +65,18 @@ export type CountryMouseStoryProps = {
   narrationVolume: number;
   /** `public/`-relative music file, or null for none. */
   music: string | null;
+  /** Music level when nobody is speaking. */
   musicVolume: number;
+  /** Fraction of `musicVolume` kept while the narrator speaks (ducking). */
+  musicDuck: number;
 };
 
 export const defaultCountryMouseStoryProps: CountryMouseStoryProps = {
   showCaptions: true,
   narrationVolume: 1,
-  music: null,
-  musicVolume: 0.12,
+  music: "mouse/music.mp3",
+  musicVolume: 0.32,
+  musicDuck: 0.4,
 };
 
 export const calculateCountryMouseStoryMetadata: CalculateMetadataFunction<CountryMouseStoryProps> = () => ({
@@ -154,11 +158,27 @@ export const CountryMouseStory: React.FC<CountryMouseStoryProps> = ({
   narrationVolume,
   music,
   musicVolume,
+  musicDuck,
 }) => {
   useStoryFont();
   const { fps, durationInFrames } = useVideoConfig();
   const timeline = layoutScenes(SCENES, fps);
   const available = new Set(getStaticFiles().map((f) => f.name));
+  // Global frame ranges where narration plays, so the music can dip under the voice.
+  const speech = timeline
+    .filter(({ scene }) => available.has(scene.vo))
+    .map(({ scene, from }) => {
+      const start = from + Math.round(scene.lead * fps);
+      return [start, start + Math.round(scene.voSeconds * fps)] as const;
+    });
+  const musicLevel = (f: number) => {
+    const ducking = speech.reduce(
+      (m, [s, e]) => Math.max(m, interpolate(f, [s - 10, s, e, e + 15], [0, 1, 1, 0], clamp)),
+      0,
+    );
+    const edges = interpolate(f, [0, fps, durationInFrames - 2 * fps, durationInFrames], [0, 1, 1, 0], clamp);
+    return musicVolume * edges * (1 - ducking * (1 - musicDuck));
+  };
 
   return (
     <AbsoluteFill style={{ backgroundColor: C.cream, fontFamily }}>
@@ -182,14 +202,10 @@ export const CountryMouseStory: React.FC<CountryMouseStoryProps> = ({
           </Sequence>
         );
       })}
-      {music ? (
-        <Audio
-          src={staticFile(music)}
-          loop
-          volume={(f) =>
-            interpolate(f, [0, fps, durationInFrames - 2 * fps, durationInFrames], [0, musicVolume, musicVolume, 0], clamp)
-          }
-        />
+      {music && available.has(music) ? (
+        <Sequence name="Music" layout="none">
+          <Audio src={staticFile(music)} loop volume={musicLevel} />
+        </Sequence>
       ) : null}
     </AbsoluteFill>
   );

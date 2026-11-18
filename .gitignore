@@ -31,6 +31,3 @@ public/aurelle/**/*.wav
 .claude/settings.local.json
 .claude/skills/*-workspace/
 
-# Country Mouse story narration/music (see public/mouse/README.md); the font and README stay tracked.
-public/mouse/*.mp3
-public/mouse/*.wav
