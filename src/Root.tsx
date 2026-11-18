@@ -35,6 +35,11 @@ import {
   ODYSSEY_WIDTH,
   OdysseyStickman,
 } from "./odyssey/OdysseyStickman";
+import {
+  STYLE_TEST_DURATION,
+  STYLE_TEST_FPS,
+  TravelStyleTest,
+} from "./styletest/TravelStyleTest";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -95,6 +100,14 @@ export const RemotionRoot: React.FC = () => {
         fps={ODYSSEY_FPS}
         width={ODYSSEY_WIDTH}
         height={ODYSSEY_HEIGHT}
+      />
+      <Composition
+        id="TravelStyleTest"
+        component={TravelStyleTest}
+        durationInFrames={STYLE_TEST_DURATION}
+        fps={STYLE_TEST_FPS}
+        width={1080}
+        height={1920}
       />
     </>
   );
