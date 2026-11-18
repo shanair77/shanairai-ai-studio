@@ -6,7 +6,16 @@
 
 import type { StoryScene } from "../../kit";
 
-export type SceneId = "title" | "nap" | "scooter" | "caught" | "laugh" | "net" | "rescue" | "crew" | "moral";
+export type SceneId =
+  | "title"
+  | "nap"
+  | "scooter"
+  | "caught"
+  | "laugh"
+  | "net"
+  | "rescue"
+  | "crew"
+  | "moral";
 
 export type Scene = StoryScene & { id: SceneId };
 
@@ -20,6 +29,12 @@ export const SCENES: Scene[] = [
     tail: 1.6,
     captions: [],
     spoken: "The Lion... and the Mouse.",
+    es: {
+      vo: "kids/lion-mouse/es01.mp3",
+      voSeconds: 2.43,
+      captions: [],
+      spoken: "El León... y el Ratón.",
+    },
   },
   {
     id: "nap",
@@ -34,6 +49,16 @@ export const SCENES: Scene[] = [
       "He snored under a shady tree, his fluffy mane rising and falling.",
       "Rumble… rumble… went his snores.",
     ],
+    es: {
+      vo: "kids/lion-mouse/es02.mp3",
+      voSeconds: 17.32,
+      captions: [
+        "Había una vez, en una sabana ancha y dorada,",
+        "un león grandote que dormía su siesta de la tarde.",
+        "Roncaba bajo un árbol con sombra, y su melena esponjosa subía y bajaba.",
+        "Rrrrum… rrrrum… hacían sus ronquidos.",
+      ],
+    },
   },
   {
     id: "scooter",
@@ -47,6 +72,15 @@ export const SCENES: Scene[] = [
       "Zip! Zoom! Oops!",
       "She rolled right up the Lion’s tail, over his back, and onto the tip of his nose!",
     ],
+    es: {
+      vo: "kids/lion-mouse/es03.mp3",
+      voSeconds: 13.56,
+      captions: [
+        "De pronto llegó una ratoncita en su pequeño scooter rojo, de regreso a casa para cenar.",
+        "¡Zip! ¡Zum! ¡Uy!",
+        "¡Subió rodando por la cola del león, por su espalda, y hasta la puntita de su nariz!",
+      ],
+    },
   },
   {
     id: "caught",
@@ -61,6 +95,16 @@ export const SCENES: Scene[] = [
       "“Oh, please let me go!” squeaked the Mouse.",
       "“One day, I will help you too!”",
     ],
+    es: {
+      vo: "kids/lion-mouse/es04.mp3",
+      voSeconds: 15.57,
+      captions: [
+        "El león abrió un ojo enorme y, con cuidado, la levantó en su pata.",
+        "«¿Quién me hace cosquillas en la nariz?», rugió suavecito.",
+        "«¡Ay, por favor, suéltame!», chilló la ratoncita.",
+        "«¡Un día, yo también te ayudaré!»",
+      ],
+    },
   },
   {
     id: "laugh",
@@ -74,6 +118,15 @@ export const SCENES: Scene[] = [
       "“Ho ho ho! A tiny mouse, helping a big lion like me?”",
       "But he was kind, so he opened his paw, and off she scooted.",
     ],
+    es: {
+      vo: "kids/lion-mouse/es05.mp3",
+      voSeconds: 13.71,
+      captions: [
+        "El león se rió tanto que su melena se sacudió.",
+        "«¡Jo, jo, jo! ¿Una ratoncita ayudando a un león tan grande como yo?»",
+        "Pero era bondadoso, así que abrió su pata, y ella se fue en su scooter.",
+      ],
+    },
   },
   {
     id: "net",
@@ -88,6 +141,16 @@ export const SCENES: Scene[] = [
       "The more he wriggled, the more tangled he got.",
       "“Help!” he roared. “Can anybody help me?”",
     ],
+    es: {
+      vo: "kids/lion-mouse/es06.mp3",
+      voSeconds: 16.43,
+      captions: [
+        "Unos días después, el león salió a pasear por la hierba alta,",
+        "y su pata quedó atrapada en una red vieja y enredada que alguien había dejado tirada.",
+        "Mientras más se movía, más se enredaba.",
+        "«¡Ayuda!», rugió. «¿Alguien me puede ayudar?»",
+      ],
+    },
   },
   {
     id: "rescue",
@@ -102,6 +165,16 @@ export const SCENES: Scene[] = [
       "Nibble, nibble, snip! Nibble, nibble, snip!",
       "One by one, she chewed through the ropes, until the Lion was free.",
     ],
+    es: {
+      vo: "kids/lion-mouse/es07.mp3",
+      voSeconds: 15.73,
+      captions: [
+        "A lo lejos, la ratoncita oyó el rugido y fue en su scooter tan rápido como pudo.",
+        "«Quédate quieto, amigo», le dijo.",
+        "¡Ñam, ñam, clic! ¡Ñam, ñam, clic!",
+        "Una por una, mordió las cuerdas, hasta que el león quedó libre.",
+      ],
+    },
   },
   {
     id: "crew",
@@ -116,6 +189,16 @@ export const SCENES: Scene[] = [
       "and sorted it into the recycling bins.",
       "And that was the start of the best clean-up crew on the savanna!",
     ],
+    es: {
+      vo: "kids/lion-mouse/es08.mp3",
+      voSeconds: 17.4,
+      captions: [
+        "El león le dio un abrazo suave y agradecido. «Tenías razón, amiguita», le dijo.",
+        "Luego, juntos, recogieron la red vieja y toda la basura de la hierba,",
+        "y la separaron en los botes de reciclaje.",
+        "¡Y así comenzó el mejor equipo de limpieza de toda la sabana!",
+      ],
+    },
   },
   {
     id: "moral",
@@ -127,5 +210,12 @@ export const SCENES: Scene[] = [
     captions: [],
     spoken:
       "And the moral of the story is: no act of kindness is ever too small. Even little friends can do big things, for each other, and for our planet. The end!",
+    es: {
+      vo: "kids/lion-mouse/es09.mp3",
+      voSeconds: 12.67,
+      captions: [],
+      spoken:
+        "Y la moraleja del cuento es: ningún acto de bondad es demasiado pequeño. Hasta los amigos más pequeños pueden hacer cosas grandes, por los demás y por nuestro planeta. ¡Fin!",
+    },
   },
 ];

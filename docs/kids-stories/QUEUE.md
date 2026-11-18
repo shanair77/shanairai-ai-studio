@@ -27,7 +27,7 @@ cuentos `PLDr-D1GTGEiQ` (all) · Fábulas de animales `PLJL8Cszza_G0` · Cuentos
 `PLA7-SfQwzk2M` · Shorts `PLRzSLSseaxFs` · Recopilaciones `PLWHIQ5016jUM`. Video IDs on that
 channel are found with `searchVideos` using connection `12412754`.
 Spanish versions done: The Country Mouse and the City Mouse (story `pVnY8KUZBig`, Short
-`xS6OGuYlEBE`). To do when convenient: The Lion and the Mouse (its code is saved).
+`xS6OGuYlEBE`); The Lion and the Mouse (story `5DiXCCIzdCs`, Short `FYfC9yrtbbg`).
 
 > Note (2026-11-18): The Tortoise and the Hare was made by an on-demand run that could not push to
 > GitHub, so its code/narration were not saved; only the YouTube video (2QpDzio7grQ) and the
