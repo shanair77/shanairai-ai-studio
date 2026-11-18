@@ -5,6 +5,7 @@
 
 import React from "react";
 import { interpolate, useCurrentFrame } from "remotion";
+import { useT, type Localized } from "./lang";
 import { C } from "./palette";
 
 /* ───────────────────────────── Food & props ───────────────────────────── */
@@ -134,13 +135,15 @@ export const Suitcase: React.FC<PropProps> = (p) => (
 export const Bubble: React.FC<{
   x: number;
   y: number;
-  text: string;
+  /** Plain string or `{ en, es }`. */
+  text: Localized;
   pop: number;
   width?: number;
   fontSize?: number;
   color?: string;
   tail?: "left" | "right";
 }> = ({ x, y, text, pop, width = 520, fontSize = 52, color = C.cream, tail = "left" }) => {
+  const t = useT();
   const s = interpolate(pop, [0, 0.7, 1], [0, 1.1, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const anchorX = tail === "left" ? 0.15 : 0.85;
   return (
@@ -168,7 +171,7 @@ export const Bubble: React.FC<{
           lineHeight: 1.15,
         }}
       >
-        {text}
+        {t(text)}
       </div>
       <svg
         width={60}

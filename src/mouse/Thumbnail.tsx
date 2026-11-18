@@ -5,7 +5,7 @@ import { C, Cake, Cheese, Jelly, Meadow, Skyline, ThumbnailFrame } from "../kids
 import { Mouse } from "./Characters";
 
 export const CountryMouseThumbnail: React.FC = () => (
-  <ThumbnailFrame lines={["Country Mouse", "& City Mouse"]} colors={[C.leafDark, C.lavenderDark]} side="top">
+  <ThumbnailFrame lines={[{ en: "Country Mouse", es: "Ratón de Campo" }, { en: "& City Mouse", es: "y Ratón de Ciudad" }]} colors={[C.leafDark, C.lavenderDark]} side="top">
     <Meadow treeX={null}>
       {/* the city peeks in on the right half */}
       <svg viewBox="0 0 1920 1080" width={1920} height={1080} style={{ position: "absolute", opacity: 0.9 }}>
