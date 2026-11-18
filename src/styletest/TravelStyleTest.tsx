@@ -7,8 +7,9 @@
  *   5 · Illustrated journal  — AI watercolor plate + code overlays, pen route, tape
  *   6 · Miniature diorama    — AI clay-diorama plate + tilt-shift blur + code overlays
  *
- * Styles 5 and 6 read their plates from public/styletest/journal.png and
- * public/styletest/diorama.png. A missing plate renders a labelled placeholder.
+ * Styles 5 and 6 read their plates from public/styletest/ (journal-1/2.png,
+ * diorama-1/2.png — both generated takes, shown back to back so the pick can be made in
+ * motion). A missing plate renders a labelled placeholder.
  */
 
 import React from "react";
@@ -67,9 +68,8 @@ const Plate: React.FC<{ file: string; from?: number; to?: number; origin?: strin
 };
 
 /* ------------------------------------------------------------------ style 5 */
-const JournalStyle: React.FC = () => {
+const JournalStyle: React.FC<{ file: string; origin: string }> = ({ file, origin }) => {
   const f = useCurrentFrame();
-  const file = "styletest/journal.png";
   // A pen-drawn dashed route across the page, drawing itself in.
   const routeLen = 1400;
   const drawn = interpolate(f, [10, 110], [routeLen, 0], clamp);
@@ -77,7 +77,7 @@ const JournalStyle: React.FC = () => {
     <AbsoluteFill style={{ background: "#efe6d2" }}>
       <AbsoluteFill style={{ padding: "150px 34px 34px", rotate: "-0.6deg" }}>
         <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", boxShadow: "0 10px 30px rgba(0,0,0,0.35)", border: "14px solid #fbf6ea" }}>
-          {hasPlate(file) ? <Plate file={file} /> : <MissingPlate file={file} />}
+          {hasPlate(file) ? <Plate file={file} origin={origin} /> : <MissingPlate file={file} />}
         </div>
       </AbsoluteFill>
       {/* tape on the photo corners */}
@@ -112,8 +112,7 @@ const JournalStyle: React.FC = () => {
 };
 
 /* ------------------------------------------------------------------ style 6 */
-const DioramaStyle: React.FC = () => {
-  const file = "styletest/diorama.png";
+const DioramaStyle: React.FC<{ file: string }> = ({ file }) => {
   if (!hasPlate(file)) {
     return (
       <AbsoluteFill>
@@ -157,11 +156,14 @@ const CodeStyle: React.FC<{ skin: Extract<Skin, "flat" | "paper"> }> = ({ skin }
   </AbsoluteFill>
 );
 
-const STYLES: { n: number; name: string; note: string; El: React.FC }[] = [
-  { n: 2, name: "Flat vector", note: "100% code · $0 per episode", El: () => <CodeStyle skin="flat" /> },
-  { n: 3, name: "Paper cut-out", note: "100% code · $0 per episode", El: () => <CodeStyle skin="paper" /> },
-  { n: 5, name: "Illustrated journal", note: "AI-painted plates + code overlays", El: JournalStyle },
-  { n: 6, name: "Miniature diorama", note: "AI clay-diorama plates + code overlays", El: DioramaStyle },
+// Styles 5 and 6 show both generated takes so the pick can be made in motion.
+const STYLES: { id: string; n: string; name: string; note: string; El: React.FC }[] = [
+  { id: "flat", n: "2", name: "Flat vector", note: "100% code · $0 per episode", El: () => <CodeStyle skin="flat" /> },
+  { id: "paper", n: "3", name: "Paper cut-out", note: "100% code · $0 per episode", El: () => <CodeStyle skin="paper" /> },
+  { id: "journal-1", n: "5", name: "Illustrated journal", note: "Take 1 · AI-painted plate + code overlays", El: () => <JournalStyle file="styletest/journal-1.png" origin="50% 55%" /> },
+  { id: "journal-2", n: "5", name: "Illustrated journal", note: "Take 2 · AI-painted plate + code overlays", El: () => <JournalStyle file="styletest/journal-2.png" origin="50% 38%" /> },
+  { id: "diorama-1", n: "6", name: "Miniature diorama", note: "Take 1 · AI clay-diorama plate + code overlays", El: () => <DioramaStyle file="styletest/diorama-1.png" /> },
+  { id: "diorama-2", n: "6", name: "Miniature diorama", note: "Take 2 · AI clay-diorama plate + code overlays", El: () => <DioramaStyle file="styletest/diorama-2.png" /> },
 ];
 
 export const STYLE_TEST_DURATION = STYLES.length * SEG;
@@ -180,7 +182,7 @@ const Segment: React.FC<{ s: (typeof STYLES)[number] }> = ({ s }) => {
 export const TravelStyleTest: React.FC = () => (
   <AbsoluteFill style={{ background: "#111" }}>
     {STYLES.map((s, i) => (
-      <Sequence key={s.n} name={`Style ${s.n} · ${s.name}`} from={i * SEG} durationInFrames={SEG}>
+      <Sequence key={s.id} name={`Style ${s.n} · ${s.note.startsWith("Take") ? s.note.split(" ·")[0] + " · " : ""}${s.name}`} from={i * SEG} durationInFrames={SEG}>
         <Segment s={s} />
       </Sequence>
     ))}

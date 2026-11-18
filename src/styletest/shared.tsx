@@ -145,7 +145,7 @@ const SKINS: Record<Skin, SkinDef> = {
 };
 
 /** The "STYLE n · NAME" tag — only for the comparison, not part of a real episode. */
-export const StyleTag: React.FC<{ n: number; name: string; note: string }> = ({ n, name, note }) => (
+export const StyleTag: React.FC<{ n: string; name: string; note: string }> = ({ n, name, note }) => (
   <div
     style={{
       position: "absolute",
