@@ -1,4 +1,4 @@
-# Postcards from Africa · Episode 02 — Egypt: Beat Sheet (draft v1)
+# Postcards from Africa · Episode 02 — Egypt: Beat Sheet (v2, decisions locked)
 
 | | |
 |---|---|
@@ -58,6 +58,11 @@
 - **Picture:** Sun-baked valley walls, a tomb entrance; inside, painted hieroglyph walls fan open as a foreground layer.
 - **Narration:** "Across the river, pharaohs were buried in hidden tombs. Tutankhamun's was found almost untouched in 1922."
 
+### 8b · The Grand Egyptian Museum — LAYER
+- **Picture:** The museum's soaring entrance atrium: the colossal standing statue of Ramesses II, a grand staircase lined with ancient statues rising behind; the traveler small at the statue's feet, looking up. A golden burial mask (painted, not a reproduction of any photo) as a foreground layer that rises into view.
+- **Narration:** "Today, more than five thousand of his treasures are shown together for the first time, at the Grand Egyptian Museum beside the pyramids."
+- **Fact card:** "A 3,200-year-old statue of Ramesses II, about 11 metres tall, greets visitors at the door."
+
 ### 9 · Abu Simbel — AI-K (hero)
 - **Picture:** The four colossal seated statues of Ramesses II at sunrise; the traveler stands small at their feet looking up.
 - **Narration:** "In the 1960s, these giant temples were cut into blocks and moved uphill to save them from a rising lake."
@@ -82,7 +87,7 @@
 - **Narration:** "Next stop: Tanzania."
 - **On screen:** "STOP 03 → TANZANIA"; stamp "VISITED · EGYPT".
 
-**Narration:** about 200 words. **Estimated running time:** 95–100 s once each scene is timed to its line, similar to Morocco.
+**Narration:** about 225 words across 14 beats. **Estimated running time:** ~105 s once each scene is timed to its line.
 
 ---
 
@@ -98,18 +103,19 @@
 7. Valley of the Kings entrance (beat 8) + a painted-tomb-wall foreground cut-out
 8. Abu Simbel at sunrise (beat 9)
 9. Red Sea reef (beat 10)
+10. Grand Egyptian Museum atrium with the Ramesses II statue (beat 8b) + a golden-mask foreground cut-out
 
 **Estimated credits (Higgsfield):**
 
 | Item | Count | Each | Total |
 |---|---|---|---|
-| Painted plates | 9 | 1 | 9 |
-| Foreground cut-outs | 3 | 1 | 3 |
+| Painted plates | 10 | 1 | 10 |
+| Foreground cut-outs | 4 | 1 | 4 |
 | Kling 4.0 hero clips (beats 2, 6, 9), 7–8 s | 3 | 15.75–18 | ~52 |
 | MiniMax atmosphere clips (beats 5, 10) | 2 | 12.5–15 | ~28 |
-| **Total** | | | **~92 credits** + a small retake buffer |
+| **Total** | | | **~94 credits** + a small retake buffer |
 
-**ElevenLabs:** 13 voice lines (~$0.25) + about 10 ambient sounds (~$0.40): the Giza wind at dawn, camel bells, Cairo street murmur, bazaar chatter and a call to prayer far away (keep it distant and respectful), café clatter and sizzling, Nile water lapping and the sail rope creaking, footsteps echoing in a stone hall, desert wind in the valley, an underwater bubble ambience, plus the reused pen, stamp and notes sounds.
+**ElevenLabs:** 14 voice lines (~$0.25) + about 10 ambient sounds (~$0.40): the Giza wind at dawn, camel bells, Cairo street murmur, bazaar chatter and a call to prayer faint in the distance (locked decision), café clatter and sizzling, a hushed museum hall with soft footsteps and murmurs, Nile water lapping and the sail rope creaking, footsteps echoing in a stone hall, desert wind in the valley, an underwater bubble ambience, plus the reused pen, stamp and notes sounds.
 
 **Normalize every new sound file** the same way as Morocco: ambient beds to ≈ -32 dB RMS and effects to ≈ -30 dB before mixing.
 
@@ -133,13 +139,14 @@
 - [ ] Tutankhamun's tomb found in 1922, largely intact
 - [ ] Abu Simbel relocated 1964–68 because of Lake Nasser; the sun alignment twice a year (around 22 February and 22 October)
 - [ ] Best-season advice and tipping guidance
-- [ ] If the new Grand Egyptian Museum is mentioned, check its current opening status and what it shows (left out of this draft)
+- [x] Grand Egyptian Museum: fully opened 1 November 2025 beside the Giza pyramids; Tutankhamun's complete collection (5,000+ objects) shown together for the first time; colossal Ramesses II statue (~11 m, 83 t) in the atrium. Sources: [Al-Monitor](https://www.al-monitor.com/originals/2025/11/egypt-officially-opens-grand-museum-near-pyramids), [Euronews](https://www.euronews.com/2025/11/05/the-1-billion-grand-egyptian-museum-opens-to-the-public-showcasing-tutankhamun-treasures), [Khaleej Times](https://www.khaleejtimes.com/world/mena/grand-egyptian-museum-opening-5-highlights). Total artefact counts differ between sources, so none is used.
+- [ ] Ramesses II statue age (~3,200 years) and current visiting hours before publishing
 
 ---
 
-## Open decisions
+## Decisions (locked)
 
-1. **Hook:** the Cleopatra timeline (recommended: it's surprising and very shareable), or a simpler "the only Wonder of the Ancient World still standing"?
-2. **Call to prayer** in the bazaar ambience: keep it, very distant and respectful, or leave it out?
-3. **Next stop:** Tanzania (as in the season slate), or swap in another country?
-4. **Grand Egyptian Museum:** add a beat (it's a big draw for visitors), or keep the episode on the sites themselves?
+1. **Hook:** the Cleopatra timeline.
+2. **Call to prayer:** in the bazaar ambience, faint and in the distance.
+3. **Next stop:** Tanzania.
+4. **Grand Egyptian Museum:** added as beat 8b, right after the Valley of the Kings.
