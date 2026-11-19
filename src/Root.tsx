@@ -42,6 +42,13 @@ import {
 } from "./styletest/TravelStyleTest";
 import { MOTION_TEST_DURATION, MOTION_TEST_FPS, MotionTest } from "./styletest/MotionTest";
 import { BAKEOFF_DURATION, BAKEOFF_FPS, BakeOff } from "./styletest/BakeOff";
+import {
+  MOROCCO,
+  POSTCARDS_FPS,
+  PostcardsEpisode,
+  calculateEpisodeMetadata,
+  episodeFrames,
+} from "./postcards";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -126,6 +133,16 @@ export const RemotionRoot: React.FC = () => {
         fps={BAKEOFF_FPS}
         width={1080}
         height={1920}
+      />
+      <Composition
+        id="PostcardsMorocco"
+        component={PostcardsEpisode}
+        durationInFrames={episodeFrames(MOROCCO)}
+        fps={POSTCARDS_FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ episode: MOROCCO }}
+        calculateMetadata={calculateEpisodeMetadata}
       />
     </>
   );

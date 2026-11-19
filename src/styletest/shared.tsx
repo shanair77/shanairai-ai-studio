@@ -46,7 +46,7 @@ const COAST: [number, number][] = [
   [-8, 33.5],
 ];
 const MAP_W = 200;
-const proj = (lon: number, lat: number) => ({ x: ((lon + 18) / 70) * MAP_W, y: ((37 - lat) / 72) * 220 });
+export const proj = (lon: number, lat: number) => ({ x: ((lon + 18) / 70) * MAP_W, y: ((37 - lat) / 72) * 220 });
 export const AFRICA_PATH = COAST.map(([lo, la], i) => {
   const p = proj(lo, la);
   return `${i ? "L" : "M"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`;

@@ -1,4 +1,4 @@
-# Episode 01 — Morocco: Beat Sheet (draft v1)
+# Postcards from Africa · Episode 01 — Morocco: Beat Sheet (v2, produced)
 
 Faceless travel cartoon series, Africa season, stop 01.
 
@@ -9,7 +9,8 @@ Faceless travel cartoon series, Africa season, stop 01.
 | **Guide** | Faceless traveler seen from behind: wide-brim tan hat, mustard-yellow backpack, cream shirt, scarf |
 | **Motion** | Kling 4.0 for hero shots · MiniMax H3 Max for "atmosphere" shots (nothing walks) · layered code animation for in-between beats · map, captions, cards and stamp drawn in Remotion |
 | **Tone** | Documentary-cozy: calm, curious, respectful. "Places you'll want to see for yourself." |
-| **Audio** | TBD — on-screen narration only, or ElevenLabs voiceover + light music (see open decisions) |
+| **Audio** | ElevenLabs voiceover (Kimberly — warm, calm, natural), ambient sound only (no music), word-by-word captions |
+| **Composition** | `PostcardsMorocco` → `src/postcards/` (engine + `morocco.ts` data), media in `public/postcards/morocco/` |
 
 **Shot types**
 
@@ -137,9 +138,16 @@ Everything above is written to be accurate, but these items change or are easy t
 
 ---
 
-## Open decisions
+## Decisions (locked)
 
-1. **Voice:** on-screen narration only, or an ElevenLabs voiceover (pick a warm, unhurried voice)?
-2. **Music:** none, a light North African-inspired bed (generated or licensed from Artlist), or ambient sound only (souk chatter, wind on dunes)?
-3. **Series name:** *Stickman Passport* no longer fits the watercolor look. Ideas: *The Travel Journal*, *Ink & Away*, *Pages of Africa*, *Postcards from Africa*.
-4. **Does the traveler get a name?** A name builds attachment across episodes; staying nameless keeps it about the place.
+1. **Series name:** *Postcards from Africa*
+2. **Voice:** ElevenLabs voiceover — Kimberly (warm, calm, natural). One file per beat in `vo/`; each beat is timed to its line.
+3. **Sound:** ambient only, no music — a crossfading bed per location plus one-shot effects (pen, stamp, tea pour, notes). All files normalized: beds ≈ -32 dB RMS, effects ≈ -30 dB, voice ≈ -20 dB.
+4. **Traveler:** nameless.
+5. **Motion:** Kling 4.0 for hero shots, MiniMax H3 Max for atmosphere shots, layered code animation for the rest.
+
+## As produced
+
+- Running time **97 s** (voice-timed; the draft estimated 74 s).
+- Spend: ~95 Higgsfield credits (10 plates + layers, 3 Kling clips, 2 MiniMax clips) and about $0.80 of ElevenLabs credits (voice + 12 ambient effects).
+- Narration line for beat 1 became "This is Postcards from Africa. Stop one: Morocco." Beat 9's line was split into two sentences for pacing.
