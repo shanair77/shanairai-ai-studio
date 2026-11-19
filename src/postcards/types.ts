@@ -13,7 +13,8 @@ export type Visual =
   | {
       kind: "plate";
       src: string;
-      motion: "push" | "pan";
+      /** push = slow zoom in · pan = left→right · tilt = bottom→top (tall subjects). */
+      motion: "push" | "pan" | "tilt";
       fg?: {
         src: string;
         /** Width as % of the frame. */
@@ -25,7 +26,7 @@ export type Visual =
       };
     }
   /** A fully code-drawn scene. */
-  | { kind: "scene"; scene: "hook" | "title" | "notes" | "next" };
+  | { kind: "scene"; scene: "hook" | "timeline" | "title" | "notes" | "next" };
 
 export type Sound = { src: string; volume: number; at?: number };
 
@@ -50,14 +51,23 @@ export type Beat = {
   sfx?: Sound[];
 };
 
+/** A point on the timeline hook. `year` is negative for BC. */
+export type TimelinePoint = { label: string; sub: string; year: number; icon: "pyramid" | "crown" | "moon" };
+
 export type Episode = {
   series: string;
   number: number;
   country: string;
   region: string;
+  /** Which flag the title card draws. */
+  flag: "morocco" | "egypt";
   /** [longitude, latitude] of the stop's pin and of the next stop's pin. */
   pin: [number, number];
-  next: { country: string; pin: [number, number] };
+  next: { country: string; pin: [number, number]; doodle: "pyramids" | "mountain" };
+  /** Pins of the season's earlier stops, oldest first, so the route builds across episodes. */
+  route: [number, number][];
+  /** Data for the "timeline" hook scene, with brackets between consecutive points. */
+  timeline?: { points: TimelinePoint[]; gaps: string[] };
   beats: Beat[];
   notes: { title: string; items: [string, string][] };
 };

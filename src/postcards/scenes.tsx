@@ -1,12 +1,13 @@
 /**
- * The code-drawn scenes of a Postcards from Africa episode: the hook map, the title page,
- * the traveler's notes and the next-stop map. Everything animates from the local frame.
+ * The code-drawn scenes of a Postcards from Africa episode: the hook (a strait map or a
+ * timeline), the title page, the traveler's notes and the next-stop map. The title and
+ * next-stop maps draw the season's route so far. Everything animates from the local frame.
  */
 
 import React from "react";
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { AFRICA_PATH, HAND, MARKER, MoroccoFlag, proj } from "../styletest/shared";
-import type { Episode } from "./types";
+import type { Episode, TimelinePoint } from "./types";
 
 export const PAPER = "#efe6d2";
 export const INK = "#2a2a3a";
@@ -27,6 +28,19 @@ export const Paper: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
     {children}
   </AbsoluteFill>
 );
+
+/** Egypt's flag, simplified: red, white and black bands with the gold eagle. */
+const EgyptFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, border = "transparent" }) => (
+  <svg width={w} height={(w * 2) / 3} viewBox="0 0 60 40" style={{ borderRadius: 4, outline: `3px solid ${border}` }}>
+    <rect width={60} height={40} fill="#ffffff" />
+    <rect width={60} height={13.33} fill="#ce1126" />
+    <rect y={26.67} width={60} height={13.33} fill="#000000" />
+    <path d="M 30 14.5 L 33 17 L 36.5 16 L 34 20 L 33 25 L 30 23.5 L 27 25 L 26 20 L 23.5 16 L 27 17 Z" fill="#c09300" />
+  </svg>
+);
+
+export const Flag: React.FC<{ country: Episode["flag"]; w?: number; border?: string }> = ({ country, w, border }) =>
+  country === "egypt" ? <EgyptFlag w={w} border={border} /> : <MoroccoFlag w={w} border={border} />;
 
 /** 0→1 draw-on progress for a stroke with pathLength={1}. */
 const draw = (f: number, start: number, end: number) => interpolate(f, [start, end], [1, 0], { ...clamp, easing: Easing.inOut(Easing.cubic) });
@@ -63,6 +77,85 @@ export const HookScene: React.FC = () => {
             <path transform={`translate(${px} ${py}) rotate(${Math.cos(plane * Math.PI * 2) * 12})`} d="M 40 0 L -30 -22 L -14 0 L -30 22 Z M -14 0 L 40 0" fill="#fffbea" stroke={INK} strokeWidth={4} strokeLinejoin="round" />
           </g>
         ) : null}
+      </svg>
+    </Paper>
+  );
+};
+
+/* ------------------------------------------------------------------ hook: a timeline */
+const TimelineIcon: React.FC<{ icon: TimelinePoint["icon"]; x: number; y: number }> = ({ icon, x, y }) => (
+  <g transform={`translate(${x} ${y})`} stroke={INK} strokeWidth={4} strokeLinejoin="round" strokeLinecap="round">
+    {icon === "pyramid" ? (
+      <>
+        <path d="M -60 0 L 0 -90 L 60 0 Z" fill="#e2b874" />
+        <path d="M 0 -90 L 12 0" fill="none" />
+      </>
+    ) : icon === "crown" ? (
+      <path d="M -46 0 L -46 -50 L -24 -26 L 0 -62 L 24 -26 L 46 -50 L 46 0 Z" fill="#e8c35a" />
+    ) : (
+      <>
+        <circle cx={0} cy={-46} r={42} fill="#f3ecd2" />
+        <circle cx={-14} cy={-58} r={8} fill="none" />
+        <circle cx={14} cy={-34} r={6} fill="none" />
+        <path d="M 30 -10 L 52 -2 L 44 8" fill="none" />
+      </>
+    )}
+  </g>
+);
+
+export const TimelineScene: React.FC<{ ep: Episode }> = ({ ep }) => {
+  const f = useCurrentFrame();
+  const tl = ep.timeline;
+  if (!tl) return <Paper />;
+  const years = tl.points.map((p) => p.year);
+  const lo = Math.min(...years) - 120;
+  const hi = Math.max(...years) + 60;
+  const X0 = 130;
+  const X1 = 950;
+  const Y = 1000;
+  const xOf = (yr: number) => X0 + ((yr - lo) / (hi - lo)) * (X1 - X0);
+  return (
+    <Paper>
+      <svg width={1080} height={1920} viewBox="0 0 1080 1920" style={{ position: "absolute" }}>
+        <line x1={60} y1={Y} x2={1020} y2={Y} stroke={INK} strokeWidth={9} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={draw(f, 0, 30)} />
+        {tl.points.map((p, i) => {
+          const x = xOf(p.year);
+          const at = 30 + i * 16;
+          const o = interpolate(f, [at, at + 10], [0, 1], clamp);
+          const pop = interpolate(f, [at, at + 10], [0.6, 1], { ...clamp, easing: Easing.out(Easing.back(2)) });
+          const anchor = i === 0 ? "start" : i === tl.points.length - 1 ? "end" : "middle";
+          const tx = i === 0 ? x - 70 : i === tl.points.length - 1 ? x + 70 : x;
+          // Middle points sit on a lower row so neighbouring labels never collide.
+          const lift = i === 0 || i === tl.points.length - 1 ? 0 : -150;
+          return (
+            <g key={p.label} opacity={o}>
+              <g transform={`translate(${x} ${Y - 40}) scale(${pop * 1.6})`}>
+                <TimelineIcon icon={p.icon} x={0} y={0} />
+              </g>
+              <circle cx={x} cy={Y} r={20} fill={RED} stroke={INK} strokeWidth={5} />
+              <text x={tx} y={Y - 390 - lift} textAnchor={anchor} fontFamily={HAND} fontSize={64} fill={INK}>
+                {p.label}
+              </text>
+              <text x={tx} y={Y - 460 - lift} textAnchor={anchor} fontFamily={MARKER} fontSize={58} fill={RED}>
+                {p.sub}
+              </text>
+            </g>
+          );
+        })}
+        {tl.gaps.map((g, i) => {
+          const a = xOf(tl.points[i].year);
+          const b = xOf(tl.points[i + 1].year);
+          const at = 80 + i * 25;
+          const d = `M ${a} ${Y + 60} L ${a} ${Y + 100} L ${b} ${Y + 100} L ${b} ${Y + 60}`;
+          return (
+            <g key={g}>
+              <path d={d} fill="none" stroke={RED} strokeWidth={8} strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={draw(f, at, at + 18)} />
+              <text x={(a + b) / 2} y={Y + 190 + i * 90} textAnchor="middle" fontFamily={MARKER} fontSize={66} fill={RED} opacity={interpolate(f, [at + 12, at + 22], [0, 1], clamp)}>
+                {g}
+              </text>
+            </g>
+          );
+        })}
       </svg>
     </Paper>
   );
@@ -105,6 +198,21 @@ const Pin: React.FC<{ lonLat: [number, number]; appear: number; color?: string }
       <circle cx={p.x} cy={p.y} r={4 + pulse * 10} fill="none" stroke={color} strokeWidth={1.4} opacity={f > appear ? 1 - pulse : 0} />
       <circle cx={p.x} cy={p.y} r={4.5} fill={color} stroke={INK} strokeWidth={1.2} />
     </g>
+  );
+};
+
+/** The season so far: dashed line through every earlier stop and grey pins on each. */
+const SeasonRoute: React.FC<{ stops: [number, number][] }> = ({ stops }) => {
+  if (stops.length < 2) return stops.length === 1 ? <Pin lonLat={stops[0]} appear={0} color="#7a7a7a" /> : null;
+  const pts = stops.map(([lo, la]) => proj(lo, la));
+  const d = pts.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `Q ${(pts[i - 1].x + p.x) / 2} ${Math.min(pts[i - 1].y, p.y) - 26} ${p.x} ${p.y}`)).join(" ");
+  return (
+    <>
+      <path d={d} fill="none" stroke="#7a7a7a" strokeWidth={1.4} strokeDasharray="4 3" />
+      {stops.slice(0, -1).map((s, i) => (
+        <Pin key={i} lonLat={s} appear={0} color="#7a7a7a" />
+      ))}
+    </>
   );
 };
 
@@ -161,6 +269,7 @@ export const TitleScene: React.FC<{ ep: Episode }> = ({ ep }) => {
     <Paper>
       <svg width={1080} height={1920} viewBox="0 0 1080 1920" style={{ position: "absolute" }}>
         <MapAfrica x={190} y={560} scale={3.5}>
+          <SeasonRoute stops={[...ep.route, ep.pin]} />
           <Pin lonLat={ep.pin} appear={45} />
         </MapAfrica>
       </svg>
@@ -181,7 +290,7 @@ export const TitleScene: React.FC<{ ep: Episode }> = ({ ep }) => {
           opacity: interpolate(f, [55, 70], [0, 1], clamp),
         }}
       >
-        <MoroccoFlag w={96} border={INK} />
+        <Flag country={ep.flag} w={96} border={INK} />
         <div style={{ fontFamily: HAND, fontSize: 76, color: INK }}>
           Stop {stop} · {ep.country}
         </div>
@@ -245,12 +354,20 @@ export const NextScene: React.FC<{ ep: Episode }> = ({ ep }) => {
     <Paper>
       <svg width={1080} height={1920} viewBox="0 0 1080 1920" style={{ position: "absolute" }}>
         <MapAfrica x={190} y={560} scale={3.5} drawStart={-60}>
+          <SeasonRoute stops={[...ep.route, ep.pin]} />
           <path d={route} fill="none" stroke={RED} strokeWidth={1.6} strokeDasharray="4 3" opacity={0.9} />
           <path d={route} fill="none" stroke={PAPER} strokeWidth={3} pathLength={1} strokeDasharray={1} strokeDashoffset={routeDraw - 1} />
           <Pin lonLat={ep.pin} appear={0} color="#7a7a7a" />
           <Pin lonLat={ep.next.pin} appear={52} />
           <g transform={`translate(${b.x + 4} ${b.y - 22})`} opacity={interpolate(f, [55, 70], [0, 1], clamp)}>
-            <path d="M 0 14 L 9 0 L 18 14 Z M 12 14 L 19 4 L 26 14 Z" fill="#e2b874" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />
+            {ep.next.doodle === "pyramids" ? (
+              <path d="M 0 14 L 9 0 L 18 14 Z M 12 14 L 19 4 L 26 14 Z" fill="#e2b874" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />
+            ) : (
+              <>
+                <path d="M 0 16 L 12 0 L 24 16 Z" fill="#9a8a7a" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />
+                <path d="M 8.2 5 L 12 0 L 15.8 5 L 13.5 4 L 12 6 L 10.5 4 Z" fill="#ffffff" stroke={INK} strokeWidth={0.6} strokeLinejoin="round" />
+              </>
+            )}
           </g>
         </MapAfrica>
       </svg>

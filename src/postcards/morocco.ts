@@ -12,8 +12,10 @@ export const MOROCCO: Episode = {
   number: 1,
   country: "Morocco",
   region: "North Africa",
+  flag: "morocco",
   pin: [-8, 31.6],
-  next: { country: "Egypt", pin: [31.2, 30] },
+  route: [],
+  next: { country: "Egypt", pin: [31.2, 30], doodle: "pyramids" },
   notes: {
     title: "Traveler's notes · Morocco",
     items: [

@@ -1,4 +1,4 @@
-# Postcards from Africa · Episode 02 — Egypt: Beat Sheet (v2, decisions locked)
+# Postcards from Africa · Episode 02 — Egypt: Beat Sheet (v3, produced)
 
 | | |
 |---|---|
@@ -8,7 +8,7 @@
 | **Motion** | Kling 4.0 for hero shots · MiniMax H3 Max for atmosphere shots · layered code animation for in-between beats · map, captions, cards and stamps drawn in Remotion |
 | **Audio** | ElevenLabs voiceover (Kimberly), ambient sound only (no music), word-by-word captions |
 | **Tone** | Documentary-cozy: calm, curious, respectful |
-| **Composition** | `PostcardsEgypt` (to build) → `src/postcards/egypt.ts` + the shared engine |
+| **Composition** | `PostcardsEgypt` → `src/postcards/egypt.ts` + the shared engine; media in `public/postcards/egypt/` |
 
 **Shot types:** **AI-K** Kling 4.0 hero clip · **AI-M** MiniMax atmosphere clip · **LAYER** painted plate animated in code · **CODE** drawn in Remotion
 
@@ -120,10 +120,10 @@
 **Normalize every new sound file** the same way as Morocco: ambient beds to ≈ -32 dB RMS and effects to ≈ -30 dB before mixing.
 
 **Engine work needed** (the Morocco engine has a few Morocco-only parts):
-- [ ] A new **timeline** hook scene (beat 0); the strait map stays for Morocco.
-- [ ] A per-country **flag** (Egypt: red, white and black bands with the gold eagle); the title card currently draws Morocco's flag.
-- [ ] A **multi-stop route** on the title and next-stop maps, so the line shows Morocco → Egypt → Tanzania building up across the season.
-- [ ] A **tilt** motion for the Karnak plate (the engine has push and pan only).
+- [x] A new **timeline** hook scene (beat 0); the strait map stays for Morocco.
+- [x] A per-country **flag** (Egypt: red, white and black bands with the gold eagle); the title card currently draws Morocco's flag.
+- [x] A **multi-stop route** on the title and next-stop maps, so the line shows Morocco → Egypt → Tanzania building up across the season.
+- [x] A **tilt** motion for the Karnak plate (the engine has push and pan only).
 
 ---
 
@@ -150,3 +150,11 @@
 2. **Call to prayer:** in the bazaar ambience, faint and in the distance.
 3. **Next stop:** Tanzania.
 4. **Grand Egyptian Museum:** added as beat 8b, right after the Valley of the Kings.
+
+## As produced
+
+- Running time **112 s** (14 voice-timed beats).
+- Spend: ~95 Higgsfield credits (10 plates, 3 cut-outs, 3 Kling 4.0 clips, 2 MiniMax clips) and about $0.85 of ElevenLabs credits (14 voice lines, 10 ambient sounds).
+- The Valley of the Kings beat uses a plain push (no tomb-wall cut-out); the Sphinx gets a camel cut-out walking through the foreground instead of sand haze.
+- The code-drawn scenes (timeline, title, notes, next stop) carry a quiet desert ambience under the page, so the episode never drops to silence.
+- Engine additions now shared by every episode: timeline hook, per-country flag, season route that builds stop by stop, tilt motion, data-driven next-stop doodle.
