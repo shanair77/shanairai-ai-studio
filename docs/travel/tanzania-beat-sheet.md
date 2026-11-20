@@ -1,4 +1,4 @@
-# Postcards from Africa · Episode 03 — Tanzania: Beat Sheet (v2, decisions locked)
+# Postcards from Africa · Episode 03 — Tanzania: Beat Sheet (v3, produced)
 
 | | |
 |---|---|
@@ -8,7 +8,7 @@
 | **Motion** | Kling 4.0 for hero shots · MiniMax H3 Max for atmosphere shots · layered code animation for in-between beats · maps, captions, cards and stamps drawn in Remotion |
 | **Audio** | ElevenLabs voiceover (Kimberly), ambient sound only (no music), word-by-word captions; quiet beds under the code-drawn scenes too |
 | **Tone** | Documentary-cozy: calm, curious, respectful |
-| **Composition** | `PostcardsTanzania` (to build) → `src/postcards/tanzania.ts` + the shared engine |
+| **Composition** | `PostcardsTanzania` → `src/postcards/tanzania.ts` + the shared engine; media in `public/postcards/tanzania/` |
 
 **Shot types:** **AI-K** Kling 4.0 hero clip · **AI-M** MiniMax atmosphere clip · **LAYER** painted plate animated in code · **CODE** drawn in Remotion
 
@@ -124,9 +124,9 @@ The episode moves in two halves: **the mainland** (plains, crater, mountain) and
 **Normalize every new sound file** as before: ambient beds to ≈ -32 dB RMS and effects to ≈ -30 dB.
 
 **Engine work needed** (small):
-- [ ] A **footprints** hook scene (beat 0).
-- [ ] **Tanzania's flag** (green and blue triangles split by a black band edged in yellow).
-- [ ] A **waterfall** doodle for the next-stop map.
+- [x] A **footprints** hook scene (beat 0).
+- [x] **Tanzania's flag** (green and blue triangles split by a black band edged in yellow).
+- [x] A **waterfall** doodle for the next-stop map.
 
 The season route, tilt, timeline and everything else already exist.
 
@@ -154,3 +154,12 @@ The season route, tilt, timeline and everything else already exist.
 2. **Maasai culture:** a short, respectful beat (4b) right after Ngorongoro, showing everyday life and the guided, community-run way to visit.
 3. **Zanzibar's history:** mentioned in the Stone Town fact card.
 4. **Next stop:** Victoria Falls.
+
+## As produced
+
+- Running time **118.5 s** (14 voice-timed beats).
+- Spend: ~95 Higgsfield credits (10 plates, 2 cut-outs, 3 Kling 4.0 clips, 2 MiniMax clips) and about $0.65 of ElevenLabs credits (14 voice lines, 11 ambient sounds).
+- The footprints hook shows two trails, one larger and one smaller, pressed into a patch of ash; the date and "Laetoli, Tanzania" are written in as the last step lands. The data lives in `footprints` on the episode.
+- The river-crossing chip reads "The Mara River"; the Maasai beat's chip reads "Ngorongoro highlands".
+- The climate-zones beat uses a plain tilt from rainforest up to the ice, without scribbles.
+- Every code-drawn scene carries a quiet savannah or sea bed, so the episode never drops to silence.

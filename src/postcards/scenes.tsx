@@ -1,6 +1,6 @@
 /**
- * The code-drawn scenes of a Postcards from Africa episode: the hook (a strait map or a
- * timeline), the title page, the traveler's notes and the next-stop map. The title and
+ * The code-drawn scenes of a Postcards from Africa episode: the hook (a strait map, a
+ * timeline or a trail of footprints), the title page, the traveler's notes and the next-stop map. The title and
  * next-stop maps draw the season's route so far. Everything animates from the local frame.
  */
 
@@ -39,8 +39,24 @@ const EgyptFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, border =
   </svg>
 );
 
+/** Tanzania's flag: green and blue triangles split by a black diagonal band edged in yellow. */
+const TanzaniaFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, border = "transparent" }) => (
+  <svg width={w} height={(w * 2) / 3} viewBox="0 0 60 40" style={{ borderRadius: 4, outline: `3px solid ${border}` }}>
+    <rect width={60} height={40} fill="#1eb53a" />
+    <path d="M 60 0 L 60 40 L 0 40 Z" fill="#00a3dd" />
+    <line x1={-4} y1={42.7} x2={64} y2={-2.7} stroke="#fcd116" strokeWidth={15} />
+    <line x1={-4} y1={42.7} x2={64} y2={-2.7} stroke="#000000" strokeWidth={10} />
+  </svg>
+);
+
 export const Flag: React.FC<{ country: Episode["flag"]; w?: number; border?: string }> = ({ country, w, border }) =>
-  country === "egypt" ? <EgyptFlag w={w} border={border} /> : <MoroccoFlag w={w} border={border} />;
+  country === "egypt" ? (
+    <EgyptFlag w={w} border={border} />
+  ) : country === "tanzania" ? (
+    <TanzaniaFlag w={w} border={border} />
+  ) : (
+    <MoroccoFlag w={w} border={border} />
+  );
 
 /** 0→1 draw-on progress for a stroke with pathLength={1}. */
 const draw = (f: number, start: number, end: number) => interpolate(f, [start, end], [1, 0], { ...clamp, easing: Easing.inOut(Easing.cubic) });
@@ -157,6 +173,66 @@ export const TimelineScene: React.FC<{ ep: Episode }> = ({ ep }) => {
           );
         })}
       </svg>
+    </Paper>
+  );
+};
+
+/* ------------------------------------------------------------------ hook: footprints */
+/** One footprint pointing up (−y), heel at the origin's bottom; `left` mirrors it. */
+const Footprint: React.FC<{ left: boolean }> = ({ left }) => (
+  <g transform={left ? "scale(-1 1)" : undefined}>
+    <path
+      d="M 2 -38 C 15 -37 19 -20 15 -2 C 12 14 13 30 2 34 C -10 36 -13 22 -12 4 C -12 -14 -14 -38 2 -38 Z"
+      fill="#7f7362"
+      stroke="#5d5345"
+      strokeWidth={2}
+    />
+    <ellipse cx={-6} cy={-48} rx={6.5} ry={7.5} fill="#7f7362" />
+    <circle cx={4} cy={-49} r={4.2} fill="#7f7362" />
+    <circle cx={11} cy={-45} r={3.6} fill="#7f7362" />
+    <circle cx={16} cy={-39} r={3.2} fill="#7f7362" />
+    <circle cx={19} cy={-32} r={2.8} fill="#7f7362" />
+  </g>
+);
+
+/** Two trails of footprints pressed into a patch of ash one step at a time, then dated. */
+export const FootprintsScene: React.FC<{ ep: Episode }> = ({ ep }) => {
+  const f = useCurrentFrame();
+  const STEPS = 9;
+  const ash = "M 170 500 C 300 430, 520 470, 700 440 C 840 420, 960 470, 945 610 C 930 800, 990 1000, 950 1180 C 920 1330, 960 1420, 800 1430 C 620 1450, 420 1400, 250 1440 C 120 1450, 140 1300, 150 1150 C 160 980, 90 820, 130 680 C 150 590, 120 540, 170 500 Z";
+  const trail = (dx: number, size: number, delay: number) =>
+    Array.from({ length: STEPS }, (_, i) => {
+      const t = i / (STEPS - 1);
+      const y = 1320 - t * 760;
+      const x = 540 + dx + Math.sin(t * Math.PI * 1.1) * 70;
+      const heading = Math.atan2(Math.cos(t * Math.PI * 1.1) * 70 * Math.PI * 1.1, 780) * (180 / Math.PI);
+      const left = i % 2 === 0;
+      const side = (left ? -1 : 1) * 24 * size;
+      const at = 14 + delay + i * 15;
+      const press = interpolate(f, [at, at + 7], [1.35, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+      const o = interpolate(f, [at, at + 5], [0, 0.9], clamp);
+      return (
+        <g key={`${dx}-${i}`} opacity={o} transform={`translate(${x + side} ${y}) rotate(${heading}) scale(${size * press})`}>
+          <Footprint left={left} />
+        </g>
+      );
+    });
+  const done = 14 + 6 + STEPS * 15;
+  const labels = ep.footprints ?? { date: "", place: "" };
+  return (
+    <Paper>
+      <svg width={1080} height={1920} viewBox="0 0 1080 1920" style={{ position: "absolute" }}>
+        <path d={ash} fill="#cfc5b4" opacity={interpolate(f, [0, 20], [0, 0.85], clamp)} />
+        <path d={ash} fill="none" stroke={INK} strokeWidth={5} strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={draw(f, 0, 24)} />
+        {trail(-110, 1.45, 0)}
+        {trail(120, 1.1, 6)}
+      </svg>
+      <div style={{ position: "absolute", top: 190, left: 0, right: 0, textAlign: "center" }}>
+        <div style={{ fontFamily: MARKER, fontSize: 92, color: RED, opacity: interpolate(f, [done, done + 12], [0, 1], clamp), translate: `0 ${interpolate(f, [done, done + 12], [20, 0], clamp)}px` }}>
+          {labels.date}
+        </div>
+        <div style={{ fontFamily: HAND, fontSize: 64, color: INK, opacity: interpolate(f, [done + 8, done + 20], [0, 1], clamp) }}>{labels.place}</div>
+      </div>
     </Paper>
   );
 };
@@ -359,9 +435,16 @@ export const NextScene: React.FC<{ ep: Episode }> = ({ ep }) => {
           <path d={route} fill="none" stroke={PAPER} strokeWidth={3} pathLength={1} strokeDasharray={1} strokeDashoffset={routeDraw - 1} />
           <Pin lonLat={ep.pin} appear={0} color="#7a7a7a" />
           <Pin lonLat={ep.next.pin} appear={52} />
-          <g transform={`translate(${b.x + 4} ${b.y - 22})`} opacity={interpolate(f, [55, 70], [0, 1], clamp)}>
+          <g transform={`translate(${ep.next.doodle === "waterfall" ? b.x - 34 : b.x + 4} ${ep.next.doodle === "waterfall" ? b.y - 20 : b.y - 22})`} opacity={interpolate(f, [55, 70], [0, 1], clamp)}>
             {ep.next.doodle === "pyramids" ? (
               <path d="M 0 14 L 9 0 L 18 14 Z M 12 14 L 19 4 L 26 14 Z" fill="#e2b874" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />
+            ) : ep.next.doodle === "waterfall" ? (
+              <>
+                <path d="M 7 2 L 17 2 L 17 14 L 7 14 Z" fill="#9cc3d8" stroke={INK} strokeWidth={0.6} />
+                <path d="M 9.5 3.5 L 9.5 12.5 M 12 3.5 L 12 12.5 M 14.5 3.5 L 14.5 12.5" stroke="#ffffff" strokeWidth={0.8} strokeLinecap="round" />
+                <path d="M 0 16 L 0 2 L 7 2 L 7 16 Z M 17 16 L 17 2 L 24 2 L 24 16 Z" fill="#9a8a7a" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />
+                <ellipse cx={12} cy={14.5} rx={6.5} ry={2.4} fill="#ffffff" stroke={INK} strokeWidth={0.5} />
+              </>
             ) : (
               <>
                 <path d="M 0 16 L 12 0 L 24 16 Z" fill="#9a8a7a" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />

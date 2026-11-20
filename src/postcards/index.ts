@@ -2,3 +2,4 @@ export { PostcardsEpisode, calculateEpisodeMetadata, episodeFrames, POSTCARDS_FP
 export type { EpisodeProps } from "./Episode";
 export { MOROCCO } from "./morocco";
 export { EGYPT } from "./egypt";
+export { TANZANIA } from "./tanzania";

@@ -26,7 +26,7 @@ export type Visual =
       };
     }
   /** A fully code-drawn scene. */
-  | { kind: "scene"; scene: "hook" | "timeline" | "title" | "notes" | "next" };
+  | { kind: "scene"; scene: "hook" | "timeline" | "footprints" | "title" | "notes" | "next" };
 
 export type Sound = { src: string; volume: number; at?: number };
 
@@ -60,14 +60,16 @@ export type Episode = {
   country: string;
   region: string;
   /** Which flag the title card draws. */
-  flag: "morocco" | "egypt";
+  flag: "morocco" | "egypt" | "tanzania";
   /** [longitude, latitude] of the stop's pin and of the next stop's pin. */
   pin: [number, number];
-  next: { country: string; pin: [number, number]; doodle: "pyramids" | "mountain" };
+  next: { country: string; pin: [number, number]; doodle: "pyramids" | "mountain" | "waterfall" };
   /** Pins of the season's earlier stops, oldest first, so the route builds across episodes. */
   route: [number, number][];
   /** Data for the "timeline" hook scene, with brackets between consecutive points. */
   timeline?: { points: TimelinePoint[]; gaps: string[] };
+  /** Labels for the "footprints" hook scene, written in as the last footprint lands. */
+  footprints?: { date: string; place: string };
   beats: Beat[];
   notes: { title: string; items: [string, string][] };
 };
