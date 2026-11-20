@@ -1,4 +1,4 @@
-# Postcards from Africa · Episode 04 — Victoria Falls: Beat Sheet (v1, decisions open)
+# Postcards from Africa · Episode 04 — Victoria Falls: Beat Sheet (v2, decisions locked)
 
 | | |
 |---|---|
@@ -8,7 +8,7 @@
 | **Motion** | Kling 4.0 for hero shots · MiniMax H3 Max for atmosphere shots · layered code animation for in-between beats · maps, captions, cards and stamps drawn in Remotion |
 | **Audio** | ElevenLabs voiceover (Kimberly), ambient sound only (no music), word-by-word captions; quiet beds under every code-drawn page |
 | **Tone** | Documentary-cozy: calm, curious, respectful |
-| **Composition** | `PostcardsVictoriaFalls` (to build) → `src/postcards/victoria-falls.ts` + the shared engine |
+| **Composition** | `PostcardsVictoriaFalls` → `src/postcards/victoria-falls.ts` + the shared engine; media in `public/postcards/victoria-falls/` |
 
 **Shot types:** **AI-K** Kling 4.0 hero clip · **AI-M** MiniMax atmosphere clip · **LAYER** painted plate animated in code · **CODE** drawn in Remotion
 
@@ -20,13 +20,10 @@ Unlike episodes 01–03, **every fact below was checked before writing** (source
 
 ## Beats
 
-### 0 · Hook — CODE *(decision 1)*
-- **Option A — A rainbow at night (recommended):** a dark-blue journal page; the moon rises, spray drifts up, and a pale white rainbow arcs across the page.
-  - **Narration:** "On full-moon nights, this waterfall makes a rainbow in the dark."
-  - **On screen:** "Moonbow · Victoria Falls" written in as the arc completes.
-  - Why: the only night-time hook of the season, a striking change of palette, and true (the park opens for moonbow viewing around each full moon in the high-water months).
-- **Option B — It makes its own rain:** a cross-section sketch: the river drops, a spray cloud rises, and drops fall on a strip of forest in a dry landscape. "This waterfall makes so much spray, it waters its own rainforest."
-- **Option C — The smoke that thunders:** the falls' Kololo-Lozi name, written in big letters, then translated. (If not the hook, this is beat 3 anyway.)
+### 0 · Hook — CODE (moonbow)
+- **Picture:** The journal page turns to night: stars come out, the moon rises, spray climbs off the falls and a pale white rainbow arcs across the page.
+- **Narration:** "On full-moon nights, this waterfall makes a rainbow in the dark."
+- **On screen:** "Moonbow · Victoria Falls" written in as the arc completes.
 
 ### 1 · Title — CODE
 - **Picture:** The Africa map draws in; the season route runs Morocco → Egypt → Tanzania → Victoria Falls; the stamp lands.
@@ -45,7 +42,7 @@ Unlike episodes 01–03, **every fact below was checked before writing** (source
 
 ### 4 · A rainforest made of spray — LAYER (tilt)
 - **Picture:** A tall plate: a dripping green forest path with ferns and palms, the traveler small on the path, the falls glimpsed through the trees at the top. The camera tilts up from the forest floor to the falls.
-- **Narration:** "The spray falls back as rain, all year round, so a strip of rainforest grows on the cliff facing the falls, surrounded by dry bush."
+- **Narration:** "The spray keeps falling back as rain, so a strip of rainforest grows on the cliff facing the falls, surrounded by dry bush."
 - **Local tip:** "Bring a raincoat, or plan to get soaked."
 
 ### 5 · Two countries, one bridge — LAYER
@@ -53,12 +50,12 @@ Unlike episodes 01–03, **every fact below was checked before writing** (source
 - **Narration:** "The falls sit on the border between Zambia and Zimbabwe. A railway bridge, finished in 1905, joins the two, high above the gorge."
 - **Fact card:** "One visa, the KAZA UniVisa, covers both countries. Check the current price and rules before you go."
 
-### 6 · Devil's Pool — AI-K (hero) *(decision 2)*
+### 6 · Devil's Pool — AI-K (hero)
 - **Picture:** Low water, late afternoon. The traveler, seen from behind, sits in a natural rock pool at the very lip of the falls, with a guide's hand on a rope nearby; the gorge drops away in front of her.
-- **Narration:** "When the river is low, you can swim in a rock pool right on the edge of the falls, with a guide holding the way."
+- **Narration:** "When the river is low, you can swim in a rock pool right on the edge of the falls, with a guide right beside you."
 - **Local tip:** "Only from about mid-August to January, when the water is low enough. Go with an official guided tour."
 
-### 7 · Nyami Nyami — LAYER *(decision 3)*
+### 7 · Nyami Nyami — LAYER
 - **Picture:** A carved wooden Nyami Nyami pendant (snake body, fish head) hanging on a cord against a painted river at dusk, with ripples spreading. No people.
 - **Narration:** "The Tonga people tell of Nyami Nyami, a river god with a snake's body and a fish's head, who protects the Zambezi."
 - **Fact card:** "You'll see Nyami Nyami carved on walking sticks and pendants in local craft markets."
@@ -73,11 +70,7 @@ Unlike episodes 01–03, **every fact below was checked before writing** (source
 - **Narration:** "And about an hour away, across the border in Botswana, Chobe National Park is famous for its enormous elephant herds."
 - **Fact card:** "Day trips from Victoria Falls cross into Botswana, so bring your passport."
 
-### 10 · The moonbow — LAYER *(only if the hook is not the moonbow; otherwise the hook covers it and this beat is cut)*
-- **Picture:** Night, full moon, the falls silver-blue; a faint white rainbow arcs through the spray; the traveler small at a viewpoint.
-- **Narration:** "Come back on a full-moon night, and you might see a rainbow in the dark."
-
-### 11 · Traveler's notes — CODE
+### 10 · Traveler's notes — CODE
 - **Notes:**
   - **Best time:** February–June for the biggest falls (heaviest spray around April–May); September–December for clearer views and Devil's Pool.
   - **Budget:** $$–$$$; activities (cruises, Devil's Pool, day trips) are the big cost.
@@ -86,21 +79,21 @@ Unlike episodes 01–03, **every fact below was checked before writing** (source
   - **Respect:** stay behind the barriers at viewpoints, ask before photographing people, never feed wildlife.
 - **Narration:** "Come between February and June for the biggest falls, bring a raincoat and small dollar notes, and stay behind the barriers."
 
-### 12 · Next stop — CODE *(decision 4)*
+### 11 · Next stop — CODE
 - **Picture:** The route line runs on from Victoria Falls to the next stop, with a doodle.
-- **Narration:** "Next stop: the Okavango Delta." *(if recommended option chosen)*
-- **On screen:** "STOP 05 → …"; stamp "VISITED · VICTORIA FALLS".
+- **Narration:** "Next stop: the Okavango Delta."
+- **On screen:** "STOP 05 → OKAVANGO DELTA" with a delta doodle in northern Botswana; stamp "VISITED · VICTORIA FALLS".
 
 **Narration:** about 230 words across 13–14 beats. **Estimated running time:** ~105–115 s.
 
 ---
 
-## Decisions for you
+## Decisions (locked)
 
-1. **Hook:** **A — moonbow (recommended)** · B — makes its own rain · C — the smoke that thunders.
-2. **Devil's Pool:** include it with the safety framing above (recommended), or leave it out.
-3. **Cultural beat:** **Nyami Nyami (recommended)**, a visit to a local village (like the Maasai beat), or none.
-4. **Next stop:** **Botswana's Okavango Delta (recommended)**: one border away, and the Chobe beat sets it up · Namibia (red dunes of Sossusvlei) · Cape Town, South Africa · Madagascar.
+1. **Hook:** the moonbow.
+2. **Devil's Pool:** kept, framed as a guided, low-water-only activity.
+3. **Cultural beat:** Nyami Nyami, the Tonga people's river god.
+4. **Next stop:** Botswana's Okavango Delta.
 
 ---
 
@@ -115,7 +108,6 @@ Unlike episodes 01–03, **every fact below was checked before writing** (source
 6. Nyami Nyami pendant over the river at dusk (beat 7)
 7. Zambezi sunset from a boat (beat 8)
 8. Chobe elephant herd crossing the river (beat 9)
-9. *(moonbow plate only if the hook is not the moonbow)*
 
 **Estimated credits (Higgsfield):**
 

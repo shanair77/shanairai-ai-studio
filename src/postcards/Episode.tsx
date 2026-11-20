@@ -25,7 +25,7 @@ import {
   type CalculateMetadataFunction,
 } from "remotion";
 import { HAND, MARKER } from "../styletest/shared";
-import { FootprintsScene, HookScene, INK, NextScene, NotesScene, PAPER, RED, TimelineScene, TitleScene } from "./scenes";
+import { FootprintsScene, HookScene, INK, MoonbowScene, NextScene, NotesScene, PAPER, RED, TimelineScene, TitleScene } from "./scenes";
 import type { Beat, Episode, Sound } from "./types";
 
 export const POSTCARDS_FPS = 30;
@@ -54,7 +54,7 @@ export const ClipPicture: React.FC<{ v: Extract<Beat["visual"], { kind: "clip" }
   const { fps } = useVideoConfig();
   // Slow the clip a little to fill the beat (never below 0.8×); a freeze on the last
   // frame covers whatever is left.
-  const rate = Math.min(1, Math.max(0.8, v.seconds / (frames / fps)));
+  const rate = Math.min(1, Math.max(v.minRate ?? 0.8, v.seconds / (frames / fps)));
   const f = useCurrentFrame();
   const drift = interpolate(f, [0, frames], [1.02, 1.07], clamp);
   return (
@@ -274,6 +274,8 @@ const BeatView: React.FC<{ ep: Episode; beat: Beat; frames: number; first: boole
           <TimelineScene ep={ep} />
         ) : v.scene === "footprints" ? (
           <FootprintsScene ep={ep} />
+        ) : v.scene === "moonbow" ? (
+          <MoonbowScene ep={ep} />
         ) : v.scene === "title" ? (
           <TitleScene ep={ep} />
         ) : v.scene === "notes" ? (
@@ -290,7 +292,7 @@ const BeatView: React.FC<{ ep: Episode; beat: Beat; frames: number; first: boole
           {beat.scribbles ? <Scribbles items={beat.scribbles} /> : null}
         </AbsoluteFill>
       )}
-      {!isScene || v.scene === "hook" || v.scene === "timeline" || v.scene === "footprints" || v.scene === "notes" ? <Caption text={beat.text} voSeconds={beat.voSeconds} /> : null}
+      {!isScene || v.scene === "hook" || v.scene === "timeline" || v.scene === "footprints" || v.scene === "moonbow" || v.scene === "notes" ? <Caption text={beat.text} voSeconds={beat.voSeconds} /> : null}
       <BeatAudio beat={beat} />
     </AbsoluteFill>
   );

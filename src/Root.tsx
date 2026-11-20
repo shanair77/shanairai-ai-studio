@@ -49,6 +49,7 @@ import {
   PostcardsEpisode,
   PostcardsSeason,
   TANZANIA,
+  VICTORIA_FALLS,
   calculateEpisodeMetadata,
   calculateSeasonMetadata,
   seasonFrames,
@@ -167,6 +168,16 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         defaultProps={{ episode: TANZANIA }}
+        calculateMetadata={calculateEpisodeMetadata}
+      />
+      <Composition
+        id="PostcardsVictoriaFalls"
+        component={PostcardsEpisode}
+        durationInFrames={episodeFrames(VICTORIA_FALLS)}
+        fps={POSTCARDS_FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ episode: VICTORIA_FALLS }}
         calculateMetadata={calculateEpisodeMetadata}
       />
       <Composition

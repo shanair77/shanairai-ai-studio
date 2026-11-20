@@ -8,7 +8,14 @@
 
 export type Visual =
   /** AI video clip. `still` is its last frame, shown if the beat outlasts the clip. */
-  | { kind: "clip"; src: string; still: string; seconds: number }
+  | {
+      kind: "clip";
+      src: string;
+      still: string;
+      seconds: number;
+      /** Slowest playback rate allowed when stretching the clip to fill its beat (default 0.8). */
+      minRate?: number;
+    }
   /** A painted plate animated in code, with an optional foreground cut-out layer. */
   | {
       kind: "plate";
@@ -26,7 +33,7 @@ export type Visual =
       };
     }
   /** A fully code-drawn scene. */
-  | { kind: "scene"; scene: "hook" | "timeline" | "footprints" | "title" | "notes" | "next" };
+  | { kind: "scene"; scene: "hook" | "timeline" | "footprints" | "moonbow" | "title" | "notes" | "next" };
 
 export type Sound = { src: string; volume: number; at?: number };
 
@@ -54,22 +61,26 @@ export type Beat = {
 /** A point on the timeline hook. `year` is negative for BC. */
 export type TimelinePoint = { label: string; sub: string; year: number; icon: "pyramid" | "crown" | "moon" };
 
+export type FlagId = "morocco" | "egypt" | "tanzania" | "zambia" | "zimbabwe";
+
 export type Episode = {
   series: string;
   number: number;
   country: string;
   region: string;
-  /** Which flag the title card draws. */
-  flag: "morocco" | "egypt" | "tanzania";
+  /** Which flag(s) the title card draws; a stop on a border shows both countries. */
+  flag: FlagId | FlagId[];
   /** [longitude, latitude] of the stop's pin and of the next stop's pin. */
   pin: [number, number];
-  next: { country: string; pin: [number, number]; doodle: "pyramids" | "mountain" | "waterfall" };
+  next: { country: string; pin: [number, number]; doodle: "pyramids" | "mountain" | "waterfall" | "delta" };
   /** Pins of the season's earlier stops, oldest first, so the route builds across episodes. */
   route: [number, number][];
   /** Data for the "timeline" hook scene, with brackets between consecutive points. */
   timeline?: { points: TimelinePoint[]; gaps: string[] };
   /** Labels for the "footprints" hook scene, written in as the last footprint lands. */
   footprints?: { date: string; place: string };
+  /** Labels for the "moonbow" hook scene, and a painting (public/-relative) shown night-tinted beneath it. */
+  moonbow?: { label: string; place: string; image?: string };
   beats: Beat[];
   notes: { title: string; items: [string, string][] };
 };

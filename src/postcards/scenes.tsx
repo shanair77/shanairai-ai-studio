@@ -5,9 +5,9 @@
  */
 
 import React from "react";
-import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { AFRICA_PATH, HAND, MARKER, MoroccoFlag, proj } from "../styletest/shared";
-import type { Episode, TimelinePoint } from "./types";
+import type { Episode, FlagId, TimelinePoint } from "./types";
 
 export const PAPER = "#efe6d2";
 export const INK = "#2a2a3a";
@@ -49,13 +49,55 @@ const TanzaniaFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, borde
   </svg>
 );
 
-export const Flag: React.FC<{ country: Episode["flag"]; w?: number; border?: string }> = ({ country, w, border }) =>
+/** Zambia's flag, simplified: green field, the orange eagle over red, black and orange stripes at the fly. */
+const ZambiaFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, border = "transparent" }) => (
+  <svg width={w} height={(w * 2) / 3} viewBox="0 0 60 40" style={{ borderRadius: 4, outline: `3px solid ${border}` }}>
+    <rect width={60} height={40} fill="#198a00" />
+    <rect x={43.3} y={16} width={5.6} height={24} fill="#de2010" />
+    <rect x={48.9} y={16} width={5.6} height={24} fill="#000000" />
+    <rect x={54.5} y={16} width={5.5} height={24} fill="#ef7d00" />
+    <path d="M 43 8 Q 47 4 51.5 8.5 Q 56 4 60 8 Q 56 9.5 53 11 L 52.5 14 L 50.5 14 L 50 11 Q 47 9.5 43 8 Z" fill="#ef7d00" />
+  </svg>
+);
+
+/** Zimbabwe's flag, simplified: seven bands with the white triangle, red star and gold bird at the hoist. */
+const ZimbabweFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, border = "transparent" }) => {
+  const bands = ["#006400", "#ffd200", "#d40000", "#000000", "#d40000", "#ffd200", "#006400"];
+  return (
+    <svg width={w} height={(w * 2) / 3} viewBox="0 0 60 40" style={{ borderRadius: 4, outline: `3px solid ${border}` }}>
+      {bands.map((c, i) => (
+        <rect key={i} y={(i * 40) / 7} width={60} height={40 / 7 + 0.2} fill={c} />
+      ))}
+      <path d="M 0 0 L 23 20 L 0 40 Z" fill="#ffffff" stroke="#000000" strokeWidth={1.2} />
+      <path d="M 9 13.5 L 10.5 17.8 L 15 17.8 L 11.4 20.4 L 12.8 24.8 L 9 22.1 L 5.2 24.8 L 6.6 20.4 L 3 17.8 L 7.5 17.8 Z" fill="#d40000" />
+      <path d="M 7.6 17 L 10.4 17 L 10 22 L 8 22 Z" fill="#ffd200" />
+    </svg>
+  );
+};
+
+const OneFlag: React.FC<{ country: FlagId; w?: number; border?: string }> = ({ country, w, border }) =>
   country === "egypt" ? (
     <EgyptFlag w={w} border={border} />
   ) : country === "tanzania" ? (
     <TanzaniaFlag w={w} border={border} />
+  ) : country === "zambia" ? (
+    <ZambiaFlag w={w} border={border} />
+  ) : country === "zimbabwe" ? (
+    <ZimbabweFlag w={w} border={border} />
   ) : (
     <MoroccoFlag w={w} border={border} />
+  );
+
+/** One flag, or several side by side for a stop on a border. */
+export const Flag: React.FC<{ country: Episode["flag"]; w?: number; border?: string }> = ({ country, w, border }) =>
+  Array.isArray(country) ? (
+    <div style={{ display: "flex", gap: 12 }}>
+      {country.map((c) => (
+        <OneFlag key={c} country={c} w={w} border={border} />
+      ))}
+    </div>
+  ) : (
+    <OneFlag country={country} w={w} border={border} />
   );
 
 /** 0→1 draw-on progress for a stroke with pathLength={1}. */
@@ -237,6 +279,87 @@ export const FootprintsScene: React.FC<{ ep: Episode }> = ({ ep }) => {
   );
 };
 
+/* ------------------------------------------------------------------ hook: a moonbow */
+/** Night falls on the page: the moon rises, spray climbs off the falls and a pale rainbow arcs through it. */
+export const MoonbowScene: React.FC<{ ep: Episode }> = ({ ep }) => {
+  const f = useCurrentFrame();
+  const night = interpolate(f, [0, 25], [0, 1], clamp);
+  const moonY = interpolate(f, [5, 70], [800, 560], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const arc = draw(f, 70, 125);
+  const bands = ["#fff7e0", "#e9f0ff", "#f2e6ff", "#e6fff4"];
+  const labels: { label: string; place: string; image?: string } = ep.moonbow ?? { label: "", place: "" };
+  const done = 130;
+  const stars = Array.from({ length: 34 }, (_, i) => ({ x: ((i * 197) % 1040) + 20, y: ((i * 131) % 620) + 160, r: 1.6 + ((i * 7) % 3) }));
+  return (
+    <Paper>
+      <AbsoluteFill style={{ background: "linear-gradient(#141c3c 0%, #23305e 55%, #2e3b5e 100%)", opacity: night * 0.96 }} />
+      {labels.image ? (
+        <div style={{ position: "absolute", left: 0, right: 0, top: 560, bottom: 0, overflow: "hidden", opacity: night }}>
+          <Img src={staticFile(labels.image)} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 0%", filter: "brightness(0.5) saturate(0.45)" }} />
+          <AbsoluteFill style={{ background: "#1c2a66", mixBlendMode: "multiply", opacity: 0.75 }} />
+          <AbsoluteFill style={{ background: "linear-gradient(#23305e 0%, rgba(35,48,94,0) 22%)" }} />
+        </div>
+      ) : null}
+      <svg width={1080} height={1920} viewBox="0 0 1080 1920" style={{ position: "absolute" }}>
+        {stars.map((st, i) => (
+          <circle
+            key={i}
+            cx={st.x}
+            cy={st.y}
+            r={st.r}
+            fill="#fffbe8"
+            opacity={interpolate(f, [10 + (i % 9) * 3, 25 + (i % 9) * 3], [0, 0.8], clamp) * (0.6 + 0.4 * Math.sin(f / 9 + i))}
+          />
+        ))}
+        <circle cx={860} cy={moonY} r={78} fill="#fff6d8" opacity={night} />
+        <circle cx={860} cy={moonY} r={130} fill="#fff6d8" opacity={night * 0.12} />
+        <defs>
+          <filter id="moonbow-soft" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="22" />
+          </filter>
+          <filter id="moonbow-glow" x="-10%" y="-10%" width="120%" height="120%">
+            <feGaussianBlur stdDeviation="3" />
+          </filter>
+        </defs>
+        {/* Spray rising from the gorge. */}
+        {Array.from({ length: 9 }, (_, i) => {
+          const rise = ((f * 1.6 + i * 60) % 520) / 520;
+          return <ellipse key={i} cx={120 + i * 110} cy={1300 - rise * 420} rx={150 + rise * 90} ry={70 + rise * 40} fill="#dfe8ff" filter="url(#moonbow-soft)" opacity={night * 0.3 * (1 - rise)} />;
+        })}
+        {bands.map((c, i) => (
+          <path
+            key={c}
+            d={`M ${110 + i * 16} 1250 A ${430 - i * 16} ${430 - i * 16} 0 0 1 ${970 - i * 16} 1250`}
+            fill="none"
+            stroke={c}
+            strokeWidth={14}
+            strokeLinecap="round"
+            opacity={0.6}
+            filter="url(#moonbow-glow)"
+            pathLength={1}
+            strokeDasharray={1}
+            strokeDashoffset={arc}
+          />
+        ))}
+      </svg>
+      <div style={{ position: "absolute", top: 190, left: 0, right: 0, textAlign: "center" }}>
+        <div
+          style={{
+            fontFamily: MARKER,
+            fontSize: 110,
+            color: "#fff6d8",
+            opacity: interpolate(f, [done, done + 12], [0, 1], clamp),
+            translate: `0 ${interpolate(f, [done, done + 12], [20, 0], clamp)}px`,
+          }}
+        >
+          {labels.label}
+        </div>
+        <div style={{ fontFamily: HAND, fontSize: 64, color: "#dfe8ff", opacity: interpolate(f, [done + 8, done + 20], [0, 1], clamp) }}>{labels.place}</div>
+      </div>
+    </Paper>
+  );
+};
+
 /* ------------------------------------------------------------------ Africa map helpers */
 const MapAfrica: React.FC<{ x: number; y: number; scale: number; drawStart?: number; children?: React.ReactNode }> = ({
   x,
@@ -329,7 +452,7 @@ export const Stamp: React.FC<{ at: number; line1: string; line2: string; line3: 
       }}
     >
       <div style={{ fontSize: 28, letterSpacing: 3 }}>{line1}</div>
-      <div style={{ fontSize: 56, margin: "12px 0" }}>{line2}</div>
+      <div style={{ fontSize: line2.length > 9 ? Math.round((56 * 9) / line2.length) : 56, margin: "12px 0" }}>{line2}</div>
       <div style={{ fontSize: 26, letterSpacing: 2 }}>{line3}</div>
     </div>
   );
@@ -366,8 +489,8 @@ export const TitleScene: React.FC<{ ep: Episode }> = ({ ep }) => {
           opacity: interpolate(f, [55, 70], [0, 1], clamp),
         }}
       >
-        <Flag country={ep.flag} w={96} border={INK} />
-        <div style={{ fontFamily: HAND, fontSize: 76, color: INK }}>
+        <Flag country={ep.flag} w={Array.isArray(ep.flag) ? 80 : 96} border={INK} />
+        <div style={{ fontFamily: HAND, fontSize: ep.country.length > 10 ? 62 : 76, color: INK }}>
           Stop {stop} · {ep.country}
         </div>
       </div>
@@ -438,6 +561,11 @@ export const NextScene: React.FC<{ ep: Episode }> = ({ ep }) => {
           <g transform={`translate(${ep.next.doodle === "waterfall" ? b.x - 34 : b.x + 4} ${ep.next.doodle === "waterfall" ? b.y - 20 : b.y - 22})`} opacity={interpolate(f, [55, 70], [0, 1], clamp)}>
             {ep.next.doodle === "pyramids" ? (
               <path d="M 0 14 L 9 0 L 18 14 Z M 12 14 L 19 4 L 26 14 Z" fill="#e2b874" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />
+            ) : ep.next.doodle === "delta" ? (
+              <>
+                <path d="M 2 2 Q 8 6 10 10 M 10 10 Q 6 14 1 16 M 10 10 Q 12 15 10 19 M 10 10 Q 16 13 22 14 M 10 10 Q 15 7 21 6" fill="none" stroke="#5b9bd5" strokeWidth={1.4} strokeLinecap="round" />
+                <path d="M 15 18 L 15 12 M 17 18 L 18 11 M 19 18 L 21 13" stroke="#5f8f3a" strokeWidth={0.9} strokeLinecap="round" />
+              </>
             ) : ep.next.doodle === "waterfall" ? (
               <>
                 <path d="M 7 2 L 17 2 L 17 14 L 7 14 Z" fill="#9cc3d8" stroke={INK} strokeWidth={0.6} />
