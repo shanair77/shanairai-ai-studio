@@ -48,6 +48,7 @@ import {
   POSTCARDS_FPS,
   PostcardsEpisode,
   PostcardsSeason,
+  SEASON_1,
   TANZANIA,
   VICTORIA_FALLS,
   calculateEpisodeMetadata,
@@ -183,11 +184,11 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="PostcardsSeason1"
         component={PostcardsSeason}
-        durationInFrames={seasonFrames([MOROCCO, EGYPT, TANZANIA])}
+        durationInFrames={seasonFrames(SEASON_1)}
         fps={POSTCARDS_FPS}
         width={1920}
         height={1080}
-        defaultProps={{ episodes: [MOROCCO, EGYPT, TANZANIA] }}
+        defaultProps={{ episodes: SEASON_1 }}
         calculateMetadata={calculateSeasonMetadata}
       />
     </>

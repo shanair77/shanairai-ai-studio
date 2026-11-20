@@ -6,3 +6,4 @@ export { TANZANIA } from "./tanzania";
 export { VICTORIA_FALLS } from "./victoria-falls";
 export { PostcardsSeason, calculateSeasonMetadata, seasonChapters, seasonFrames, END_CARD_SECONDS } from "./Journal";
 export type { SeasonProps } from "./Journal";
+export { SEASON_1 } from "./seasons";
