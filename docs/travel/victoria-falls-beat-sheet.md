@@ -150,3 +150,12 @@ This is about 35 credits less than earlier episodes: one atmosphere clip instead
 | Zimbabwe: ZiG introduced 2024, US dollars widely used | Verified | [Wikipedia: Economy of Zimbabwe](https://en.wikipedia.org/wiki/Economy_of_Zimbabwe) |
 
 **Left out on purpose:** spray-visibility distances (sources range from 8 to 50 km), exact elephant numbers, the exact bungee height, and white-water grades. None had a reliable source.
+
+## As produced
+
+- Running time **101 s** (12 voice-timed beats).
+- Spend: ~61 Higgsfield credits (8 plates, 2 cut-outs, 1 plate retake, 3 five-second Kling 4.0 clips, 1 MiniMax clip) and about $0.60 of ElevenLabs credits (12 voice lines, 9 ambient sounds).
+- The Devil's Pool plate was regenerated once: the first version showed the traveler wearing her hat in the pool with a second hat on the rock.
+- The moonbow hook uses the falls painting, tinted to night, under a drawn sky, moon, spray and rainbow (a fully drawn waterfall read as a fence). The painting is set by `moonbow.image` in the episode data.
+- The 5-second hero clips play down to 0.65× speed (`minRate`) so they move for most of their scene before holding on the last frame.
+- Engine additions now shared by every episode: moonbow hook, any number of flags on the title card, Zambia and Zimbabwe flags, delta doodle, stamps and titles that shrink for long names.
