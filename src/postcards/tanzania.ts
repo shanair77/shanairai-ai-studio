@@ -25,7 +25,7 @@ export const TANZANIA: Episode = {
     items: [
       ["Best time", "June–Oct (dry season) for safaris; Jan–Feb for calving"],
       ["Budget", "$$–$$$ — park fees make safaris the big cost"],
-      ["Money", "Tanzanian shilling; US dollars common for safaris & park fees"],
+      ["Money", "Tanzanian shilling; dollar rules changed in 2024–25, so ask your safari operator"],
       ["Language", "Swahili & English"],
       ["Respect", "ask before photos, dress modestly in Stone Town, never feed wildlife"],
     ],
@@ -61,7 +61,7 @@ export const TANZANIA: Episode = {
       voSeconds: 7.36,
       visual: { kind: "clip", src: `${T}/clips/migration.mp4`, still: `${T}/clips/migration-last.jpg`, seconds: 8 },
       place: "Serengeti",
-      note: { label: "Did you know?", text: "'Serengeti' comes from a Maasai word for 'endless plains'." },
+      note: { label: "Did you know?", text: "'Serengeti' is often said to come from a Maasai word for 'endless plains'." },
       ambient: { src: `${T}/sfx/herd.mp3`, volume: 0.85 },
     },
     {

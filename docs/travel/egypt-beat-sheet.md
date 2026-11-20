@@ -158,3 +158,18 @@
 - The Valley of the Kings beat uses a plain push (no tomb-wall cut-out); the Sphinx gets a camel cut-out walking through the foreground instead of sand haze.
 - The code-drawn scenes (timeline, title, notes, next stop) carry a quiet desert ambience under the page, so the episode never drops to silence.
 - Engine additions now shared by every episode: timeline hook, per-country flag, season route that builds stop by stop, tilt motion, data-driven next-stop doodle.
+
+## Fact-check (November 2026)
+
+Checked against Britannica, the University of Memphis Hypostyle Hall project, the CIA World Factbook and news coverage of the Grand Egyptian Museum. Every claim holds up.
+
+| Claim | Verdict |
+|---|---|
+| Cleopatra closer to the Moon landing; ~2,500 / ~2,000-year gaps | Accurate — [Britannica](https://www.britannica.com/biography/Cleopatra-queen-of-Egypt) |
+| Great Pyramid tallest for "nearly four thousand years" | Loose but fine (~3,870 years). Which building overtook it is disputed, so the Lincoln Cathedral note above is not used on screen — [History Revealed](https://www.historyrevealed.com/feature/what-overtook-the-great-pyramid-of-giza-as-the-tallest-manmade-structure/) |
+| Only surviving Ancient Wonder; Sphinx ~73 m from one ridge | Accurate — [Britannica](https://www.britannica.com/topic/Great-Sphinx) |
+| Khan el-Khalili 600+ years (1380s) | Accurate |
+| Nile 6,000+ km; ~95% of Egyptians live along it | Accurate — [CIA Factbook](https://www.cia.gov/the-world-factbook/about/archives/2022/countries/egypt) |
+| Karnak hall: 134 columns | Accurate — [Univ. of Memphis](https://www.memphis.edu/hypostyle/tour_hall/great_columns.php) |
+| Tutankhamun 1922; GEM 5,000+ items; Ramesses II ~3,200 years, ~11 m | Accurate |
+| Abu Simbel moved in the 1960s; sun alignment twice a year | Accurate (1964–68) |

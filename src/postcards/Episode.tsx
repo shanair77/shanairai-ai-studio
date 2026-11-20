@@ -29,9 +29,9 @@ import { FootprintsScene, HookScene, INK, NextScene, NotesScene, PAPER, RED, Tim
 import type { Beat, Episode, Sound } from "./types";
 
 export const POSTCARDS_FPS = 30;
-const LEAD = 0.45;
+export const LEAD = 0.45;
 const TAIL = 0.85;
-const FADE = 9;
+export const FADE = 9;
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 export const beatFrames = (b: Beat, fps = POSTCARDS_FPS) =>
@@ -49,7 +49,8 @@ export const calculateEpisodeMetadata: CalculateMetadataFunction<EpisodeProps> =
 });
 
 /* ------------------------------------------------------------------ picture */
-const ClipPicture: React.FC<{ v: Extract<Beat["visual"], { kind: "clip" }>; frames: number }> = ({ v, frames }) => {
+/** `focusY` picks which part of a tall picture a shorter window keeps (CSS object-position y). */
+export const ClipPicture: React.FC<{ v: Extract<Beat["visual"], { kind: "clip" }>; frames: number; focusY?: string }> = ({ v, frames, focusY = "50%" }) => {
   const { fps } = useVideoConfig();
   // Slow the clip a little to fill the beat (never below 0.8×); a freeze on the last
   // frame covers whatever is left.
@@ -58,15 +59,15 @@ const ClipPicture: React.FC<{ v: Extract<Beat["visual"], { kind: "clip" }>; fram
   const drift = interpolate(f, [0, frames], [1.02, 1.07], clamp);
   return (
     <AbsoluteFill style={{ scale: `${drift}` }}>
-      <Img src={staticFile(v.still)} style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover" }} />
+      <Img src={staticFile(v.still)} style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover", objectPosition: `50% ${focusY}` }} />
       {/* OffthreadVideo decodes frames with Remotion's own ffmpeg; @remotion/media's <Video>
           relies on the browser's decoders and rendered blank in headless Chrome here. */}
-      <OffthreadVideo src={staticFile(v.src)} muted playbackRate={rate} style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover" }} />
+      <OffthreadVideo src={staticFile(v.src)} muted playbackRate={rate} style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover", objectPosition: `50% ${focusY}` }} />
     </AbsoluteFill>
   );
 };
 
-const PlatePicture: React.FC<{ v: Extract<Beat["visual"], { kind: "plate" }>; frames: number }> = ({ v, frames }) => {
+export const PlatePicture: React.FC<{ v: Extract<Beat["visual"], { kind: "plate" }>; frames: number; focusY?: string }> = ({ v, frames, focusY = "50%" }) => {
   const f = useCurrentFrame();
   const t = interpolate(f, [0, frames], [0, 1], clamp);
   const plateStyle: React.CSSProperties =
@@ -77,7 +78,7 @@ const PlatePicture: React.FC<{ v: Extract<Beat["visual"], { kind: "plate" }>; fr
         : { scale: "1.22", translate: `${interpolate(t, [0, 1], [5, -5])}% 0` };
   return (
     <AbsoluteFill>
-      <Img src={staticFile(v.src)} style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover", ...plateStyle }} />
+      <Img src={staticFile(v.src)} style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover", objectPosition: `50% ${focusY}`, ...plateStyle }} />
       {v.fg ? (
         <Img
           src={staticFile(v.fg.src)}
@@ -96,7 +97,7 @@ const PlatePicture: React.FC<{ v: Extract<Beat["visual"], { kind: "plate" }>; fr
 };
 
 /* ------------------------------------------------------------------ journal overlays */
-const Tape: React.FC<{ style: React.CSSProperties }> = ({ style }) => (
+export const Tape: React.FC<{ style: React.CSSProperties }> = ({ style }) => (
   <div style={{ position: "absolute", width: 170, height: 46, background: "rgba(226,208,150,0.82)", ...style }} />
 );
 
@@ -176,7 +177,7 @@ const FactNote: React.FC<{ label: string; text: string }> = ({ label, text }) =>
   );
 };
 
-const Scribbles: React.FC<{ items: string[] }> = ({ items }) => {
+export const Scribbles: React.FC<{ items: string[] }> = ({ items }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const spots = [
@@ -240,7 +241,7 @@ const Caption: React.FC<{ text: string; voSeconds: number }> = ({ text, voSecond
 };
 
 /* ------------------------------------------------------------------ sound */
-const BeatAudio: React.FC<{ beat: Beat }> = ({ beat }) => {
+export const BeatAudio: React.FC<{ beat: Beat }> = ({ beat }) => {
   const { fps } = useVideoConfig();
   const lead = Math.round(LEAD * fps);
   return (
@@ -299,7 +300,7 @@ const BeatView: React.FC<{ ep: Episode; beat: Beat; frames: number; first: boole
 const XFADE = 18;
 
 /** One looping ambient bed, fading in and out over XFADE so neighbouring beds overlap. */
-const AmbientBed: React.FC<{ sound: Sound; frames: number }> = ({ sound, frames }) => (
+export const AmbientBed: React.FC<{ sound: Sound; frames: number }> = ({ sound, frames }) => (
   <Audio
     src={staticFile(sound.src)}
     loop
@@ -309,7 +310,8 @@ const AmbientBed: React.FC<{ sound: Sound; frames: number }> = ({ sound, frames 
   />
 );
 
-export const PostcardsEpisode: React.FC<EpisodeProps> = ({ episode }) => {
+/** Every beat's ambient bed, crossfading into the next; shared by the vertical and journal layouts. */
+export const EpisodeAmbience: React.FC<{ episode: Episode }> = ({ episode }) => {
   let at = 0;
   const total = episodeFrames(episode);
   const starts = episode.beats.map((b) => {
@@ -317,9 +319,8 @@ export const PostcardsEpisode: React.FC<EpisodeProps> = ({ episode }) => {
     at += beatFrames(b);
     return s;
   });
-  at = 0;
   return (
-    <AbsoluteFill style={{ background: PAPER }}>
+    <>
       {episode.beats.map((b, i) => {
         if (!b.ambient) return null;
         const from = Math.max(0, starts[i] - (i > 0 ? XFADE / 2 : 0));
@@ -330,6 +331,15 @@ export const PostcardsEpisode: React.FC<EpisodeProps> = ({ episode }) => {
           </Sequence>
         );
       })}
+    </>
+  );
+};
+
+export const PostcardsEpisode: React.FC<EpisodeProps> = ({ episode }) => {
+  let at = 0;
+  return (
+    <AbsoluteFill style={{ background: PAPER }}>
+      <EpisodeAmbience episode={episode} />
       {episode.beats.map((b, i) => {
         const frames = beatFrames(b);
         const from = at;

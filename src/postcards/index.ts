@@ -3,3 +3,5 @@ export type { EpisodeProps } from "./Episode";
 export { MOROCCO } from "./morocco";
 export { EGYPT } from "./egypt";
 export { TANZANIA } from "./tanzania";
+export { PostcardsSeason, calculateSeasonMetadata, seasonChapters, seasonFrames, END_CARD_SECONDS } from "./Journal";
+export type { SeasonProps } from "./Journal";

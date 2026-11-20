@@ -151,3 +151,18 @@ Everything above is written to be accurate, but these items change or are easy t
 - Running time **97 s** (voice-timed; the draft estimated 74 s).
 - Spend: ~95 Higgsfield credits (10 plates + layers, 3 Kling clips, 2 MiniMax clips) and about $0.80 of ElevenLabs credits (voice + 12 ambient effects).
 - Narration line for beat 1 became "This is Postcards from Africa. Stop one: Morocco." Beat 9's line was split into two sentences for pacing.
+
+## Fact-check (November 2026)
+
+Checked against Britannica, UNESCO, NASA Earth Observatory and Guinness World Records. Everything on screen holds up; two spoken lines are loosely worded.
+
+| Claim | Verdict |
+|---|---|
+| Strait of Gibraltar ≈ 14 km | Accurate (13–14.3 km) — [Britannica](https://www.britannica.com/place/Strait-of-Gibraltar) |
+| Medina (1985) and Aït Benhaddou (1987) UNESCO sites; Jemaa el-Fnaa on the intangible list | Accurate — [UNESCO 331](https://whc.unesco.org/en/list/331/), [UNESCO 444](https://whc.unesco.org/en/list/444/), [ICH](https://ich.unesco.org/en/RL/cultural-space-of-jemaa-el-fna-square-00014) |
+| Koutoubia: 12th-century minaret, ~77 m | Accurate — [Wikipedia](https://en.wikipedia.org/wiki/Kutubiyya_Mosque) |
+| "No building in the old city may stand taller" (spoken) | **Weakly sourced** — travel sites only, no legal text found. If re-recorded: "By tradition, nothing in the old city stands taller." |
+| Al-Qarawiyyin, 859, Fatima al-Fihri (spoken: "a university") | **Loose** — began as a mosque and teaching centre, a state university since 1963; Guinness backs "oldest operating". Card's "often called" hedges it. If re-recorded: "a mosque school founded in 859…" — [Guinness](https://www.guinnessworldrecords.com/world-records/oldest-university) |
+| Chefchaouen blue, "nobody fully agrees why" | Accurate |
+| Erg Chebbi up to ~150 m, taller than the minaret | Accurate — [NASA](https://earthobservatory.nasa.gov/images/89181/the-shallow-aquifers-of-erg-chebbi) |
+| Mint tea, dirham, languages, seasons | Accurate |

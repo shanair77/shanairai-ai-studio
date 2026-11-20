@@ -163,3 +163,19 @@ The season route, tilt, timeline and everything else already exist.
 - The river-crossing chip reads "The Mara River"; the Maasai beat's chip reads "Ngorongoro highlands".
 - The climate-zones beat uses a plain tilt from rainforest up to the ice, without scribbles.
 - Every code-drawn scene carries a quiet savannah or sea bed, so the episode never drops to silence.
+
+## Fact-check (November 2026)
+
+Checked against the Getty Conservation Institute, UNESCO, Britannica, Audubon, Live Science and Tanzanian news. Two on-screen cards were corrected; one spoken line is overstated.
+
+| Claim | Verdict |
+|---|---|
+| Laetoli footprints ~3.6 million years, "still here" | Accurate (3.66 million; reburied to preserve them). There is no source for a public replica, so ignore that phrase in the checklist above — [Getty](https://www.getty.edu/projects/hominid-trackway-laetoli/conservation-program/) |
+| ~1.5 million wildebeest; Mara River crossings | Accurate — [Live Science](https://www.livescience.com/23310-serengeti.html) |
+| "Serengeti" = Maasai "endless plains" (card) | **Popular, not confirmed** in Maa dictionaries → card now says "is often said to come from" |
+| Ngorongoro collapsed volcano ~20 km; black rhino; Maasai herders | Accurate (16–19 km) — [UNESCO](https://whc.unesco.org/en/list/39/) |
+| Baobabs "some more than a thousand years old" (spoken) | **Overstated** — a researcher puts almost all of Tarangire's baobabs at 500–900 years. If re-recorded: "some of them many centuries old" — [Audubon](https://www.audubon.org/magazine/day-230-old-baobabs) |
+| Kilimanjaro 5,895 m, no ropes; climate zones | Accurate — [Britannica](https://www.britannica.com/place/Kilimanjaro) |
+| Stone Town history; cathedral on the slave-market site | Accurate (market closed 1873) — [UNESCO](https://whc.unesco.org/en/list/173/), [World Monuments Fund](https://wmf.org/node/13897) |
+| Money card ("US dollars common for safaris & park fees") | **Out of date** — park fees moved to shillings in July 2024; a 2025 rule lets tour operators still pay in dollars for tourists → card now says "dollar rules changed in 2024–25, so ask your safari operator" — [The EastAfrican](https://theeastafrican.co.ke/tea/business-tech/tanzania-asks-tourists-to-pay-using-local-currency-4688990), [Tourism Update](https://www.tourismupdate.com/article/currency-exemption-relief-for-tanzanias-tourism-industry) |
+| Spices, dhows, seasons | Accurate |
