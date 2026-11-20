@@ -96,7 +96,7 @@ export const TANZANIA: Episode = {
     },
     {
       id: "tarangire",
-      text: "In Tarangire, huge baobab trees, some more than a thousand years old, shade herds of elephants.",
+      text: "In Tarangire, huge baobab trees, some of them many centuries old, shade herds of elephants.",
       vo: `${T}/vo/06.mp3`,
       voSeconds: 7.2,
       visual: {

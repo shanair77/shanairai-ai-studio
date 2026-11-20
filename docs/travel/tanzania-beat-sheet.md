@@ -50,7 +50,7 @@ The episode moves in two halves: **the mainland** (plains, crater, mountain) and
 
 ### 5 · Tarangire's baobabs — LAYER
 - **Picture:** Giant baobab trees in dry golden grass; an elephant family walks slowly across the foreground as a cut-out layer.
-- **Narration:** "In Tarangire, huge baobab trees, some more than a thousand years old, shade herds of elephants."
+- **Narration:** "In Tarangire, huge baobab trees, some of them many centuries old, shade herds of elephants."
 
 ### 6 · Kilimanjaro — AI-K (hero)
 - **Picture:** Sunrise above a sea of clouds. The traveler, seen from behind on a rocky trail with trekking poles, looks up at the snow-capped summit glowing pink.
@@ -138,7 +138,7 @@ The season route, tilt, timeline and everything else already exist.
 - [ ] Great Migration: roughly 1.5 million wildebeest (plus zebra and gazelle); "Serengeti" from the Maasai word for "endless plains"
 - [ ] River crossings (Mara/Grumeti) happen mainly July–October
 - [ ] Ngorongoro Crater ≈ 19–20 km across; black rhino viewing
-- [ ] Some Tarangire baobabs are over 1,000 years old
+- [x] Tarangire baobabs: "many centuries old" (most are 500–900 years)
 - [ ] Kilimanjaro height 5,895 m; walkable "trekking peak", no technical climbing
 - [ ] Climate zones on Kilimanjaro (rainforest, heath/moorland, alpine desert, arctic summit)
 - [ ] Stone Town UNESCO status; the slave-market history and the Anglican Cathedral (Christ Church) built on the former market site
@@ -174,7 +174,7 @@ Checked against the Getty Conservation Institute, UNESCO, Britannica, Audubon, L
 | ~1.5 million wildebeest; Mara River crossings | Accurate — [Live Science](https://www.livescience.com/23310-serengeti.html) |
 | "Serengeti" = Maasai "endless plains" (card) | **Popular, not confirmed** in Maa dictionaries → card now says "is often said to come from" |
 | Ngorongoro collapsed volcano ~20 km; black rhino; Maasai herders | Accurate (16–19 km) — [UNESCO](https://whc.unesco.org/en/list/39/) |
-| Baobabs "some more than a thousand years old" (spoken) | **Overstated** — a researcher puts almost all of Tarangire's baobabs at 500–900 years. If re-recorded: "some of them many centuries old" — [Audubon](https://www.audubon.org/magazine/day-230-old-baobabs) |
+| Baobabs "some more than a thousand years old" (spoken) | **Overstated** — a researcher puts almost all of Tarangire's baobabs at 500–900 years. Re-recorded as "some of them many centuries old" — [Audubon](https://www.audubon.org/magazine/day-230-old-baobabs) |
 | Kilimanjaro 5,895 m, no ropes; climate zones | Accurate — [Britannica](https://www.britannica.com/place/Kilimanjaro) |
 | Stone Town history; cathedral on the slave-market site | Accurate (market closed 1873) — [UNESCO](https://whc.unesco.org/en/list/173/), [World Monuments Fund](https://wmf.org/node/13897) |
 | Money card ("US dollars common for safaris & park fees") | **Out of date** — park fees moved to shillings in July 2024; a 2025 rule lets tour operators still pay in dollars for tourists → card now says "dollar rules changed in 2024–25, so ask your safari operator" — [The EastAfrican](https://theeastafrican.co.ke/tea/business-tech/tanzania-asks-tourists-to-pay-using-local-currency-4688990), [Tourism Update](https://www.tourismupdate.com/article/currency-exemption-relief-for-tanzanias-tourism-industry) |
