@@ -33,6 +33,7 @@ export const MOROCCO: Episode = {
       vo: `${M}/vo/00.mp3`,
       voSeconds: 4.05,
       visual: { kind: "scene", scene: "hook" },
+      ambient: { src: `${M}/sfx/garden.mp3`, volume: 0.45 },
       sfx: [{ src: `${M}/sfx/pen.mp3`, volume: 0.7, at: 0.1 }],
     },
     {
@@ -42,6 +43,7 @@ export const MOROCCO: Episode = {
       voSeconds: 4.6,
       minSeconds: 6,
       visual: { kind: "scene", scene: "title" },
+      ambient: { src: `${M}/sfx/garden.mp3`, volume: 0.45 },
       sfx: [
         { src: `${M}/sfx/pen.mp3`, volume: 0.5, at: 0 },
         { src: `${M}/sfx/stamp.mp3`, volume: 0.7, at: 4.4 },
@@ -159,6 +161,7 @@ export const MOROCCO: Episode = {
       voSeconds: 4.91,
       minSeconds: 9,
       visual: { kind: "scene", scene: "notes" },
+      ambient: { src: `${M}/sfx/desert.mp3`, volume: 0.4 },
       sfx: [{ src: `${M}/sfx/notes.mp3`, volume: 0.8, at: 0.3 }],
     },
     {
@@ -168,6 +171,7 @@ export const MOROCCO: Episode = {
       voSeconds: 1.88,
       minSeconds: 5,
       visual: { kind: "scene", scene: "next" },
+      ambient: { src: `${M}/sfx/desert.mp3`, volume: 0.4 },
       sfx: [
         { src: `${M}/sfx/pen.mp3`, volume: 0.5, at: 0.2 },
         { src: `${M}/sfx/stamp.mp3`, volume: 0.7, at: 3.2 },
