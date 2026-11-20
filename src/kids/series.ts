@@ -9,6 +9,7 @@ import type { Localized, ShortSpec, StoryScene } from "./kit";
 import { SCENE_COMPONENTS as COUNTRY_MOUSE_COMPONENTS } from "../mouse/CountryMouseStory";
 import { LION_MOUSE_COMPONENTS } from "./stories/lion-mouse";
 import { TORTOISE_HARE_COMPONENTS } from "./stories/tortoise-hare";
+import { ANT_GRASSHOPPER_COMPONENTS } from "./stories/ant-grasshopper";
 
 /** Playlists on the channel (YouTube playlist ids live in `docs/kids-stories/QUEUE.md`). */
 export type PlaylistKey = "fables" | "fairy-tales";
@@ -65,6 +66,20 @@ export const PACKAGING: Record<string, StoryPackaging> = {
         { scene: "nap", from: 6, focusX: [1100, 600], panAt: [1, 6] },
         { scene: "finish", from: 4, zoom: 1, focusX: 1050 },
         { scene: "moral", to: 11, zoom: 0.75, focusX: 960 },
+      ],
+    },
+  },
+  AntGrasshopperStory: {
+    title: { en: "The Ant and the Grasshopper", es: "La Hormiga y el Saltamontes" },
+    components: ANT_GRASSHOPPER_COMPONENTS as Record<string, React.FC<{ scene: StoryScene }>>,
+    music: "kids/ant-grasshopper/music.mp3",
+    playlist: "fables",
+    short: {
+      segments: [
+        { scene: "winter", from: 0.5, focusX: [860, 1100], panAt: [5, 7] },
+        { scene: "knock", from: 4, focusX: [950, 1250], panAt: [7, 9] },
+        { scene: "party", from: 3, zoom: 1, focusX: [1150, 700], panAt: [4, 7] },
+        { scene: "moral", to: 11.5, zoom: 0.75, focusX: 960 },
       ],
     },
   },

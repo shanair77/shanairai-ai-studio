@@ -12,6 +12,8 @@ import { LionMouseStory, LionMouseThumbnail, defaultLionMouseStoryProps } from "
 import { SCENES as LION_MOUSE_SCENES } from "./stories/lion-mouse/story";
 import { TortoiseHareStory, TortoiseHareThumbnail, defaultTortoiseHareStoryProps } from "./stories/tortoise-hare";
 import { SCENES as TORTOISE_HARE_SCENES } from "./stories/tortoise-hare/story";
+import { AntGrasshopperStory, AntGrasshopperThumbnail, defaultAntGrasshopperStoryProps } from "./stories/ant-grasshopper";
+import { SCENES as ANT_GRASSHOPPER_SCENES } from "./stories/ant-grasshopper/story";
 
 export type KidsStory = {
   /** Composition id (letters, digits, hyphens). */
@@ -47,5 +49,13 @@ export const STORIES: KidsStory[] = [
     defaultProps: defaultTortoiseHareStoryProps,
     scenes: TORTOISE_HARE_SCENES,
     Thumbnail: TortoiseHareThumbnail,
+  },
+  {
+    id: "AntGrasshopperStory",
+    title: "The Ant and the Grasshopper",
+    component: AntGrasshopperStory,
+    defaultProps: defaultAntGrasshopperStoryProps,
+    scenes: ANT_GRASSHOPPER_SCENES,
+    Thumbnail: AntGrasshopperThumbnail,
   },
 ];
