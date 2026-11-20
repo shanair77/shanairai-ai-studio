@@ -69,9 +69,9 @@ export const MOROCCO: Episode = {
     },
     {
       id: "koutoubia",
-      text: "Its twelfth-century minaret still sets the skyline. No building in the old city may stand taller.",
+      text: "Its twelfth-century minaret still sets the skyline. By tradition, nothing in the old city stands taller.",
       vo: `${M}/vo/04.mp3`,
-      voSeconds: 6.84,
+      voSeconds: 7.16,
       visual: {
         kind: "plate",
         src: `${M}/plates/koutoubia.jpg`,

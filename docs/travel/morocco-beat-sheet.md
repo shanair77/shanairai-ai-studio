@@ -45,7 +45,7 @@ Faceless travel cartoon series, Africa season, stop 01.
 
 ### 4 · Koutoubia minaret — 5 s · LAYER
 - **Picture:** The minaret against a pink sky; palm silhouettes drift past at different depths.
-- **Narration:** "Its 12th-century minaret still sets the skyline. No building in the old city may stand taller."
+- **Narration:** "Its 12th-century minaret still sets the skyline. By tradition, nothing in the old city stands taller."
 - **Etiquette tip:** "Most Moroccan mosques are open to Muslims only. Admire them from outside."
 
 ### 5 · Mint tea — 6 s · AI-M (atmosphere)
@@ -161,7 +161,7 @@ Checked against Britannica, UNESCO, NASA Earth Observatory and Guinness World Re
 | Strait of Gibraltar ≈ 14 km | Accurate (13–14.3 km) — [Britannica](https://www.britannica.com/place/Strait-of-Gibraltar) |
 | Medina (1985) and Aït Benhaddou (1987) UNESCO sites; Jemaa el-Fnaa on the intangible list | Accurate — [UNESCO 331](https://whc.unesco.org/en/list/331/), [UNESCO 444](https://whc.unesco.org/en/list/444/), [ICH](https://ich.unesco.org/en/RL/cultural-space-of-jemaa-el-fna-square-00014) |
 | Koutoubia: 12th-century minaret, ~77 m | Accurate — [Wikipedia](https://en.wikipedia.org/wiki/Kutubiyya_Mosque) |
-| "No building in the old city may stand taller" (spoken) | **Weakly sourced** — travel sites only, no legal text found. If re-recorded: "By tradition, nothing in the old city stands taller." |
+| "No building in the old city may stand taller" (spoken) | **Weakly sourced** — travel sites only, no legal text found. Re-recorded as "By tradition, nothing in the old city stands taller." |
 | Al-Qarawiyyin, 859, Fatima al-Fihri (spoken: "a university") | **Loose** — began as a mosque and teaching centre, a state university since 1963; Guinness backs "oldest operating". Card's "often called" hedges it. If re-recorded: "a mosque school founded in 859…" — [Guinness](https://www.guinnessworldrecords.com/world-records/oldest-university) |
 | Chefchaouen blue, "nobody fully agrees why" | Accurate |
 | Erg Chebbi up to ~150 m, taller than the minaret | Accurate — [NASA](https://earthobservatory.nasa.gov/images/89181/the-shallow-aquifers-of-erg-chebbi) |

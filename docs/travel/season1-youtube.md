@@ -18,7 +18,7 @@ A hand-painted travel journal across Africa — three countries, their history, 
 0:00 Stop 01 · Morocco
 1:37 Stop 02 · Egypt
 3:29 Stop 03 · Tanzania
-5:27 Season map & what's next
+5:28 Season map & what's next
 
 Next stop: Victoria Falls.
 
