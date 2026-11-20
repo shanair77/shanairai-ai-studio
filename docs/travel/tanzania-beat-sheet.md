@@ -1,4 +1,4 @@
-# Postcards from Africa · Episode 03 — Tanzania: Beat Sheet (draft v1)
+# Postcards from Africa · Episode 03 — Tanzania: Beat Sheet (v2, decisions locked)
 
 | | |
 |---|---|
@@ -42,6 +42,12 @@ The episode moves in two halves: **the mainland** (plains, crater, mountain) and
 - **Narration:** "Ngorongoro Crater is a collapsed volcano nearly twenty kilometres across, with a whole world of animals living inside."
 - **Fact card:** "It's one of the best places in Africa to see a black rhino."
 
+### 4b · Maasai country — LAYER
+- **Picture:** Late afternoon on the highland grassland near the crater: a Maasai homestead of low round houses inside a circular thorn fence, cattle grazing with bells, people in red and blue cloth painted as loose figures with no facial detail. The traveler stands at a respectful distance beside a local guide (also a loose figure). Long shadows, calm. No dancing or posed "show".
+- **Narration:** "The Maasai have herded cattle across these highlands for generations. Many communities welcome visitors, with a local guide, on their own terms."
+- **Local tip:** "Visit through a community-run program, and always ask before taking photos."
+- **Care notes:** no caricature, no costume clichés beyond everyday dress, no jumping-dance cliché, nobody posed for the camera; the scene shows ordinary daily life.
+
 ### 5 · Tarangire's baobabs — LAYER
 - **Picture:** Giant baobab trees in dry golden grass; an elephant family walks slowly across the foreground as a cut-out layer.
 - **Narration:** "In Tarangire, huge baobab trees, some more than a thousand years old, shade herds of elephants."
@@ -58,7 +64,8 @@ The episode moves in two halves: **the mainland** (plains, crater, mountain) and
 ### 8 · Stone Town, Zanzibar — LAYER
 - **Picture:** A narrow Stone Town lane with whitewashed walls and an intricately carved wooden door with brass studs; the traveler small in the lane. The door is a foreground layer that the camera eases toward.
 - **Narration:** "Off the coast, Zanzibar's Stone Town is a maze of carved wooden doors, shaped by African, Arab, Indian and European history."
-- **Fact card:** "Freddie Mercury was born here, in 1946."
+- **Fact card (History):** "Stone Town was once a center of the East African slave trade. A cathedral now stands on the site of the old slave market."
+- *(The Freddie Mercury fact was dropped to make room; the engine shows one card per beat.)*
 
 ### 9 · The Spice Island — AI-M (atmosphere)
 - **Picture:** Close-up of hands holding fresh spices on a farm: clove buds, a split nutmeg with its red mace, cinnamon bark, vanilla pods; leaves moving in a breeze. Hands only.
@@ -84,7 +91,7 @@ The episode moves in two halves: **the mainland** (plains, crater, mountain) and
 - **Narration:** "Next stop: Victoria Falls."
 - **On screen:** "STOP 04 → VICTORIA FALLS"; stamp "VISITED · TANZANIA".
 
-**Narration:** about 230 words across 13 beats. **Estimated running time:** ~105 s once each scene is timed to its line.
+**Narration:** about 255 words across 14 beats. **Estimated running time:** ~112 s once each scene is timed to its line.
 
 ---
 
@@ -100,18 +107,19 @@ The episode moves in two halves: **the mainland** (plains, crater, mountain) and
 7. Stone Town lane (beat 8) + a carved-door foreground cut-out
 8. Spices in hands (beat 9)
 9. Dhow at sunset (beat 10)
+10. Maasai homestead near the crater (beat 4b)
 
 **Estimated credits (Higgsfield):**
 
 | Item | Count | Each | Total |
 |---|---|---|---|
-| Painted plates | 9 | 1 | 9 |
+| Painted plates | 10 | 1 | 10 |
 | Foreground cut-outs | 2 | 1 | 2 |
 | Kling 4.0 hero clips (beats 2, 6, 10), 7–8 s | 3 | 15.75–18 | ~52 |
 | MiniMax atmosphere clips (beats 3, 9) | 2 | 15 | ~30 |
-| **Total** | | | **~93 credits** + a small retake buffer |
+| **Total** | | | **~94 credits** + a small retake buffer |
 
-**ElevenLabs:** 13 voice lines (~$0.25) and about 9 ambient sounds (~$0.35): savannah wind with distant hooves and grunting wildebeest, a rushing river with splashing, crater birdlife and distant hippos, elephants rumbling softly in dry grass, high mountain wind, rainforest-to-ice wind layers, a quiet Stone Town lane (footsteps, a bicycle bell, a distant call to prayer if wanted), a spice-farm breeze with birds, and waves lapping on a wooden dhow. Plus a soft savannah bed under the code-drawn scenes, and the pen, stamp and notes sounds reused.
+**ElevenLabs:** 14 voice lines (~$0.25) and about 9 ambient sounds (~$0.35): savannah wind with distant hooves and grunting wildebeest, a rushing river with splashing, crater birdlife and distant hippos, elephants rumbling softly in dry grass, highland wind with cattle bells and distant voices (Maasai beat), high mountain wind, rainforest-to-ice wind layers, a quiet Stone Town lane (footsteps, a bicycle bell, a distant call to prayer if wanted), a spice-farm breeze with birds, and waves lapping on a wooden dhow. Plus a soft savannah bed under the code-drawn scenes, and the pen, stamp and notes sounds reused.
 
 **Normalize every new sound file** as before: ambient beds to ≈ -32 dB RMS and effects to ≈ -30 dB.
 
@@ -133,15 +141,16 @@ The season route, tilt, timeline and everything else already exist.
 - [ ] Some Tarangire baobabs are over 1,000 years old
 - [ ] Kilimanjaro height 5,895 m; walkable "trekking peak", no technical climbing
 - [ ] Climate zones on Kilimanjaro (rainforest, heath/moorland, alpine desert, arctic summit)
-- [ ] Stone Town UNESCO status and history; Freddie Mercury born in Zanzibar in 1946
+- [ ] Stone Town UNESCO status; the slave-market history and the Anglican Cathedral (Christ Church) built on the former market site
+- [ ] Maasai beat wording: pastoralists in northern Tanzania and southern Kenya; community-run visits
 - [ ] Spices grown on Zanzibar (cloves, nutmeg, cinnamon, vanilla)
 - [ ] Best-season, money and etiquette advice
 
 ---
 
-## Open decisions
+## Decisions (locked)
 
-1. **Hook:** the 3.6-million-year-old footprints (recommended: it's surprising and fits "cradle of humankind"), or "snow on a mountain just three degrees south of the equator" (Kilimanjaro)?
-2. **Maasai culture:** leave it out (the episode stays on landscapes and wildlife), or add a short, respectful beat about visiting a Maasai community with a local guide? Faceless figures help avoid caricature, but a culture beat needs extra care to read as respectful.
-3. **Zanzibar's history:** Stone Town was a center of the East African slave trade, and today's Anglican Cathedral stands on the site of the former slave market. Mention it in a line or a fact card (it adds honesty to the "history" beat), or keep this episode light and save it for a dedicated history piece?
-4. **Next stop:** Victoria Falls (Zambia/Zimbabwe, as in the season slate), or swap?
+1. **Hook:** the Laetoli footprints.
+2. **Maasai culture:** a short, respectful beat (4b) right after Ngorongoro, showing everyday life and the guided, community-run way to visit.
+3. **Zanzibar's history:** mentioned in the Stone Town fact card.
+4. **Next stop:** Victoria Falls.
