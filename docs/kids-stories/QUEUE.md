@@ -28,7 +28,8 @@ cuentos `PLDr-D1GTGEiQ` (all) · Fábulas de animales `PLJL8Cszza_G0` · Cuentos
 channel are found with `searchVideos` using connection `12412754`.
 Spanish versions done: The Country Mouse and the City Mouse (story `pVnY8KUZBig`, Short
 `xS6OGuYlEBE`); The Lion and the Mouse (story `5DiXCCIzdCs`, Short `FYfC9yrtbbg`); The Tortoise and the Hare
-(2026 Edition) (story `c6TyKIZrg7A`, Short `XqqUfPDK9EE`).
+(2026 Edition) (story `c6TyKIZrg7A`, Short `XqqUfPDK9EE`); The Ant and the Grasshopper (2026 Edition)
+(story `xshxSQVkvzo`, Short `FTnorpcsflg`).
 
 > Note (2026-11-18): The Tortoise and the Hare was remade with the 2026 spin (code in
 > `src/kids/stories/tortoise-hare/`); the old video 2QpDzio7grQ has been deleted.
@@ -38,7 +39,7 @@ Spanish versions done: The Country Mouse and the City Mouse (story `pVnY8KUZBig`
 | 1 | The Country Mouse and the City Mouse | Aesop | meadow → city | (made before the 2026 spin) | done | 2026-11-18 | jpiPKkRmM4w |
 | 2 | The Tortoise and the Hare (2026 Edition) | Aesop | park fun-run, finish line flags | Hare stops for selfies and "just one more video", then naps; Tortoise wears a little step-counter watch; a camera drone films the finish | done (Short: 8T5T-HAseLI; remade 2026-11-18, old video 2QpDzio7grQ deleted) | 2026-11-18 | uOSLKnnMC2Y |
 | 3 | The Lion and the Mouse | Aesop | savanna, net in the long grass | Lion is caught in an old tangle of litter netting; Mouse nibbles him free and they start a clean-up crew with recycling bins | done (Short: 4kb2-VZW1FI) | 2026-11-18 | BNFkTf3-3vI |
-| 4 | The Ant and the Grasshopper | Aesop | summer field → snowy winter | Grasshopper streams songs all summer while the ants run a solar-powered pantry; kind ending: the ants share and he plays at their winter party | todo | | |
+| 4 | The Ant and the Grasshopper (2026 Edition) | Aesop | summer field → snowy winter | Grasshopper streams songs all summer while the ants run a solar-powered pantry; kind ending: the ants share and he plays at their winter party | done (Short: a900O3lb83I; code `src/kids/stories/ant-grasshopper/`) | 2026-11-20 | sxtV7AVO-EA |
 | 5 | The Three Little Pigs | English folk tale | countryside cul-de-sac | The pigs build with straw, sticks and smart bricks; the wolf huffs at a video doorbell ("Not by the hair of my chinny chin chin!"). Gentle: the wolf can't get in, gets tired and goes home; no pot, no one eaten | todo | | |
 | 6 | The Boy Who Cried Wolf | Aesop | hillside pasture, village | Young shepherd sends pretend "WOLF!" alerts on the village walkie-talkie / group chat; lesson about trust and real alerts | todo | | |
 | 7 | Little Red Riding Hood | Brothers Grimm / Perrault | woodland path → Grandma's cottage | Red brings Grandma a get-well basket and her step-counter watch beeps the way; the wolf takes a 'shortcut'. Gentle: Grandma hides in the wardrobe, a woodcutter shoos the wolf off; moral echo: stick to the path, don't share plans with strangers | todo | | |
