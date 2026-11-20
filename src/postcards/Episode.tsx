@@ -11,11 +11,12 @@
  * re-times the edit automatically.
  */
 
-import { Audio, Video } from "@remotion/media";
+import { Audio } from "@remotion/media";
 import React from "react";
 import {
   AbsoluteFill,
   Img,
+  OffthreadVideo,
   Sequence,
   interpolate,
   staticFile,
@@ -58,7 +59,9 @@ const ClipPicture: React.FC<{ v: Extract<Beat["visual"], { kind: "clip" }>; fram
   return (
     <AbsoluteFill style={{ scale: `${drift}` }}>
       <Img src={staticFile(v.still)} style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover" }} />
-      <Video src={staticFile(v.src)} muted playbackRate={rate} objectFit="cover" style={{ width: "100%", height: "100%" }} />
+      {/* OffthreadVideo decodes frames with Remotion's own ffmpeg; @remotion/media's <Video>
+          relies on the browser's decoders and rendered blank in headless Chrome here. */}
+      <OffthreadVideo src={staticFile(v.src)} muted playbackRate={rate} style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover" }} />
     </AbsoluteFill>
   );
 };
