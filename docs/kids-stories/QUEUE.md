@@ -18,11 +18,13 @@ cooked or hurt; villains are grumpy, get outsmarted, and run off or say sorry.
 Vary the settings and palettes from story to story (meadow, forest, seaside, snowy hills,
 farmyard, pond, desert, night sky) so the channel never looks like one template repeated.
 
+Uploads are **Public** since 2026-11-21 (all earlier videos were switched to Public too).
+
 Playlists: Kids Stories `PLD70uhyUFwQQ` (all) · Animal Fables `PLdNhP4iIPHK8` · Fairy Tales
 `PLRD5dwbPreE4` · Story Shorts `PLVTEVa-gcp3g` · Compilations `PLXIyn2J-iB9Y`.
 
 Spanish channel ("Érase una vez 2026", YouTube channel `UC7ocqh3vOFi1sjyONjWCnaQ`): **set up**.
-Upload scenario **7091840** "Cuentos (Español) → YouTube (Private)". Playlists: Todos los
+Upload scenario **7091840** "Cuentos (Español) → YouTube (Public)". Playlists: Todos los
 cuentos `PLDr-D1GTGEiQ` (all) · Fábulas de animales `PLJL8Cszza_G0` · Cuentos de hadas
 `PLA7-SfQwzk2M` · Shorts `PLRzSLSseaxFs` · Recopilaciones `PLWHIQ5016jUM`. Video IDs on that
 channel are found with `searchVideos` using connection `12412754`.

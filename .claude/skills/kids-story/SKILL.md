@@ -1,9 +1,9 @@
 ---
 name: kids-story
 description: >-
-  Make the next narrated pastel kids' story video for the YouTube channel and upload it as a
-  Private video — script, ElevenLabs narration, original lullaby, flat 2D Remotion scenes,
-  custom thumbnail, Cloudinary hosting, and the Make "Kids Stories → YouTube (Private)" upload.
+  Make the next narrated pastel kids' story video for the YouTube channel and publish it
+  Publicly — script, ElevenLabs narration, original lullaby, flat 2D Remotion scenes,
+  custom thumbnail, Cloudinary hosting, and the Make "Kids Stories → YouTube (Public)" upload.
   Use this whenever the scheduled kids' story run fires, or the user asks for "another kids'
   story", "the next fable", "a story like the Country Mouse one", or to redo/upload a story.
   Not for ads, reels or montage videos (use ad-production-pipeline / montage-reel).
@@ -18,7 +18,7 @@ The reference story is **The Country Mouse and the City Mouse**: `src/mouse/` (c
 drawing anything; every new story should feel like a sibling of that one. Shared pieces live
 in the kit, `src/kids/kit/` (palette, timing, StoryShell, scenery, props, thumbnail frame).
 
-Output: a ~2 minute 1920×1080 video, a 1280×720 thumbnail, and a Private YouTube upload.
+Output: a ~2 minute 1920×1080 video, a 1280×720 thumbnail, and a Public YouTube upload (made for kids).
 
 ## The 2026 spin (house style)
 
@@ -174,14 +174,14 @@ npx remotion render src/kids/index.ts <Id>Short out/<Id>Short.mp4 --browser-exec
 (Remotion's own Chrome download is blocked here; always pass `--browser-executable`.)
 Verify: `ffprobe` shows a video and an audio stream and the expected duration.
 
-## 7. Upload (Private)
+## 7. Upload (Public)
 
 ```bash
 scripts/kids-publish.sh <slug> out/<Id>.mp4 out/<Id>-thumb.jpg   # → {"video_url", "thumbnail_url"}
 scripts/kids-publish.sh <slug>-short out/<Id>Short.mp4           # → {"video_url", "thumbnail_url": ""}
 ```
 
-Then run the Make scenario **7086309** "Kids Stories → YouTube (Private)" with
+Then run the Make scenario **7086309** "Kids Stories → YouTube (Public)" with
 `mcp__Make__scenarios_run` (`responsive: true`) and data:
 
 - `video_url`, `thumbnail_url` — from the script
@@ -199,8 +199,11 @@ Then run the same scenario once more for **the Short**: `video_url` from the sho
 #shorts), a one-line description ending "Watch the whole story on our channel! #shorts
 #bedtimestories", the same tags, `playlist_1` `PLVTEVa-gcp3g` (Story Shorts), no `playlist_2`.
 
-The scenario uploads Private, made for kids, Film & Animation, no subscriber notification, and
-sets the thumbnail (it skips the thumbnail if YouTube refuses — e.g. unverified channel).
+The scenario publishes **Public** (the owner switched from Private on 2026-11-21), made for kids,
+Film & Animation. It notifies subscribers only for full stories (calls with a `thumbnail_url`),
+not for Shorts. Because the video goes live straight away, never upload anything you have not
+checked: look at the stills, play the start and end of each render, and stop if anything is off.
+It also sets the thumbnail (it skips the thumbnail if YouTube refuses — e.g. unverified channel).
 If the run fails, read `mcp__Make__executions_get-detail`; do not re-run blindly (a re-run
 uploads a second copy).
 
