@@ -53,6 +53,7 @@ import {
   VICTORIA_FALLS,
   OKAVANGO,
   NAMIBIA,
+  CAPE_TOWN,
   calculateEpisodeMetadata,
   calculateSeasonMetadata,
   seasonFrames,
@@ -201,6 +202,16 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         defaultProps={{ episode: NAMIBIA }}
+        calculateMetadata={calculateEpisodeMetadata}
+      />
+      <Composition
+        id="PostcardsCapeTown"
+        component={PostcardsEpisode}
+        durationInFrames={episodeFrames(CAPE_TOWN)}
+        fps={POSTCARDS_FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ episode: CAPE_TOWN }}
         calculateMetadata={calculateEpisodeMetadata}
       />
       <Composition

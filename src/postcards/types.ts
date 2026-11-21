@@ -33,7 +33,7 @@ export type Visual =
       };
     }
   /** A fully code-drawn scene. */
-  | { kind: "scene"; scene: "hook" | "timeline" | "footprints" | "moonbow" | "river" | "trees" | "title" | "notes" | "next" };
+  | { kind: "scene"; scene: "hook" | "timeline" | "footprints" | "moonbow" | "river" | "trees" | "penguins" | "title" | "notes" | "next" | "finale" };
 
 export type Sound = { src: string; volume: number; at?: number };
 
@@ -61,7 +61,7 @@ export type Beat = {
 /** A point on the timeline hook. `year` is negative for BC. */
 export type TimelinePoint = { label: string; sub: string; year: number; icon: "pyramid" | "crown" | "moon" };
 
-export type FlagId = "morocco" | "egypt" | "tanzania" | "zambia" | "zimbabwe" | "botswana" | "namibia";
+export type FlagId = "morocco" | "egypt" | "tanzania" | "zambia" | "zimbabwe" | "botswana" | "namibia" | "southafrica";
 
 export type Episode = {
   series: string;
@@ -72,7 +72,8 @@ export type Episode = {
   flag: FlagId | FlagId[];
   /** [longitude, latitude] of the stop's pin and of the next stop's pin. */
   pin: [number, number];
-  next: { country: string; pin: [number, number]; doodle: "pyramids" | "mountain" | "waterfall" | "delta" | "dunes" | "tablemountain" };
+  /** The next stop, teased by the "next" scene. Leave it out on a season's last stop, which ends on the "finale" scene instead. */
+  next?: { country: string; pin: [number, number]; doodle: "pyramids" | "mountain" | "waterfall" | "delta" | "dunes" | "tablemountain" };
   /** Pins of the season's earlier stops, oldest first, so the route builds across episodes. */
   route: [number, number][];
   /** Data for the "timeline" hook scene, with brackets between consecutive points. */
@@ -83,6 +84,10 @@ export type Episode = {
   moonbow?: { label: string; place: string; image?: string };
   /** Labels for the "river" hook scene: where the river rises and where it ends. */
   river?: { label: string; place: string; source: string; sink: string };
+  /** Labels for the "penguins" hook scene, written in as the last penguin arrives, and the penguin cut-out (public/-relative PNG) that waddles onto the beach. */
+  penguins?: { label: string; place: string; image: string };
+  /** Marks a season's last stop: the "finale" scene draws the whole season route and stamps the season complete. */
+  finale?: { season: number };
   /** Labels for the "trees" hook scene (dead trees on a clay pan) and the age tag that lands on one. */
   trees?: { label: string; place: string; tag: string };
   beats: Beat[];

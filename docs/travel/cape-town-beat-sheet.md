@@ -1,4 +1,4 @@
-# Postcards from Africa · Episode 07 — Cape Town: Beat Sheet (v1, decisions open)
+# Postcards from Africa · Episode 07 — Cape Town: Beat Sheet (v2, as produced)
 
 | | |
 |---|---|
@@ -8,7 +8,7 @@
 | **Motion** | Kling 4.0 for hero shots · MiniMax H3 Max for an atmosphere shot · layered code animation for in-between beats · maps, captions, cards and stamps drawn in Remotion |
 | **Audio** | ElevenLabs voiceover (Kimberly), ambient sound only (no music), word-by-word captions; quiet beds under every code-drawn page |
 | **Tone** | Documentary-cozy: calm, curious, respectful |
-| **Composition** | `PostcardsCapeTown` (to build) → `src/postcards/cape-town.ts` + the shared engine; added to `SEASON_1` |
+| **Composition** | `PostcardsCapeTown` → `src/postcards/cape-town.ts` + the shared engine; added to `SEASON_1` |
 
 **Shot types:** **AI-K** Kling 4.0 hero clip · **AI-M** MiniMax atmosphere clip · **LAYER** painted plate animated in code · **CODE** drawn in Remotion
 
@@ -89,7 +89,11 @@ As with the last three episodes, **every fact below was checked before writing**
 
 ---
 
-## Decisions for you
+## Decisions (made)
+
+Chosen: **penguins hook**, **both** history beats (Robben Island in the narration, District Six as a history card on the Bo-Kaap beat), and **Season 1 ends here with a finale**.
+
+The options as offered:
 
 1. **Hook:** **A — penguins on an African beach (recommended)** · B — the tablecloth · C — a whole floral kingdom.
 2. **History beat:** **A — Robben Island (recommended)** · B — District Six · C — both.
@@ -144,3 +148,15 @@ As with the last three episodes, **every fact below was checked before writing**
 | Best time: Dec–Apr for beaches; Jun–Nov cheaper and quieter | Verified | [Cape Town Tourism](https://capetown.travel/the-best-time-of-year-to-visit-cape-town/), [Lonely Planet](https://www.lonelyplanet.com/articles/best-time-to-visit-cape-town) |
 
 **Left out on purpose:** "one of the oldest mountains in the world" (sources disagree on the rock's age), Robben Island's UNESCO year (not confirmed in this check), and exact penguin counts (they change every census).
+
+---
+
+## As produced
+
+- Running time **102 s** (12 voice-timed beats). Season 1 is now 7 stops and **12 min 28 s**; Cape Town is chapter 10:32 and the season map 12:14.
+- Spend: ~58 Higgsfield credits (8 plates, 1 penguin cut-out, 3 five-second Kling 4.0 clips, 1 MiniMax whale clip; no retakes) and about $0.60 of ElevenLabs credits (12 voice lines, 8 ambient sounds).
+- **Hook** (`penguins` scene): a drawn cove with granite boulders; four painted penguins waddle in one by one, "Africa?!" is scribbled over the sea, then "Boulders Beach · Cape Town" is written in. The labels and the penguin cut-out are episode data (`penguins: { label, place, image }`).
+- **History:** Robben Island is narrated, with a "Local tip" card on the former-prisoner guides. District Six is a "History" card on the Bo-Kaap beat ("tens of thousands", since sources give between ~30,000 and 60,000+). The Bo-Kaap colours fact was dropped to make room.
+- **Finale** (`finale` scene, `finale: { season: 1 }` on the episode, no `next`): the whole route draws stop by stop, every pin lights up, "That's a wrap on Season 1", and a "SEASON 1 · COMPLETE" stamp. In the season video the end card drops the next-stop tease and says "That's a wrap on Season 1."
+- Wording changes from v1: the penguin line names Simon's Town (Boulders is about 40 km from the city centre); the fynbos line is shortened; the Agulhas line says "further along the coast".
+- New engine pieces: South Africa's flag, the `penguins` and `finale` scenes, optional `next`, and a `line2Size` option on the passport stamp.

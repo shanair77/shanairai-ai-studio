@@ -1,22 +1,22 @@
 # Postcards from Africa · Season 1 — YouTube upload notes
 
-**Season 1 is the whole Africa run.** It grows with every new African stop: add the episode to `SEASON_1` in `src/postcards/seasons.ts` (in travel order), re-render `PostcardsSeason1`, and update the chapters below. Each destination also stays a standalone vertical Short.
+**Season 1 is the whole Africa run, from Morocco to the Cape, and it is now complete:** Cape Town is the finale (its last page draws the whole route and stamps the season complete, and the end card says "That's a wrap on Season 1"). Each destination also stays a standalone vertical Short. A later season works the same way: a new `SEASON_2` list, with `finale` set on its last stop.
 
 | | |
 |---|---|
 | **Long-form** | `PostcardsSeason1` · 1920×1080, 30 fps → `out/PostcardsFromAfrica-Season1-Journal.mp4` |
-| **Stops so far** | 6: Morocco, Egypt, Tanzania, Victoria Falls, Okavango Delta, Namibia · **10 min 46 s** |
-| **Shorts** | `PostcardsMorocco`, `PostcardsEgypt`, `PostcardsTanzania`, `PostcardsVictoriaFalls`, `PostcardsOkavango`, `PostcardsNamibia` · 1080×1920, 96–119 s each |
+| **Stops** | 7: Morocco, Egypt, Tanzania, Victoria Falls, Okavango Delta, Namibia, Cape Town · **12 min 28 s** |
+| **Shorts** | `PostcardsMorocco`, `PostcardsEgypt`, `PostcardsTanzania`, `PostcardsVictoriaFalls`, `PostcardsOkavango`, `PostcardsNamibia`, `PostcardsCapeTown` · 1080×1920, 96–119 s each |
 | **Layout** | Open journal: picture taped on the left page; place, fact note, mini map and handwritten narration on the right (`src/postcards/Journal.tsx`) |
 | **End screen** | The last 14 s are an end card with the season route; the right page is left clear for YouTube's end-screen elements (subscribe button, next video) |
 
 ## Suggested title
 
-Africa in 11 Minutes: Morocco to Namibia | Postcards from Africa · Season 1
+Africa in 12 Minutes: Morocco to Cape Town | Postcards from Africa · Season 1
 
 ## Description (paste as is; chapters must start at 0:00)
 
-A hand-painted travel journal across Africa: six stops, their history, wildlife and food, and practical tips for your own trip.
+A hand-painted travel journal across Africa, from Morocco to the Cape: seven stops, their history, wildlife and food, and practical tips for your own trip.
 
 0:00 Stop 01 · Morocco
 1:37 Stop 02 · Egypt
@@ -24,9 +24,8 @@ A hand-painted travel journal across Africa: six stops, their history, wildlife 
 5:28 Stop 04 · Victoria Falls
 7:09 Stop 05 · Okavango Delta
 8:45 Stop 06 · Namibia
-10:32 Season map & what's next
-
-Next stop: Cape Town.
+10:32 Stop 07 · Cape Town
+12:14 Season map
 
 Animation made with AI-assisted illustration and narration. Facts were checked in November 2026; prices, visa and currency rules change, so confirm them before you travel.
 

@@ -1,6 +1,6 @@
 /**
  * The code-drawn scenes of a Postcards from Africa episode: the hook (a strait map, a
- * timeline or a trail of footprints), the title page, the traveler's notes and the next-stop map. The title and
+ * timeline, footprints, a moonbow, a river, dead trees or penguins), the title page, the traveler's notes, and the next-stop map or the season finale. The title and
  * next-stop maps draw the season's route so far. Everything animates from the local frame.
  */
 
@@ -104,8 +104,21 @@ const NamibiaFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, border
   );
 };
 
+/** South Africa's flag: red and blue fields, a green Y edged in white, and a black triangle edged in gold at the hoist. */
+const SouthAfricaFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, border = "transparent" }) => (
+  <svg width={w} height={(w * 2) / 3} viewBox="0 0 60 40" style={{ borderRadius: 4, outline: `3px solid ${border}` }}>
+    <rect width={60} height={20} fill="#e03c31" />
+    <rect y={20} width={60} height={20} fill="#001489" />
+    <path d="M -2 -1.6 L 25 20 L 62 20 M -2 41.6 L 25 20" fill="none" stroke="#ffffff" strokeWidth={13.3} />
+    <path d="M -2 -1.6 L 25 20 L 62 20 M -2 41.6 L 25 20" fill="none" stroke="#007749" strokeWidth={8} />
+    <path d="M 0 4.6 L 19.3 20 L 0 35.4 Z" fill="#000000" stroke="#ffb81c" strokeWidth={2.6} />
+  </svg>
+);
+
 const OneFlag: React.FC<{ country: FlagId; w?: number; border?: string }> = ({ country, w, border }) =>
-  country === "namibia" ? (
+  country === "southafrica" ? (
+    <SouthAfricaFlag w={w} border={border} />
+  ) : country === "namibia" ? (
     <NamibiaFlag w={w} border={border} />
   ) : country === "botswana" ? (
     <BotswanaFlag w={w} border={border} />
@@ -517,6 +530,82 @@ export const TreesScene: React.FC<{ ep: Episode }> = ({ ep }) => {
   );
 };
 
+/* ------------------------------------------------------------------ hook: penguins on an African beach */
+export const PenguinsScene: React.FC<{ ep: Episode }> = ({ ep }) => {
+  const f = useCurrentFrame();
+  const labels = ep.penguins ?? { label: "", place: "", image: "" };
+  const wash = interpolate(f, [0, 25], [0, 1], clamp);
+  // Penguins waddle in from the left one by one: feet position, width and entry frame.
+  const birds = [
+    { x: 300, y: 1330, w: 175, at: 18 },
+    { x: 520, y: 1265, w: 140, at: 34 },
+    { x: 720, y: 1340, w: 165, at: 50 },
+    { x: 890, y: 1255, w: 125, at: 66 },
+  ];
+  const walk = 42;
+  const h = 1942 / 936;
+  const quip = interpolate(f, [walk + 70, walk + 80], [0, 1], clamp);
+  const done = 135;
+  return (
+    <Paper>
+      <svg width={1080} height={1920} viewBox="0 0 1080 1920" style={{ position: "absolute" }}>
+        <rect x={0} y={420} width={1080} height={330} fill="#8fc3e6" opacity={wash * 0.8} />
+        <rect x={0} y={740} width={1080} height={260} fill="#2fb0b8" opacity={wash * 0.85} />
+        {[[60, 800, 330], [420, 850, 700], [760, 790, 1020], [150, 930, 480], [600, 950, 900]].map(([x1, y, x2], i) => (
+          <path key={i} d={`M ${x1} ${y} Q ${(x1 + x2) / 2} ${y - 14} ${x2} ${y}`} fill="none" stroke="#e8f7f6" strokeWidth={4} strokeLinecap="round" opacity={wash * 0.8} />
+        ))}
+        <path d="M 0 990 Q 270 960 540 985 Q 810 1010 1080 975 L 1080 1410 L 0 1410 Z" fill="#f3e6c8" opacity={wash} />
+        <path d="M 0 990 Q 270 960 540 985 Q 810 1010 1080 975" fill="none" stroke="#ffffff" strokeWidth={10} opacity={wash * 0.9} />
+        <path d="M 0 990 Q 270 960 540 985 Q 810 1010 1080 975" fill="none" stroke={INK} strokeWidth={4} pathLength={1} strokeDasharray={1} strokeDashoffset={draw(f, 4, 30)} />
+        <line x1={0} y1={742} x2={1080} y2={742} stroke={INK} strokeWidth={4} pathLength={1} strokeDasharray={1} strokeDashoffset={draw(f, 0, 24)} />
+        {/* Granite boulders at both ends of the cove. */}
+        {[
+          "M -40 1010 Q -50 760 120 700 Q 260 660 300 820 Q 330 960 250 1015 Z",
+          "M 180 1030 Q 200 900 300 900 Q 400 905 400 1000 Q 400 1040 330 1045 Z",
+          "M 1120 1000 Q 1130 720 960 690 Q 820 680 790 830 Q 770 960 850 1005 Z",
+          "M 700 1010 Q 700 930 770 925 Q 850 925 860 990 Q 860 1020 800 1025 Z",
+        ].map((d, i) => (
+          <g key={i}>
+            <path d={d} fill="#b9b0a2" opacity={wash} />
+            <path d={d} fill="none" stroke={INK} strokeWidth={5} strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={draw(f, 8 + i * 6, 38 + i * 6)} />
+          </g>
+        ))}
+      </svg>
+      {birds.map((b, i) => {
+        const t = interpolate(f, [b.at, b.at + walk], [0, 1], clamp);
+        const x = interpolate(t, [0, 1], [-160 - i * 40, b.x], { easing: Easing.out(Easing.quad) });
+        const moving = t > 0 && t < 1;
+        const rot = moving ? Math.sin(f * 0.6 + i) * 8 : Math.sin(f * 0.12 + i * 2) * 2;
+        const bob = moving ? -Math.abs(Math.sin(f * 0.6 + i)) * 10 : 0;
+        return (
+          <Img
+            key={i}
+            src={staticFile(labels.image)}
+            style={{
+              position: "absolute",
+              left: x - b.w / 2,
+              top: b.y - b.w * h + bob,
+              width: b.w,
+              rotate: `${rot}deg`,
+              transformOrigin: "50% 100%",
+              opacity: f >= b.at ? 1 : 0,
+            }}
+          />
+        );
+      })}
+      <div style={{ position: "absolute", left: 600, top: 470, fontFamily: MARKER, fontSize: 104, color: RED, rotate: "-8deg", opacity: quip, scale: `${interpolate(quip, [0, 1], [1.4, 1])}` }}>
+        Africa?!
+      </div>
+      <div style={{ position: "absolute", top: 180, left: 0, right: 0, textAlign: "center" }}>
+        <div style={{ fontFamily: MARKER, fontSize: 100, color: RED, opacity: interpolate(f, [done, done + 12], [0, 1], clamp), translate: `0 ${interpolate(f, [done, done + 12], [20, 0], clamp)}px` }}>
+          {labels.label}
+        </div>
+        <div style={{ fontFamily: HAND, fontSize: 64, color: INK, opacity: interpolate(f, [done + 8, done + 20], [0, 1], clamp) }}>{labels.place}</div>
+      </div>
+    </Paper>
+  );
+};
+
 /* ------------------------------------------------------------------ Africa map helpers */
 const MapAfrica: React.FC<{ x: number; y: number; scale: number; drawStart?: number; children?: React.ReactNode }> = ({
   x,
@@ -573,8 +662,9 @@ const SeasonRoute: React.FC<{ stops: [number, number][] }> = ({ stops }) => {
 };
 
 /** The passport stamp, slamming down at `at` frames. */
-export const Stamp: React.FC<{ at: number; line1: string; line2: string; line3: string; x: number; y: number; rotate?: number }> = ({
+export const Stamp: React.FC<{ at: number; line1: string; line2: string; line3: string; x: number; y: number; rotate?: number; line2Size?: number }> = ({
   at,
+  line2Size,
   line1,
   line2,
   line3,
@@ -609,7 +699,7 @@ export const Stamp: React.FC<{ at: number; line1: string; line2: string; line3: 
       }}
     >
       <div style={{ fontSize: 28, letterSpacing: 3 }}>{line1}</div>
-      <div style={{ fontSize: line2.length > 9 ? Math.round((56 * 9) / line2.length) : 56, margin: "12px 0" }}>{line2}</div>
+      <div style={{ fontSize: line2Size ?? (line2.length > 9 ? Math.round((56 * 9) / line2.length) : 56), margin: "12px 0" }}>{line2}</div>
       <div style={{ fontSize: 26, letterSpacing: 2 }}>{line3}</div>
     </div>
   );
@@ -701,6 +791,7 @@ export const NotesScene: React.FC<{ ep: Episode }> = ({ ep }) => {
 export const NextScene: React.FC<{ ep: Episode }> = ({ ep }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
+  if (!ep.next) return <FinaleScene ep={ep} />;
   const a = proj(ep.pin[0], ep.pin[1]);
   const b = proj(ep.next.pin[0], ep.next.pin[1]);
   const route = `M ${a.x} ${a.y} Q ${(a.x + b.x) / 2} ${Math.min(a.y, b.y) - 26} ${b.x} ${b.y}`;
@@ -751,6 +842,41 @@ export const NextScene: React.FC<{ ep: Episode }> = ({ ep }) => {
         {ep.series} · Stop {next}
       </div>
       <Stamp at={Math.round(3.2 * fps)} line1="★ VISITED ★" line2={ep.country.toUpperCase()} line3={`STOP ${String(ep.number).padStart(2, "0")} · AFRICA`} x={390} y={1530} rotate={10} />
+    </Paper>
+  );
+};
+
+/* ------------------------------------------------------------------ season finale */
+/** A season's last page: the whole route draws stop by stop, every pin lights up, and the season is stamped complete. */
+export const FinaleScene: React.FC<{ ep: Episode }> = ({ ep }) => {
+  const f = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const stops = [...ep.route, ep.pin];
+  const pts = stops.map(([lo, la]) => proj(lo, la));
+  const d = pts.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `Q ${(pts[i - 1].x + p.x) / 2} ${Math.min(pts[i - 1].y, p.y) - 26} ${p.x} ${p.y}`)).join(" ");
+  const start = 20;
+  const step = 16;
+  const end = start + (stops.length - 1) * step;
+  const season = ep.finale?.season ?? 1;
+  return (
+    <Paper>
+      <svg width={1080} height={1920} viewBox="0 0 1080 1920" style={{ position: "absolute" }}>
+        <MapAfrica x={190} y={560} scale={3.5} drawStart={-60}>
+          <path d={d} fill="none" stroke={RED} strokeWidth={1.8} strokeDasharray="4 3" />
+          <path d={d} fill="none" stroke={PAPER} strokeWidth={3.4} pathLength={1} strokeDasharray={1} strokeDashoffset={interpolate(f, [start, end], [0, -1], clamp)} />
+          {stops.map((s, i) => (
+            <Pin key={i} lonLat={s} appear={start + i * step} />
+          ))}
+        </MapAfrica>
+      </svg>
+      <div style={{ position: "absolute", top: 190, left: 0, right: 0, textAlign: "center", opacity: interpolate(f, [5, 20], [0, 1], clamp) }}>
+        <div style={{ fontFamily: HAND, fontSize: 64, color: INK }}>That's a wrap on</div>
+        <div style={{ fontFamily: MARKER, fontSize: 120, color: RED, lineHeight: 1.05 }}>Season {season}</div>
+      </div>
+      <div style={{ position: "absolute", top: 1400, left: 0, right: 0, textAlign: "center", fontFamily: HAND, fontSize: 56, color: INK, opacity: interpolate(f, [end, end + 15], [0, 1], clamp) }}>
+        {stops.length} stops across Africa
+      </div>
+      <Stamp at={Math.round(5.2 * fps)} line1={`★ SEASON ${season} ★`} line2="COMPLETE" line2Size={44} line3={`${stops.length} STOPS · AFRICA`} x={390} y={1530} rotate={-8} />
     </Paper>
   );
 };

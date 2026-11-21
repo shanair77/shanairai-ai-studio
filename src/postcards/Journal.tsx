@@ -28,7 +28,7 @@ import {
   beatFrames,
   episodeFrames,
 } from "./Episode";
-import { FootprintsScene, HookScene, INK, MoonbowScene, RiverScene, TreesScene, NextScene, NotesScene, PAPER, RED, TimelineScene, TitleScene } from "./scenes";
+import { FinaleScene, FootprintsScene, HookScene, PenguinsScene, INK, MoonbowScene, RiverScene, TreesScene, NextScene, NotesScene, PAPER, RED, TimelineScene, TitleScene } from "./scenes";
 import type { Beat, Episode } from "./types";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -118,6 +118,10 @@ const SceneCard: React.FC<{ ep: Episode; scene: Extract<Beat["visual"], { kind: 
           <RiverScene ep={ep} />
         ) : scene === "trees" ? (
           <TreesScene ep={ep} />
+        ) : scene === "penguins" ? (
+          <PenguinsScene ep={ep} />
+        ) : scene === "finale" ? (
+          <FinaleScene ep={ep} />
         ) : scene === "title" ? (
           <TitleScene ep={ep} />
         ) : scene === "notes" ? (
@@ -279,32 +283,36 @@ const EndCard: React.FC<{ episodes: Episode[] }> = ({ episodes }) => {
   const f = useCurrentFrame();
   const last = episodes[episodes.length - 1];
   const stops = [...last.route, last.pin].map(([lo, la]) => proj(lo, la));
-  const nextPin = proj(last.next.pin[0], last.next.pin[1]);
   const d = stops.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `Q ${(stops[i - 1].x + p.x) / 2} ${Math.min(stops[i - 1].y, p.y) - 26} ${p.x} ${p.y}`)).join(" ");
   const here = stops[stops.length - 1];
-  const nextD = `M ${here.x} ${here.y} Q ${(here.x + nextPin.x) / 2} ${Math.min(here.y, nextPin.y) - 26} ${nextPin.x} ${nextPin.y}`;
+  // A season that ends on its finale has no next stop to tease.
+  const nextPin = last.next ? proj(last.next.pin[0], last.next.pin[1]) : null;
+  const nextD = nextPin ? `M ${here.x} ${here.y} Q ${(here.x + nextPin.x) / 2} ${Math.min(here.y, nextPin.y) - 26} ${nextPin.x} ${nextPin.y}` : null;
   const draw = interpolate(f, [10, 70], [1, 0], { ...clamp, easing: Easing.inOut(Easing.cubic) });
   const o = interpolate(f, [0, 15], [0, 1], clamp);
+  const pinStep = Math.min(25, 60 / Math.max(1, stops.length - 1));
   return (
     <AbsoluteFill style={{ opacity: o }}>
       <div style={{ position: "absolute", left: 74, width: W / 2 - 74, top: 90, textAlign: "center" }}>
         <div style={{ fontFamily: MARKER, fontSize: 70, color: INK }}>{last.series}</div>
-        <div style={{ fontFamily: HAND, fontSize: 46, color: RED }}>{episodes.map((e) => e.country).join(" · ")}</div>
+        <div style={{ fontFamily: HAND, fontSize: episodes.length > 6 ? 38 : 46, color: RED, padding: "0 40px" }}>{episodes.map((e) => e.country).join(" · ")}</div>
       </div>
-      <svg width={660} height={720} viewBox="-10 -10 220 240" style={{ position: "absolute", left: LEFT_CX - 330, top: 260 }}>
+      <svg width={660} height={720} viewBox="-10 -10 220 240" style={{ position: "absolute", left: LEFT_CX - 330, top: episodes.length > 6 ? 300 : 260 }}>
         <path d={AFRICA_PATH} fill="#e2b874" opacity={0.65} />
         <path d={AFRICA_PATH} fill="none" stroke={INK} strokeWidth={1.4} strokeLinejoin="round" />
         <path d={d} fill="none" stroke={RED} strokeWidth={1.4} strokeDasharray="4 3" />
         <path d={d} fill="none" stroke={PAPER} strokeWidth={3} pathLength={1} strokeDasharray={1} strokeDashoffset={draw - 1} />
-        <path d={nextD} fill="none" stroke="#7a7a7a" strokeWidth={1.2} strokeDasharray="2 3" opacity={interpolate(f, [70, 85], [0, 1], clamp)} />
+        {nextD ? <path d={nextD} fill="none" stroke="#7a7a7a" strokeWidth={1.2} strokeDasharray="2 3" opacity={interpolate(f, [70, 85], [0, 1], clamp)} /> : null}
         {stops.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={4.5} fill={RED} stroke={INK} strokeWidth={1.1} opacity={interpolate(f, [10 + i * 25, 18 + i * 25], [0, 1], clamp)} />
+          <circle key={i} cx={p.x} cy={p.y} r={4.5} fill={RED} stroke={INK} strokeWidth={1.1} opacity={interpolate(f, [10 + i * pinStep, 18 + i * pinStep], [0, 1], clamp)} />
         ))}
-        <circle cx={nextPin.x} cy={nextPin.y} r={4.5} fill="none" stroke="#7a7a7a" strokeWidth={1.4} opacity={interpolate(f, [80, 90], [0, 1], clamp)} />
+        {nextPin ? <circle cx={nextPin.x} cy={nextPin.y} r={4.5} fill="none" stroke="#7a7a7a" strokeWidth={1.4} opacity={interpolate(f, [80, 90], [0, 1], clamp)} /> : null}
       </svg>
       <div style={{ position: "absolute", left: RIGHT_X, width: RIGHT_W, top: 110, opacity: interpolate(f, [20, 35], [0, 1], clamp) }}>
         <div style={{ fontFamily: HAND, fontSize: 56, color: INK, lineHeight: 1.25 }}>Thanks for travelling with us.</div>
-        <div style={{ fontFamily: HAND, fontSize: 44, color: RED, marginTop: 10 }}>Next stop: {last.next.country}</div>
+        <div style={{ fontFamily: HAND, fontSize: 44, color: RED, marginTop: 10 }}>
+          {last.next ? `Next stop: ${last.next.country}` : `That's a wrap on Season ${last.finale?.season ?? 1}.`}
+        </div>
       </div>
     </AbsoluteFill>
   );
@@ -324,7 +332,8 @@ export const seasonChapters = (episodes: Episode[], fps = POSTCARDS_FPS) => {
     at += episodeFrames(e, fps);
     return { title: `Stop ${String(e.number).padStart(2, "0")} · ${e.country}`, seconds: s / fps };
   });
-  return [...list, { title: "Season map & what's next", seconds: at / fps }];
+  const last = episodes[episodes.length - 1];
+  return [...list, { title: last?.next ? "Season map & what's next" : "Season map", seconds: at / fps }];
 };
 
 export const calculateSeasonMetadata: CalculateMetadataFunction<SeasonProps> = ({ props }) => ({
