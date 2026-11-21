@@ -1,4 +1,4 @@
-# Postcards from Africa · Episode 05 — The Okavango Delta: Beat Sheet (v1, decisions open)
+# Postcards from Africa · Episode 05 — The Okavango Delta: Beat Sheet (v2, produced)
 
 | | |
 |---|---|
@@ -8,7 +8,7 @@
 | **Motion** | Kling 4.0 for hero shots · MiniMax H3 Max for an atmosphere shot · layered code animation for in-between beats · maps, captions, cards and stamps drawn in Remotion |
 | **Audio** | ElevenLabs voiceover (Kimberly), ambient sound only (no music), word-by-word captions; quiet beds under every code-drawn page |
 | **Tone** | Documentary-cozy: calm, curious, respectful |
-| **Composition** | `PostcardsOkavango` (to build) → `src/postcards/okavango.ts` + the shared engine; added to `SEASON_1` |
+| **Composition** | `PostcardsOkavango` → `src/postcards/okavango.ts` + the shared engine; media in `public/postcards/okavango/`; stop 05 of `SEASON_1` |
 
 **Shot types:** **AI-K** Kling 4.0 hero clip · **AI-M** MiniMax atmosphere clip · **LAYER** painted plate animated in code · **CODE** drawn in Remotion
 
@@ -20,13 +20,10 @@ As with Victoria Falls, **every fact below was checked before writing** (sources
 
 ## Beats
 
-### 0 · Hook — CODE *(decision 1)*
-- **Option A — The river that never reaches the sea (recommended):** a pen draws the Okavango River flowing south from Angola. Instead of reaching the coast, it fans out like an open hand across the Kalahari and fades into the sand.
-  - **Narration:** "This river flows into a desert, and never reaches the sea."
-  - **On screen:** "Okavango Delta · Botswana" written in as the river fans out.
-  - Why: the strangest true fact about the place, and a drawn map is a natural continuation of the season's journal maps.
-- **Option B — A flood in the dry season:** a two-month calendar page. Rain falls on "January · Angola", then water spreads over "July · Botswana" while the sun blazes. "Here, the floods arrive in the middle of the dry season."
-- **Option C — Money named after rain:** coins fall like raindrops onto the page. "In Botswana, the money is named after rain." (If not the hook, this is beat 8 anyway.)
+### 0 · Hook — CODE (the river that never reaches the sea)
+- **Picture:** Rain falls on the Angolan highlands; a pen draws the river down the page; it fans out like an open hand across the Kalahari's sand and fades away, with islands appearing between the channels.
+- **Narration:** "This river flows into a desert, and never reaches the sea."
+- **On screen:** "Okavango Delta · Botswana" written in as the river fans out.
 
 ### 1 · Title — CODE
 - **Picture:** The Africa map draws in; the season route runs Morocco → Egypt → Tanzania → Victoria Falls → Okavango; the stamp lands.
@@ -57,7 +54,7 @@ As with Victoria Falls, **every fact below was checked before writing** (sources
 - **Narration:** "In Moremi Game Reserve, red lechwe bound through the shallows, and rare African wild dogs hunt in packs."
 - **Fact card:** "Moremi is one of the best places in Africa to see wild dogs."
 
-### 7 · Tsodilo Hills — LAYER *(decision 2)*
+### 7 · Tsodilo Hills — LAYER
 - **Picture:** A rock face in warm light covered in red-ochre paintings of eland, giraffe and handprints; the hills rise behind; the traveler small at a respectful distance with a local guide.
 - **Narration:** "In the northwest, the Tsodilo Hills hold more than four thousand five hundred rock paintings, some made by ancestors of the San people."
 - **Fact card:** "Local communities still treat the hills as a sacred place. Visit with a guide and never touch the paintings."
@@ -81,24 +78,20 @@ As with Victoria Falls, **every fact below was checked before writing** (sources
   - **Respect:** give wildlife space, never feed animals, never touch rock paintings, follow your guide.
 - **Narration:** "Come between June and October, fly in through Maun, and always listen to your guide."
 
-### 11 · Next stop — CODE *(decision 3)*
+### 11 · Next stop — CODE
 - **Picture:** The route line runs on from the delta to the next stop, with a doodle.
-- **Narration:** "Next stop: Namibia." *(if the recommended option is chosen)*
-- **On screen:** "STOP 06 → …"; stamp "VISITED · OKAVANGO".
+- **Narration:** "Next stop: Namibia."
+- **On screen:** "STOP 06 → NAMIBIA" with a dunes doodle; stamp "VISITED · OKAVANGO DELTA".
 
 **Narration:** about 220 words across 12 beats. **Estimated running time:** ~100–110 s.
 
 ---
 
-## Decisions for you
+## Decisions (locked)
 
-1. **Hook:** **A — the river that never reaches the sea (recommended)** · B — a flood in the dry season · C — money named after rain.
-2. **Cultural beat:** **Tsodilo Hills rock art (recommended)**, a visit to a village of the delta's river peoples, or none.
-3. **Next stop:**
-   - **Namibia (recommended):** next door, and its red dunes are the opposite of the wet delta.
-   - **Cape Town, South Africa.**
-   - **Madagascar.**
-   - **Or end Season 1 here** and save the next stops for Season 2.
+1. **Hook:** the river that never reaches the sea.
+2. **Cultural beat:** Tsodilo Hills rock art.
+3. **Next stop:** Namibia.
 
 ---
 
@@ -127,10 +120,10 @@ As with Victoria Falls, **every fact below was checked before writing** (sources
 **ElevenLabs:** 12 voice lines (~$0.25) and about 8 ambient sounds (~$0.30): a small plane's engine hum with wind, water trickling over dry grass with birds, a pole dipping and reeds brushing a canoe, elephants and egrets at dawn, splashing antelope with distant wild-dog calls, warm wind over rock with cicadas, rolling thunder and first rain on sand, and a night lagoon with frogs, hippos and a fish eagle. Plus a soft bed under the code-drawn pages, and the pen, stamp and notes sounds reused.
 
 **Engine work needed** (small):
-- [ ] A **river-map** hook scene (the river fanning into the Kalahari), if option A.
-- [ ] **Botswana's flag.**
-- [ ] A doodle for the next stop (dunes, if Namibia).
-- [ ] Add the episode to `SEASON_1` and update the season chapters.
+- [x] A **river-map** hook scene (the river fanning into the Kalahari).
+- [x] **Botswana's flag.**
+- [x] A dunes doodle for the next stop.
+- [x] Added to `SEASON_1`; season chapters updated.
 
 ---
 
@@ -151,3 +144,10 @@ As with Victoria Falls, **every fact below was checked before writing** (sources
 | Best time June–October (flood high, dry season) | Verified | [Okavango.com](https://www.okavango.com/best-time-to-visit-okavango-delta.php) |
 
 **Left out on purpose:** Botswana's visitor levy. The only sources are from 2017–18 and disagree about whether it was introduced, withdrawn or reintroduced, so the notes say nothing about fees. Also left out: whether mokoros are now mostly fibreglass (sources disagree on whether that's a rule or a trend), and exact elephant trends (contested).
+
+## As produced
+
+- Running time **96 s** (12 voice-timed beats).
+- Spend: ~59 Higgsfield credits (8 plates, 1 cut-out, 1 plate retake, 3 five-second Kling 4.0 clips, 1 MiniMax clip) and about $0.55 of ElevenLabs credits (12 voice lines, 9 ambient sounds).
+- The mokoro plate was regenerated once: the first version had the poler standing ahead of the traveler; on a real mokoro the poler stands at the back.
+- The hook's labels (`river: { label, place, source, sink }`) are episode data, so the river scene can be reused.
