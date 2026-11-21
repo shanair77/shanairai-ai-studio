@@ -75,8 +75,19 @@ const ZimbabweFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, borde
   );
 };
 
+/** Botswana's flag: light blue with a black band edged in white. */
+const BotswanaFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, border = "transparent" }) => (
+  <svg width={w} height={(w * 2) / 3} viewBox="0 0 60 40" style={{ borderRadius: 4, outline: `3px solid ${border}` }}>
+    <rect width={60} height={40} fill="#75aadb" />
+    <rect y={15} width={60} height={10} fill="#ffffff" />
+    <rect y={16.67} width={60} height={6.66} fill="#000000" />
+  </svg>
+);
+
 const OneFlag: React.FC<{ country: FlagId; w?: number; border?: string }> = ({ country, w, border }) =>
-  country === "egypt" ? (
+  country === "botswana" ? (
+    <BotswanaFlag w={w} border={border} />
+  ) : country === "egypt" ? (
     <EgyptFlag w={w} border={border} />
   ) : country === "tanzania" ? (
     <TanzaniaFlag w={w} border={border} />
@@ -360,6 +371,72 @@ export const MoonbowScene: React.FC<{ ep: Episode }> = ({ ep }) => {
   );
 };
 
+/* ------------------------------------------------------------------ hook: a river into the desert */
+/** A pen draws a river from rainy highlands down the page; it fans out into a delta and fades into the sand. */
+export const RiverScene: React.FC<{ ep: Episode }> = ({ ep }) => {
+  const f = useCurrentFrame();
+  const labels = ep.river ?? { label: "", place: "", source: "", sink: "" };
+  const main = "M 470 470 C 540 580, 400 660, 470 770 C 540 880, 450 940, 540 1010";
+  const branches = [
+    "M 540 1010 C 470 1100, 360 1180, 250 1260",
+    "M 540 1010 C 500 1120, 430 1220, 380 1330",
+    "M 540 1010 C 545 1130, 520 1240, 520 1360",
+    "M 540 1010 C 590 1120, 640 1220, 670 1340",
+    "M 540 1010 C 620 1090, 730 1160, 820 1250",
+    "M 540 1010 C 640 1050, 780 1080, 900 1130",
+  ];
+  const islands = [
+    [430, 1150],
+    [470, 1250],
+    [590, 1180],
+    [640, 1280],
+    [720, 1170],
+    [350, 1230],
+    [560, 1300],
+  ];
+  const sand = interpolate(f, [70, 110], [0, 1], clamp);
+  const done = 130;
+  return (
+    <Paper>
+      <svg width={1080} height={1920} viewBox="0 0 1080 1920" style={{ position: "absolute" }}>
+        <defs>
+          <linearGradient id="river-fade" x1="0" y1="1010" x2="0" y2="1380" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stopColor="#4f8fc9" stopOpacity={1} />
+            <stop offset="1" stopColor="#4f8fc9" stopOpacity={0.05} />
+          </linearGradient>
+        </defs>
+        {/* The Kalahari: a wash of sand under the delta. */}
+        <ellipse cx={560} cy={1260} rx={470} ry={250} fill="#e2c48e" opacity={sand * 0.7} />
+        <text x={760} y={1470} fontFamily={HAND} fontSize={56} fill="#9a6b2f" opacity={sand}>
+          {labels.sink}
+        </text>
+        {/* Rainy highlands where the river rises. */}
+        <path d="M 250 470 Q 330 390 410 450 Q 470 380 560 440 Q 640 380 720 470 Z" fill="#9fb07a" opacity={interpolate(f, [0, 15], [0, 0.8], clamp)} />
+        {Array.from({ length: 12 }, (_, i) => {
+          const fall = ((f * 9 + i * 37) % 90) / 90;
+          return <line key={i} x1={280 + i * 38} y1={300 + fall * 120} x2={274 + i * 38} y2={322 + fall * 120} stroke="#4f8fc9" strokeWidth={4} strokeLinecap="round" opacity={interpolate(f, [0, 15], [0, 0.7], clamp) * (1 - fall)} />;
+        })}
+        <text x={740} y={440} fontFamily={HAND} fontSize={56} fill={INK} opacity={interpolate(f, [5, 20], [0, 1], clamp)}>
+          {labels.source}
+        </text>
+        <path d={main} fill="none" stroke="#4f8fc9" strokeWidth={16} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={draw(f, 10, 60)} />
+        {branches.map((d, i) => (
+          <path key={i} d={d} fill="none" stroke="url(#river-fade)" strokeWidth={11 - i * 0.6} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={draw(f, 60 + i * 4, 105 + i * 4)} />
+        ))}
+        {islands.map(([x, y], i) => (
+          <ellipse key={i} cx={x} cy={y} rx={22} ry={13} fill="#7fa65a" opacity={interpolate(f, [95 + i * 3, 105 + i * 3], [0, 0.85], clamp)} />
+        ))}
+      </svg>
+      <div style={{ position: "absolute", top: 160, left: 0, right: 0, textAlign: "center" }}>
+        <div style={{ fontFamily: MARKER, fontSize: 92, color: RED, opacity: interpolate(f, [done, done + 12], [0, 1], clamp), translate: `0 ${interpolate(f, [done, done + 12], [20, 0], clamp)}px` }}>
+          {labels.label}
+        </div>
+        <div style={{ fontFamily: HAND, fontSize: 64, color: INK, opacity: interpolate(f, [done + 8, done + 20], [0, 1], clamp) }}>{labels.place}</div>
+      </div>
+    </Paper>
+  );
+};
+
 /* ------------------------------------------------------------------ Africa map helpers */
 const MapAfrica: React.FC<{ x: number; y: number; scale: number; drawStart?: number; children?: React.ReactNode }> = ({
   x,
@@ -561,6 +638,8 @@ export const NextScene: React.FC<{ ep: Episode }> = ({ ep }) => {
           <g transform={`translate(${ep.next.doodle === "waterfall" ? b.x - 34 : b.x + 4} ${ep.next.doodle === "waterfall" ? b.y - 20 : b.y - 22})`} opacity={interpolate(f, [55, 70], [0, 1], clamp)}>
             {ep.next.doodle === "pyramids" ? (
               <path d="M 0 14 L 9 0 L 18 14 Z M 12 14 L 19 4 L 26 14 Z" fill="#e2b874" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />
+            ) : ep.next.doodle === "dunes" ? (
+              <path d="M 0 16 Q 6 4 12 10 Q 17 2 24 16 Z" fill="#d9773b" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />
             ) : ep.next.doodle === "delta" ? (
               <>
                 <path d="M 2 2 Q 8 6 10 10 M 10 10 Q 6 14 1 16 M 10 10 Q 12 15 10 19 M 10 10 Q 16 13 22 14 M 10 10 Q 15 7 21 6" fill="none" stroke="#5b9bd5" strokeWidth={1.4} strokeLinecap="round" />

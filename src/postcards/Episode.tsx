@@ -25,7 +25,7 @@ import {
   type CalculateMetadataFunction,
 } from "remotion";
 import { HAND, MARKER } from "../styletest/shared";
-import { FootprintsScene, HookScene, INK, MoonbowScene, NextScene, NotesScene, PAPER, RED, TimelineScene, TitleScene } from "./scenes";
+import { FootprintsScene, HookScene, INK, MoonbowScene, RiverScene, NextScene, NotesScene, PAPER, RED, TimelineScene, TitleScene } from "./scenes";
 import type { Beat, Episode, Sound } from "./types";
 
 export const POSTCARDS_FPS = 30;
@@ -276,6 +276,8 @@ const BeatView: React.FC<{ ep: Episode; beat: Beat; frames: number; first: boole
           <FootprintsScene ep={ep} />
         ) : v.scene === "moonbow" ? (
           <MoonbowScene ep={ep} />
+        ) : v.scene === "river" ? (
+          <RiverScene ep={ep} />
         ) : v.scene === "title" ? (
           <TitleScene ep={ep} />
         ) : v.scene === "notes" ? (
@@ -292,7 +294,7 @@ const BeatView: React.FC<{ ep: Episode; beat: Beat; frames: number; first: boole
           {beat.scribbles ? <Scribbles items={beat.scribbles} /> : null}
         </AbsoluteFill>
       )}
-      {!isScene || v.scene === "hook" || v.scene === "timeline" || v.scene === "footprints" || v.scene === "moonbow" || v.scene === "notes" ? <Caption text={beat.text} voSeconds={beat.voSeconds} /> : null}
+      {!isScene || v.scene === "hook" || v.scene === "timeline" || v.scene === "footprints" || v.scene === "moonbow" || v.scene === "river" || v.scene === "notes" ? <Caption text={beat.text} voSeconds={beat.voSeconds} /> : null}
       <BeatAudio beat={beat} />
     </AbsoluteFill>
   );
