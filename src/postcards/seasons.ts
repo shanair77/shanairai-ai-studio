@@ -6,9 +6,10 @@
 
 import { EGYPT } from "./egypt";
 import { MOROCCO } from "./morocco";
+import { NAMIBIA } from "./namibia";
 import { OKAVANGO } from "./okavango";
 import { TANZANIA } from "./tanzania";
 import type { Episode } from "./types";
 import { VICTORIA_FALLS } from "./victoria-falls";
 
-export const SEASON_1: Episode[] = [MOROCCO, EGYPT, TANZANIA, VICTORIA_FALLS, OKAVANGO];
+export const SEASON_1: Episode[] = [MOROCCO, EGYPT, TANZANIA, VICTORIA_FALLS, OKAVANGO, NAMIBIA];

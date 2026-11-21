@@ -28,7 +28,7 @@ import {
   beatFrames,
   episodeFrames,
 } from "./Episode";
-import { FootprintsScene, HookScene, INK, MoonbowScene, RiverScene, NextScene, NotesScene, PAPER, RED, TimelineScene, TitleScene } from "./scenes";
+import { FootprintsScene, HookScene, INK, MoonbowScene, RiverScene, TreesScene, NextScene, NotesScene, PAPER, RED, TimelineScene, TitleScene } from "./scenes";
 import type { Beat, Episode } from "./types";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -116,6 +116,8 @@ const SceneCard: React.FC<{ ep: Episode; scene: Extract<Beat["visual"], { kind: 
           <MoonbowScene ep={ep} />
         ) : scene === "river" ? (
           <RiverScene ep={ep} />
+        ) : scene === "trees" ? (
+          <TreesScene ep={ep} />
         ) : scene === "title" ? (
           <TitleScene ep={ep} />
         ) : scene === "notes" ? (

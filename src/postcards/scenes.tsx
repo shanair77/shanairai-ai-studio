@@ -84,8 +84,30 @@ const BotswanaFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, borde
   </svg>
 );
 
+/** Namibia's flag: blue and green triangles split by a red diagonal edged in white, with a golden sun. */
+const NamibiaFlag: React.FC<{ w?: number; border?: string }> = ({ w = 96, border = "transparent" }) => {
+  const rays = Array.from({ length: 12 }, (_, i) => {
+    const a = (i * Math.PI) / 6;
+    const b = a + Math.PI / 12;
+    const c = a - Math.PI / 12;
+    return `M ${12 + Math.cos(a) * 8} ${11 + Math.sin(a) * 8} L ${12 + Math.cos(b) * 4} ${11 + Math.sin(b) * 4} L ${12 + Math.cos(c) * 4} ${11 + Math.sin(c) * 4} Z`;
+  }).join(" ");
+  return (
+    <svg width={w} height={(w * 2) / 3} viewBox="0 0 60 40" style={{ borderRadius: 4, outline: `3px solid ${border}` }}>
+      <rect width={60} height={40} fill="#009543" />
+      <path d="M 0 0 L 60 0 L 0 40 Z" fill="#003580" />
+      <line x1={-4} y1={42.7} x2={64} y2={-2.7} stroke="#ffffff" strokeWidth={15} />
+      <line x1={-4} y1={42.7} x2={64} y2={-2.7} stroke="#d21034" strokeWidth={10} />
+      <path d={rays} fill="#ffce00" />
+      <circle cx={12} cy={11} r={3.6} fill="#ffce00" stroke="#003580" strokeWidth={0.6} />
+    </svg>
+  );
+};
+
 const OneFlag: React.FC<{ country: FlagId; w?: number; border?: string }> = ({ country, w, border }) =>
-  country === "botswana" ? (
+  country === "namibia" ? (
+    <NamibiaFlag w={w} border={border} />
+  ) : country === "botswana" ? (
     <BotswanaFlag w={w} border={border} />
   ) : country === "egypt" ? (
     <EgyptFlag w={w} border={border} />
@@ -437,6 +459,64 @@ export const RiverScene: React.FC<{ ep: Episode }> = ({ ep }) => {
   );
 };
 
+/* ------------------------------------------------------------------ hook: dead trees on a clay pan */
+/** A pen draws a white clay pan under a red dune, then black, bare trees; an age tag swings onto one. */
+export const TreesScene: React.FC<{ ep: Episode }> = ({ ep }) => {
+  const f = useCurrentFrame();
+  const labels = ep.trees ?? { label: "", place: "", tag: "" };
+  const wash = interpolate(f, [0, 25], [0, 1], clamp);
+  const trees = [
+    { x: 520, base: 1300, s: 1.75, at: 25 },
+    { x: 190, base: 1215, s: 0.95, at: 40 },
+    { x: 880, base: 1240, s: 1.05, at: 50 },
+  ];
+  const tree =
+    "M 0 0 L -6 -120 L -40 -200 M -6 -120 L 18 -230 L -8 -310 M 18 -230 L 70 -290 M -40 -200 L -90 -235 M -40 -200 L -55 -260 M 70 -290 L 110 -300 M 70 -290 L 80 -340 M -8 -310 L 20 -360";
+  const swing = interpolate(f, [95, 130], [-38, 0], { ...clamp, easing: Easing.out(Easing.elastic(1.2)) });
+  const tagIn = interpolate(f, [90, 100], [0, 1], clamp);
+  const done = 130;
+  return (
+    <Paper>
+      <svg width={1080} height={1920} viewBox="0 0 1080 1920" style={{ position: "absolute" }}>
+        <rect x={0} y={420} width={1080} height={520} fill="#2f5fb3" opacity={wash * 0.85} />
+        <defs>
+          <linearGradient id="dune-wash" x1="0" y1="520" x2="1080" y2="1000" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stopColor="#e88a45" />
+            <stop offset="0.55" stopColor="#d36a32" />
+            <stop offset="1" stopColor="#9c4a2b" />
+          </linearGradient>
+        </defs>
+        <path d="M -40 1000 Q 200 600 420 520 Q 640 600 760 760 Q 900 700 1120 820 L 1120 1000 Z" fill="url(#dune-wash)" opacity={wash} />
+        <path d="M 420 520 Q 560 700 640 1000" fill="none" stroke="#a5532a" strokeWidth={4} opacity={wash * 0.6} />
+        <rect x={0} y={990} width={1080} height={420} fill="#f1ece1" opacity={wash} />
+        {[[90, 1060, 260, 1110], [300, 1150, 480, 1100], [560, 1180, 760, 1140], [800, 1080, 1000, 1130], [180, 1290, 420, 1330], [620, 1300, 900, 1270]].map(([x1, y1, x2, y2], i) => (
+          <path key={i} d={`M ${x1} ${y1} L ${(x1 + x2) / 2} ${y1 + 18} L ${x2} ${y2}`} fill="none" stroke="#c9bca5" strokeWidth={3} opacity={wash} />
+        ))}
+        {trees.map((t, i) => (
+          <g key={i} transform={`translate(${t.x} ${t.base}) scale(${t.s})`}>
+            <path d={tree} fill="none" stroke="#1d1a17" strokeWidth={11} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={draw(f, t.at, t.at + 35)} />
+          </g>
+        ))}
+        {/* The age tag, hung from the big tree's branch on a string. */}
+        <g transform={`translate(${520 + 70 * 1.75} ${1300 - 290 * 1.75}) rotate(${swing})`} opacity={tagIn}>
+          <line x1={0} y1={0} x2={0} y2={60} stroke={INK} strokeWidth={4} />
+          <path d="M -140 60 L 140 60 L 140 170 L -140 170 Z" fill="#fbf6ea" stroke={INK} strokeWidth={5} />
+          <circle cx={0} cy={78} r={8} fill="none" stroke={INK} strokeWidth={4} />
+          <text x={0} y={150} textAnchor="middle" fontFamily={MARKER} fontSize={60} fill={RED}>
+            {labels.tag}
+          </text>
+        </g>
+      </svg>
+      <div style={{ position: "absolute", top: 180, left: 0, right: 0, textAlign: "center" }}>
+        <div style={{ fontFamily: MARKER, fontSize: 100, color: RED, opacity: interpolate(f, [done, done + 12], [0, 1], clamp), translate: `0 ${interpolate(f, [done, done + 12], [20, 0], clamp)}px` }}>
+          {labels.label}
+        </div>
+        <div style={{ fontFamily: HAND, fontSize: 64, color: INK, opacity: interpolate(f, [done + 8, done + 20], [0, 1], clamp) }}>{labels.place}</div>
+      </div>
+    </Paper>
+  );
+};
+
 /* ------------------------------------------------------------------ Africa map helpers */
 const MapAfrica: React.FC<{ x: number; y: number; scale: number; drawStart?: number; children?: React.ReactNode }> = ({
   x,
@@ -638,6 +718,8 @@ export const NextScene: React.FC<{ ep: Episode }> = ({ ep }) => {
           <g transform={`translate(${ep.next.doodle === "waterfall" ? b.x - 34 : b.x + 4} ${ep.next.doodle === "waterfall" ? b.y - 20 : b.y - 22})`} opacity={interpolate(f, [55, 70], [0, 1], clamp)}>
             {ep.next.doodle === "pyramids" ? (
               <path d="M 0 14 L 9 0 L 18 14 Z M 12 14 L 19 4 L 26 14 Z" fill="#e2b874" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />
+            ) : ep.next.doodle === "tablemountain" ? (
+              <path d="M 0 16 L 5 6 L 19 6 L 24 16 Z" fill="#8a9a6a" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />
             ) : ep.next.doodle === "dunes" ? (
               <path d="M 0 16 Q 6 4 12 10 Q 17 2 24 16 Z" fill="#d9773b" stroke={INK} strokeWidth={0.9} strokeLinejoin="round" />
             ) : ep.next.doodle === "delta" ? (

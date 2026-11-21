@@ -33,7 +33,7 @@ export type Visual =
       };
     }
   /** A fully code-drawn scene. */
-  | { kind: "scene"; scene: "hook" | "timeline" | "footprints" | "moonbow" | "river" | "title" | "notes" | "next" };
+  | { kind: "scene"; scene: "hook" | "timeline" | "footprints" | "moonbow" | "river" | "trees" | "title" | "notes" | "next" };
 
 export type Sound = { src: string; volume: number; at?: number };
 
@@ -61,7 +61,7 @@ export type Beat = {
 /** A point on the timeline hook. `year` is negative for BC. */
 export type TimelinePoint = { label: string; sub: string; year: number; icon: "pyramid" | "crown" | "moon" };
 
-export type FlagId = "morocco" | "egypt" | "tanzania" | "zambia" | "zimbabwe" | "botswana";
+export type FlagId = "morocco" | "egypt" | "tanzania" | "zambia" | "zimbabwe" | "botswana" | "namibia";
 
 export type Episode = {
   series: string;
@@ -72,7 +72,7 @@ export type Episode = {
   flag: FlagId | FlagId[];
   /** [longitude, latitude] of the stop's pin and of the next stop's pin. */
   pin: [number, number];
-  next: { country: string; pin: [number, number]; doodle: "pyramids" | "mountain" | "waterfall" | "delta" | "dunes" };
+  next: { country: string; pin: [number, number]; doodle: "pyramids" | "mountain" | "waterfall" | "delta" | "dunes" | "tablemountain" };
   /** Pins of the season's earlier stops, oldest first, so the route builds across episodes. */
   route: [number, number][];
   /** Data for the "timeline" hook scene, with brackets between consecutive points. */
@@ -83,6 +83,8 @@ export type Episode = {
   moonbow?: { label: string; place: string; image?: string };
   /** Labels for the "river" hook scene: where the river rises and where it ends. */
   river?: { label: string; place: string; source: string; sink: string };
+  /** Labels for the "trees" hook scene (dead trees on a clay pan) and the age tag that lands on one. */
+  trees?: { label: string; place: string; tag: string };
   beats: Beat[];
   notes: { title: string; items: [string, string][] };
 };
