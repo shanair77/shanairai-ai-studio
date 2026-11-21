@@ -14,6 +14,8 @@ import { TortoiseHareStory, TortoiseHareThumbnail, defaultTortoiseHareStoryProps
 import { SCENES as TORTOISE_HARE_SCENES } from "./stories/tortoise-hare/story";
 import { AntGrasshopperStory, AntGrasshopperThumbnail, defaultAntGrasshopperStoryProps } from "./stories/ant-grasshopper";
 import { SCENES as ANT_GRASSHOPPER_SCENES } from "./stories/ant-grasshopper/story";
+import { ThreePigsStory, ThreePigsThumbnail, defaultThreePigsStoryProps } from "./stories/three-pigs";
+import { SCENES as THREE_PIGS_SCENES } from "./stories/three-pigs/story";
 
 export type KidsStory = {
   /** Composition id (letters, digits, hyphens). */
@@ -57,5 +59,13 @@ export const STORIES: KidsStory[] = [
     defaultProps: defaultAntGrasshopperStoryProps,
     scenes: ANT_GRASSHOPPER_SCENES,
     Thumbnail: AntGrasshopperThumbnail,
+  },
+  {
+    id: "ThreePigsStory",
+    title: "The Three Little Pigs",
+    component: ThreePigsStory,
+    defaultProps: defaultThreePigsStoryProps,
+    scenes: THREE_PIGS_SCENES,
+    Thumbnail: ThreePigsThumbnail,
   },
 ];

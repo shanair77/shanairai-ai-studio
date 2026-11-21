@@ -10,6 +10,7 @@ import { SCENE_COMPONENTS as COUNTRY_MOUSE_COMPONENTS } from "../mouse/CountryMo
 import { LION_MOUSE_COMPONENTS } from "./stories/lion-mouse";
 import { TORTOISE_HARE_COMPONENTS } from "./stories/tortoise-hare";
 import { ANT_GRASSHOPPER_COMPONENTS } from "./stories/ant-grasshopper";
+import { THREE_PIGS_COMPONENTS } from "./stories/three-pigs";
 
 /** Playlists on the channel (YouTube playlist ids live in `docs/kids-stories/QUEUE.md`). */
 export type PlaylistKey = "fables" | "fairy-tales";
@@ -83,6 +84,20 @@ export const PACKAGING: Record<string, StoryPackaging> = {
       ],
     },
   },
+  ThreePigsStory: {
+    title: { en: "The Three Little Pigs", es: "Los Tres Cerditos" },
+    components: THREE_PIGS_COMPONENTS as Record<string, React.FC<{ scene: StoryScene }>>,
+    music: "kids/three-pigs/music.mp3",
+    playlist: "fables",
+    short: {
+      segments: [
+        { scene: "wolfStraw", from: 9.6, to: 18.5, focusX: [870, 1350], panAt: [3.2, 6] },
+        { scene: "wolfSticks", focusX: [870, 1350], panAt: [5.5, 8] },
+        { scene: "doorbell", to: 20.2, zoom: 1, focusX: [1250, 1050], panAt: [6, 9.5] },
+        { scene: "moral", to: 12.8, zoom: 0.75, focusX: 960 },
+      ],
+    },
+  },
 };
 
 export type CompilationSpec = {
@@ -97,4 +112,10 @@ export type CompilationSpec = {
  * Compilations: after every 5 new stories, add one (see the kids-story skill).
  * The scheduled run appends entries here.
  */
-export const COMPILATIONS: CompilationSpec[] = [];
+export const COMPILATIONS: CompilationSpec[] = [
+  {
+    id: "Compilation01",
+    title: { en: "Bedtime Stories for Kids: Collection 1", es: "Cuentos para dormir: Colección 1" },
+    storyIds: ["CountryMouseStory", "TortoiseHareStory", "LionMouseStory", "AntGrasshopperStory", "ThreePigsStory"],
+  },
+];
