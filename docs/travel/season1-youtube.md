@@ -5,27 +5,28 @@
 | | |
 |---|---|
 | **Long-form** | `PostcardsSeason1` · 1920×1080, 30 fps → `out/PostcardsFromAfrica-Season1-Journal.mp4` |
-| **Stops so far** | 5: Morocco, Egypt, Tanzania, Victoria Falls, Okavango Delta · **9 min 0 s** |
-| **Shorts** | `PostcardsMorocco`, `PostcardsEgypt`, `PostcardsTanzania`, `PostcardsVictoriaFalls`, `PostcardsOkavango` · 1080×1920, 96–119 s each |
+| **Stops so far** | 6: Morocco, Egypt, Tanzania, Victoria Falls, Okavango Delta, Namibia · **10 min 46 s** |
+| **Shorts** | `PostcardsMorocco`, `PostcardsEgypt`, `PostcardsTanzania`, `PostcardsVictoriaFalls`, `PostcardsOkavango`, `PostcardsNamibia` · 1080×1920, 96–119 s each |
 | **Layout** | Open journal: picture taped on the left page; place, fact note, mini map and handwritten narration on the right (`src/postcards/Journal.tsx`) |
 | **End screen** | The last 14 s are an end card with the season route; the right page is left clear for YouTube's end-screen elements (subscribe button, next video) |
 
 ## Suggested title
 
-Africa in 9 Minutes: Morocco to the Okavango Delta | Postcards from Africa · Season 1
+Africa in 11 Minutes: Morocco to Namibia | Postcards from Africa · Season 1
 
 ## Description (paste as is; chapters must start at 0:00)
 
-A hand-painted travel journal across Africa: five stops, their history, wildlife and food, and practical tips for your own trip.
+A hand-painted travel journal across Africa: six stops, their history, wildlife and food, and practical tips for your own trip.
 
 0:00 Stop 01 · Morocco
 1:37 Stop 02 · Egypt
 3:29 Stop 03 · Tanzania
 5:28 Stop 04 · Victoria Falls
 7:09 Stop 05 · Okavango Delta
-8:45 Season map & what's next
+8:45 Stop 06 · Namibia
+10:32 Season map & what's next
 
-Next stop: Namibia.
+Next stop: Cape Town.
 
 Animation made with AI-assisted illustration and narration. Facts were checked in November 2026; prices, visa and currency rules change, so confirm them before you travel.
 

@@ -1,4 +1,4 @@
-# Postcards from Africa · Episode 06 — Namibia: Beat Sheet (v1, decisions open)
+# Postcards from Africa · Episode 06 — Namibia: Beat Sheet (v2, produced)
 
 | | |
 |---|---|
@@ -8,7 +8,7 @@
 | **Motion** | Kling 4.0 for hero shots · MiniMax H3 Max for an atmosphere shot · layered code animation for in-between beats · maps, captions, cards and stamps drawn in Remotion |
 | **Audio** | ElevenLabs voiceover (Kimberly), ambient sound only (no music), word-by-word captions; quiet beds under every code-drawn page |
 | **Tone** | Documentary-cozy: calm, curious, respectful |
-| **Composition** | `PostcardsNamibia` (to build) → `src/postcards/namibia.ts` + the shared engine; added to `SEASON_1` |
+| **Composition** | `PostcardsNamibia` → `src/postcards/namibia.ts` + the shared engine; media in `public/postcards/namibia/`; stop 06 of `SEASON_1` |
 
 **Shot types:** **AI-K** Kling 4.0 hero clip · **AI-M** MiniMax atmosphere clip · **LAYER** painted plate animated in code · **CODE** drawn in Remotion
 
@@ -20,13 +20,10 @@ As with the last two episodes, **every fact below was checked before writing** (
 
 ## Beats
 
-### 0 · Hook — CODE *(decision 1)*
-- **Option A — Trees that died 900 years ago, still standing (recommended):** a pen draws a white clay pan, a red dune behind it and a few black, bare trees. A tag on a string swings onto one tree: "~900 years".
-  - **Narration:** "These trees died hundreds of years ago, and they're still standing."
-  - **On screen:** "Deadvlei · Namibia" written in as the tag lands.
-  - Why: the most striking image in Namibia, and the "why" is a natural cliff-hanger for beat 3.
-- **Option B — A plant with only two leaves:** a welwitschia is drawn leaf by leaf while a counter climbs past "500 years… 1,000 years…". "This plant grows only two leaves, and it can live for over a thousand years."
-- **Option C — Drinking the fog:** a beetle tilts on a dune crest, fog rolls in and a drop runs down its back. "In this desert, some animals drink the fog."
+### 0 · Hook — CODE (Deadvlei)
+- **Picture:** A pen draws a white clay pan under a red dune and blue sky, then three black, bare trees; a "~900 yrs" tag on a string swings onto the biggest tree and settles.
+- **Narration:** "These trees died hundreds of years ago, and they're still standing."
+- **On screen:** "Deadvlei · Namibia" written in as the tag settles.
 
 ### 1 · Title — CODE
 - **Picture:** The Africa map draws in; the season route runs Morocco → … → Okavango → Namibia; the stamp lands.
@@ -66,10 +63,10 @@ As with the last two episodes, **every fact below was checked before writing** (
 - **Narration:** "In Etosha National Park, animals gather at waterholes along the edge of a salt pan almost five thousand square kilometres wide."
 - **Fact card:** "Floodlit waterholes at the rest camps let you watch animals after dark, sometimes even rare black rhino."
 
-### 9 · Cultural beat *(decision 2)*
-- **Option A — History card in Swakopmund (recommended):** LAYER. A quiet street of German colonial-era buildings by the sea. "In Swakopmund, German-era buildings recall Namibia's colonial past." **History card:** "Between 1904 and 1908, German colonial forces killed tens of thousands of Herero and Nama people. In 2021, Germany recognised it as genocide." It mirrors the Zanzibar history card: honest, short, not graphic.
-- **Option B — Twyfelfontein rock engravings:** UNESCO's first site in Namibia (2007), with more than 2,000 engravings by San hunter-gatherers. Strong, but close to the Tsodilo rock-art beat in episode 05.
-- **Option C — Visiting a Himba community:** possible only with careful framing (community-run visits, consent before photos), and the picture would need extra care. Not recommended for a short format.
+### 9 · Swakopmund — LAYER (history card)
+- **Picture:** A quiet street of pastel German colonial-era buildings by the sea. No people.
+- **Narration:** "In Swakopmund, German-era buildings recall Namibia's colonial past."
+- **History card:** "Between 1904 and 1908, German colonial forces killed tens of thousands of Herero and Nama people. In 2021, Germany recognised it as genocide." The beat holds for 9.5 s so the card can be read.
 
 ### 10 · The darkest skies — AI-K (hero)
 - **Picture:** Night in the NamibRand reserve: the traveler, seen from behind, sits on a dune crest under a blazing Milky Way.
@@ -85,23 +82,20 @@ As with the last two episodes, **every fact below was checked before writing** (
   - **Respect:** stay on marked tracks, never touch the trees of Deadvlei, ask before photographing people.
 - **Narration:** "Come between May and October, carry water on every drive, and leave nothing behind but footprints."
 
-### 12 · Next stop — CODE *(decision 3)*
+### 12 · Next stop — CODE
 - **Picture:** The route line runs on from Namibia to the next stop, with a doodle.
-- **Narration:** "Next stop: Cape Town." *(if the recommended option is chosen)*
-- **On screen:** "STOP 07 → …"; stamp "VISITED · NAMIBIA".
+- **Narration:** "Next stop: Cape Town."
+- **On screen:** "STOP 07 → CAPE TOWN" with a Table Mountain doodle; stamp "VISITED · NAMIBIA".
 
 **Narration:** about 250 words across 13 beats. **Estimated running time:** ~105–115 s.
 
 ---
 
-## Decisions for you
+## Decisions (locked)
 
-1. **Hook:** **A — trees that died centuries ago, still standing (recommended)** · B — a plant with two leaves that lives a thousand years · C — drinking the fog.
-2. **Cultural beat:** **A — the Swakopmund history card on the Herero and Nama genocide (recommended)** · B — Twyfelfontein rock engravings · C — a Himba community visit.
-3. **Next stop:**
-   - **Cape Town, South Africa (recommended):** next door, and a natural finale for a southern-Africa run.
-   - **Madagascar.**
-   - **End Season 1 here** with Namibia as the final stop.
+1. **Hook:** Deadvlei, trees that died centuries ago and still stand.
+2. **Cultural beat:** the Swakopmund history card on the Herero and Nama genocide.
+3. **Next stop:** Cape Town, South Africa.
 
 ---
 
@@ -131,10 +125,10 @@ As with the last two episodes, **every fact below was checked before writing** (
 **ElevenLabs:** 13 voice lines (~$0.25) and about 9 ambient sounds (~$0.35): desert wind over dunes at dawn, a silent windless pan with faint wind, cool fog and distant surf, gravel-plain wind with insects, surf and foghorn-free wreck ambience, a roaring seal colony, a waterhole with zebras and elephants, a quiet seaside town street, and a night desert with crickets. Plus a soft desert-wind bed under the code-drawn pages.
 
 **Engine work needed** (small):
-- [ ] A **Deadvlei** hook scene (drawn pan, dune, trees and age tag), if option A.
-- [ ] **Namibia's flag.**
-- [ ] A doodle for the next stop (Table Mountain, if Cape Town).
-- [ ] Add the episode to `SEASON_1` and update the season chapters.
+- [x] A **Deadvlei** hook scene (drawn pan, dune, trees and age tag).
+- [x] **Namibia's flag.**
+- [x] A Table Mountain doodle for the next stop.
+- [x] Added to `SEASON_1`; season chapters updated.
 
 ---
 
@@ -159,3 +153,10 @@ As with the last two episodes, **every fact below was checked before writing** (
 | Namibian dollar at par with the rand; the rand is legal tender in Namibia | Verified | [Wikipedia: Namibian dollar](https://en.wikipedia.org/wiki/Namibian_dollar), [Wikipedia: Common Monetary Area](https://en.wikipedia.org/wiki/Common_Monetary_Area) |
 
 **Left out on purpose:** that welwitschia appears on Namibia's coat of arms (not confirmed by an official source), exact wreck counts (sources range widely), and Dune 7's height (no source found).
+
+## As produced
+
+- Running time **106 s** (13 voice-timed beats).
+- Spend: ~59 Higgsfield credits (9 plates, 1 cut-out, 3 five-second Kling 4.0 clips, 1 MiniMax clip; no retakes) and about $0.60 of ElevenLabs credits (13 voice lines, 9 ambient sounds).
+- The first draft of the Deadvlei hook was too small and flat; the trees and tag were enlarged and the dune given a watercolor gradient.
+- The hook's labels (`trees: { label, place, tag }`) are episode data, so the scene can be reused.
