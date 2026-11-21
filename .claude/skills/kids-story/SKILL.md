@@ -232,15 +232,19 @@ step. Otherwise (it is set up as of 2026-11-18), do this for every new story:
 
 ## 7b. Compilation (every 5th story)
 
-Count the `done` stories in QUEUE.md that have code in `src/` (all but The Tortoise and the Hare,
-which has no saved code). When that count reaches a multiple of 5, also make a compilation of
+Count the `done` stories in QUEUE.md that have code in `src/` (The Tortoise and the Hare has code
+since its 2026-11-18 remake; Compilation01 covered stories 1–5, see QUEUE.md). When that count reaches a multiple of 5, also make a compilation of
 the last 5: add `{ id: "CompilationNN", title: { en, es }, storyIds: [...] }` to `COMPILATIONS`
 in `src/kids/series.ts`, render `CompilationNN` (no new narration, no extra credits), make a
 thumbnail by rendering a still of one of its stories' thumbnails, publish it like a story with
-title "Bedtime Stories for Kids: <5 titles, shortened> | 15-Minute Collection", chapter
-timestamps in the description (each story's start: 0:00 intro, then the stories in order;
+title "Bedtime Stories for Kids: <5 titles, shortened> | <N>-Minute Collection" (the real length; ≤ 100 chars
+or YouTube rejects it), chapter
+timestamps in the description (YouTube needs ≥ 10 s chapters, so start at 0:00 with the first story,
+not the 2 s intro) (each story's start: 0:00 intro, then the stories in order;
 read the start frames from `compilationLayout` or step through stills), `playlist_1`
-`PLD70uhyUFwQQ`, `playlist_2` `PLXIyn2J-iB9Y` (Compilations). Note it in QUEUE.md.
+`PLD70uhyUFwQQ`, `playlist_2` `PLXIyn2J-iB9Y` (Compilations). Compilations render at ~160 MB, over the Cloudinary preset's 100 MB limit (HTTP 413): re-encode first with
+`ffmpeg -i out/CompilationNN.mp4 -c:v libx264 -b:v 950k -maxrate 1400k -bufsize 2800k -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart out/CompilationNN-small.mp4`
+(~90 MB for 11–12 min). Note it in QUEUE.md.
 
 ## 8. Record and report
 
