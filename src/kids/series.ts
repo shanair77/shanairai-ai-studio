@@ -11,6 +11,7 @@ import { LION_MOUSE_COMPONENTS } from "./stories/lion-mouse";
 import { TORTOISE_HARE_COMPONENTS } from "./stories/tortoise-hare";
 import { ANT_GRASSHOPPER_COMPONENTS } from "./stories/ant-grasshopper";
 import { THREE_PIGS_COMPONENTS } from "./stories/three-pigs";
+import { BOY_WOLF_COMPONENTS } from "./stories/boy-wolf";
 
 /** Playlists on the channel (YouTube playlist ids live in `docs/kids-stories/QUEUE.md`). */
 export type PlaylistKey = "fables" | "fairy-tales";
@@ -94,6 +95,20 @@ export const PACKAGING: Record<string, StoryPackaging> = {
         { scene: "wolfStraw", from: 9.6, to: 18.5, focusX: [870, 1350], panAt: [3.2, 6] },
         { scene: "wolfSticks", focusX: [870, 1350], panAt: [5.5, 8] },
         { scene: "doorbell", to: 20.2, zoom: 1, focusX: [1250, 1050], panAt: [6, 9.5] },
+        { scene: "moral", to: 12.8, zoom: 0.75, focusX: 960 },
+      ],
+    },
+  },
+  BoyWolfStory: {
+    title: { en: "The Boy Who Cried Wolf", es: "El Pastorcito Mentiroso" },
+    components: BOY_WOLF_COMPONENTS as Record<string, React.FC<{ scene: StoryScene }>>,
+    music: "kids/boy-wolf/music.mp3",
+    playlist: "fables",
+    short: {
+      segments: [
+        { scene: "trick1", from: 0.4, focusX: [780, 1300], panAt: [9.5, 12] },
+        { scene: "realWolf", from: 3, focusX: [1350, 780], panAt: [5.5, 7.5] },
+        { scene: "nobody", from: 9.6, zoom: 1, focusX: [760, 1300], panAt: [1, 3.5] },
         { scene: "moral", to: 12.8, zoom: 0.75, focusX: 960 },
       ],
     },

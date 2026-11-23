@@ -16,6 +16,8 @@ import { AntGrasshopperStory, AntGrasshopperThumbnail, defaultAntGrasshopperStor
 import { SCENES as ANT_GRASSHOPPER_SCENES } from "./stories/ant-grasshopper/story";
 import { ThreePigsStory, ThreePigsThumbnail, defaultThreePigsStoryProps } from "./stories/three-pigs";
 import { SCENES as THREE_PIGS_SCENES } from "./stories/three-pigs/story";
+import { BoyWolfStory, BoyWolfThumbnail, defaultBoyWolfStoryProps } from "./stories/boy-wolf";
+import { SCENES as BOY_WOLF_SCENES } from "./stories/boy-wolf/story";
 
 export type KidsStory = {
   /** Composition id (letters, digits, hyphens). */
@@ -67,5 +69,13 @@ export const STORIES: KidsStory[] = [
     defaultProps: defaultThreePigsStoryProps,
     scenes: THREE_PIGS_SCENES,
     Thumbnail: ThreePigsThumbnail,
+  },
+  {
+    id: "BoyWolfStory",
+    title: "The Boy Who Cried Wolf",
+    component: BoyWolfStory,
+    defaultProps: defaultBoyWolfStoryProps,
+    scenes: BOY_WOLF_SCENES,
+    Thumbnail: BoyWolfThumbnail,
   },
 ];
