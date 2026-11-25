@@ -1,5 +1,5 @@
 import "./index.css";
-import { Composition } from "remotion";
+import { Composition, Still } from "remotion";
 import { DemoVideo } from "./DemoVideo";
 import { ShanairPromo } from "./ShanairPromo";
 import { JetSetCampaign } from "./JetSetCampaign";
@@ -54,6 +54,7 @@ import {
   OKAVANGO,
   NAMIBIA,
   CAPE_TOWN,
+  PostcardsThumbnail,
   calculateEpisodeMetadata,
   calculateSeasonMetadata,
   seasonFrames,
@@ -223,6 +224,23 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
         defaultProps={{ episodes: SEASON_1 }}
         calculateMetadata={calculateSeasonMetadata}
+      />
+      <Still
+        id="PostcardsSeason1Thumbnail"
+        component={PostcardsThumbnail}
+        width={1280}
+        height={720}
+        defaultProps={{
+          episodes: SEASON_1,
+          title: "AFRICA",
+          subtitle: "in 12 minutes",
+          photos: [
+            "postcards/morocco/plates/chefchaouen.jpg",
+            "postcards/egypt/plates/giza.jpg",
+            "postcards/victoria-falls/plates/falls.jpg",
+            "postcards/cape-town/plates/boulders.jpg",
+          ],
+        }}
       />
     </>
   );
