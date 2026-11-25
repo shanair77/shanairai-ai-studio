@@ -77,12 +77,14 @@ export const PostcardsThumbnail: React.FC<ThumbnailProps> = ({ episodes, title, 
  *  title sits there over the painting's open sky; the landmarks run along the bottom. */
 export const BANNER_SAFE = { width: 1235, height: 338 };
 
-export const PostcardsBanner: React.FC<{ background: string; title: string; tagline: string; showSafeArea?: boolean }> = ({
-  background,
-  title,
-  tagline,
-  showSafeArea = false,
-}) => (
+export const PostcardsBanner: React.FC<{
+  background: string;
+  title: string;
+  tagline: string;
+  /** Optional small line for the series now showing, e.g. "Now showing: Postcards From Africa". */
+  series?: string;
+  showSafeArea?: boolean;
+}> = ({ background, title, tagline, series, showSafeArea = false }) => (
   <AbsoluteFill>
     <Img src={staticFile(background)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
     <AbsoluteFill style={{ background: "radial-gradient(ellipse 34% 20% at 50% 50%, rgba(255,248,236,0.55) 0%, rgba(255,248,236,0) 100%)" }} />
@@ -102,6 +104,9 @@ export const PostcardsBanner: React.FC<{ background: string; title: string; tagl
     >
       <div style={{ fontFamily: MARKER, fontSize: 100, lineHeight: 1, whiteSpace: "nowrap", color: RED, textShadow: "3px 4px 0 rgba(255,248,236,0.9), 0 0 24px rgba(255,248,236,0.8)" }}>{title}</div>
       <div style={{ fontFamily: HAND, fontSize: 58, whiteSpace: "nowrap", color: INK, marginTop: 22, textShadow: "0 0 14px rgba(255,248,236,0.95)" }}>{tagline}</div>
+      {series ? (
+        <div style={{ fontFamily: HAND, fontSize: 44, whiteSpace: "nowrap", color: RED, marginTop: 10, textShadow: "0 0 12px rgba(255,248,236,0.95)" }}>{series}</div>
+      ) : null}
     </div>
   </AbsoluteFill>
 );

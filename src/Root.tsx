@@ -250,8 +250,9 @@ export const RemotionRoot: React.FC = () => {
         height={1152}
         defaultProps={{
           background: "postcards/brand/banner-bg.jpg",
-          title: "Postcards from Africa",
-          tagline: "Hand-painted travel journals, one stop at a time",
+          title: "Postcards From...",
+          tagline: "Hand-painted travel journals, one place at a time",
+          series: "Now showing: Postcards From Africa",
           showSafeArea: false,
         }}
       />
