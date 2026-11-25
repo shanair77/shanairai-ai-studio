@@ -13,6 +13,7 @@ import { ANT_GRASSHOPPER_COMPONENTS } from "./stories/ant-grasshopper";
 import { THREE_PIGS_COMPONENTS } from "./stories/three-pigs";
 import { BOY_WOLF_COMPONENTS } from "./stories/boy-wolf";
 import { RED_HOOD_COMPONENTS } from "./stories/red-hood";
+import { CROW_PITCHER_COMPONENTS } from "./stories/crow-pitcher";
 
 /** Playlists on the channel (YouTube playlist ids live in `docs/kids-stories/QUEUE.md`). */
 export type PlaylistKey = "fables" | "fairy-tales";
@@ -125,6 +126,21 @@ export const PACKAGING: Record<string, StoryPackaging> = {
         { scene: "teeth", zoom: 1, focusX: 760 },
         { scene: "woodcutter", to: 15.8, zoom: 1, focusX: 640 },
         { scene: "moral", to: 10.5, zoom: 0.75, focusX: 960 },
+      ],
+    },
+  },
+  CrowPitcherStory: {
+    title: { en: "The Crow and the Pitcher", es: "El Cuervo y la Jarra" },
+    components: CROW_PITCHER_COMPONENTS as Record<string, React.FC<{ scene: StoryScene }>>,
+    music: "kids/crow-pitcher/music.mp3",
+    playlist: "fables",
+    short: {
+      segments: [
+        { scene: "pitcher", from: 9.2, to: 16.5, zoom: 1, focusX: 1020 },
+        { scene: "poster", from: 11.3, focusX: [470, 1100], panAt: [2.5, 4] },
+        { scene: "pebbles", from: 4.7, zoom: 1, focusX: [930, 700], panAt: [10.5, 11.5] },
+        { scene: "drink", from: 1.8, to: 7.6, zoom: 1, focusX: 960 },
+        { scene: "moral", to: 11, zoom: 0.75, focusX: 960 },
       ],
     },
   },

@@ -20,6 +20,8 @@ import { BoyWolfStory, BoyWolfThumbnail, defaultBoyWolfStoryProps } from "./stor
 import { SCENES as BOY_WOLF_SCENES } from "./stories/boy-wolf/story";
 import { RedHoodStory, RedHoodThumbnail, defaultRedHoodStoryProps } from "./stories/red-hood";
 import { SCENES as RED_HOOD_SCENES } from "./stories/red-hood/story";
+import { CrowPitcherStory, CrowPitcherThumbnail, defaultCrowPitcherStoryProps } from "./stories/crow-pitcher";
+import { SCENES as CROW_PITCHER_SCENES } from "./stories/crow-pitcher/story";
 
 export type KidsStory = {
   /** Composition id (letters, digits, hyphens). */
@@ -87,5 +89,13 @@ export const STORIES: KidsStory[] = [
     defaultProps: defaultRedHoodStoryProps,
     scenes: RED_HOOD_SCENES,
     Thumbnail: RedHoodThumbnail,
+  },
+  {
+    id: "CrowPitcherStory",
+    title: "The Crow and the Pitcher",
+    component: CrowPitcherStory,
+    defaultProps: defaultCrowPitcherStoryProps,
+    scenes: CROW_PITCHER_SCENES,
+    Thumbnail: CrowPitcherThumbnail,
   },
 ];
