@@ -18,6 +18,8 @@ import { ThreePigsStory, ThreePigsThumbnail, defaultThreePigsStoryProps } from "
 import { SCENES as THREE_PIGS_SCENES } from "./stories/three-pigs/story";
 import { BoyWolfStory, BoyWolfThumbnail, defaultBoyWolfStoryProps } from "./stories/boy-wolf";
 import { SCENES as BOY_WOLF_SCENES } from "./stories/boy-wolf/story";
+import { RedHoodStory, RedHoodThumbnail, defaultRedHoodStoryProps } from "./stories/red-hood";
+import { SCENES as RED_HOOD_SCENES } from "./stories/red-hood/story";
 
 export type KidsStory = {
   /** Composition id (letters, digits, hyphens). */
@@ -77,5 +79,13 @@ export const STORIES: KidsStory[] = [
     defaultProps: defaultBoyWolfStoryProps,
     scenes: BOY_WOLF_SCENES,
     Thumbnail: BoyWolfThumbnail,
+  },
+  {
+    id: "RedHoodStory",
+    title: "Little Red Riding Hood",
+    component: RedHoodStory,
+    defaultProps: defaultRedHoodStoryProps,
+    scenes: RED_HOOD_SCENES,
+    Thumbnail: RedHoodThumbnail,
   },
 ];

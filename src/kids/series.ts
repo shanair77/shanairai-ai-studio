@@ -12,6 +12,7 @@ import { TORTOISE_HARE_COMPONENTS } from "./stories/tortoise-hare";
 import { ANT_GRASSHOPPER_COMPONENTS } from "./stories/ant-grasshopper";
 import { THREE_PIGS_COMPONENTS } from "./stories/three-pigs";
 import { BOY_WOLF_COMPONENTS } from "./stories/boy-wolf";
+import { RED_HOOD_COMPONENTS } from "./stories/red-hood";
 
 /** Playlists on the channel (YouTube playlist ids live in `docs/kids-stories/QUEUE.md`). */
 export type PlaylistKey = "fables" | "fairy-tales";
@@ -110,6 +111,20 @@ export const PACKAGING: Record<string, StoryPackaging> = {
         { scene: "realWolf", from: 3, focusX: [1350, 780], panAt: [5.5, 7.5] },
         { scene: "nobody", from: 9.6, zoom: 1, focusX: [760, 1300], panAt: [1, 3.5] },
         { scene: "moral", to: 12.8, zoom: 0.75, focusX: 960 },
+      ],
+    },
+  },
+  RedHoodStory: {
+    title: { en: "Little Red Riding Hood", es: "Caperucita Roja" },
+    components: RED_HOOD_COMPONENTS as Record<string, React.FC<{ scene: StoryScene }>>,
+    music: "kids/red-hood/music.mp3",
+    playlist: "fairy-tales",
+    short: {
+      segments: [
+        { scene: "bed", from: 6.3, zoom: 1, focusX: 800 },
+        { scene: "teeth", zoom: 1, focusX: 760 },
+        { scene: "woodcutter", to: 16.5, zoom: 1, focusX: 640 },
+        { scene: "moral", to: 10.5, zoom: 0.75, focusX: 960 },
       ],
     },
   },
