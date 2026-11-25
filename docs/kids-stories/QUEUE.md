@@ -34,11 +34,12 @@ Spanish versions done: The Country Mouse and the City Mouse (story `pVnY8KUZBig`
 (story `xshxSQVkvzo`, Short `FTnorpcsflg`); The Three Little Pigs (2026 Edition) (story `UkXA5FoDtzU`,
 Short `j1E0WRZWmFE`); The Boy Who Cried Wolf as "El Pastorcito Mentiroso (Edición 2026)" (story `nAmntqqKb90`,
 Short `ea1uye-koKw`); Little Red Riding Hood as "Caperucita Roja (Edición 2026)" (story `kbNA6509-os`, Short
-`6bbBvjtCAno`).
+`6bbBvjtCAno`); The Crow and the Pitcher as "El Cuervo y la Jarra (Edición 2026)" (story `Zfiu5flpuiM`,
+Short `cNZgIkA_tVw`).
 
 > Compilations: **Compilation01** (stories 1–5: Country Mouse, Tortoise and Hare, Lion and Mouse, Ant and
 > Grasshopper, Three Little Pigs), 2026-11-21: English `-P1mCfn8LiA` (11:17), Spanish `eQVKrx6BOIo` (11:51).
-> The next one is due after 5 more stories (stories 6–10; 2 of 5 done: The Boy Who Cried Wolf, Little Red Riding Hood).
+> The next one is due after 5 more stories (stories 6–10; 3 of 5 done: The Boy Who Cried Wolf, Little Red Riding Hood, The Crow and the Pitcher).
 
 > Note (2026-11-18): The Tortoise and the Hare was remade with the 2026 spin (code in
 > `src/kids/stories/tortoise-hare/`); the old video 2QpDzio7grQ has been deleted.
@@ -52,7 +53,7 @@ Short `ea1uye-koKw`); Little Red Riding Hood as "Caperucita Roja (Edición 2026)
 | 5 | The Three Little Pigs | English folk tale | countryside cul-de-sac | The pigs build with straw, sticks and smart bricks; the wolf huffs at a video doorbell ("Not by the hair of my chinny chin chin!"). Gentle: the wolf can't get in, gets tired and goes home; no pot, no one eaten | done (Short: 7IkxclCwAa8; code `src/kids/stories/three-pigs/`) | 2026-11-21 | 1yqEfVZkcac |
 | 6 | The Boy Who Cried Wolf | Aesop | hillside pasture, village | Young shepherd sends pretend "WOLF!" alerts on the village walkie-talkie / group chat; lesson about trust and real alerts | done (Short: fvW-_NyIFKA; code `src/kids/stories/boy-wolf/`; Toby the bear cub, gentle ending: the wolf gives up, sheep found by tracker collars) | 2026-11-23 | btYu9wyae_E |
 | 7 | Little Red Riding Hood | Brothers Grimm / Perrault | woodland path → Grandma's cottage | Red brings Grandma a get-well basket and her step-counter watch beeps the way; the wolf takes a 'shortcut'. Gentle: Grandma hides in the wardrobe, a woodcutter shoos the wolf off; moral echo: stick to the path, don't share plans with strangers | done (Short: kfBmlleVOfY; code `src/kids/stories/red-hood/`; Red is a bunny, the wolf only wants the muffins, Grandma hides in the wardrobe, a beaver woodcutter answers the watch's help button) | 2026-11-25 | 1b1Cp_06_gc |
-| 8 | The Crow and the Pitcher | Aesop | hot day at a community garden | Crow solves it like a little scientist (pebbles = an experiment); a kid's science-fair poster in the background | todo | | |
+| 8 | The Crow and the Pitcher (2026 Edition) | Aesop | hot day at a community garden | Crow solves it like a little scientist (pebbles = an experiment); a kid's science-fair poster in the background | done (Short: KAxwIuWdzpk; code `src/kids/stories/crow-pitcher/`; Pip the crow, sprinklers on a sunset timer, science-fair poster gives the idea, the garden's delivery robot lends the pebbles, a sleepy snail and a bee share the water) | 2026-11-25 | VSBobqSHnCE |
 | 9 | Goldilocks and the Three Bears | English folk tale | forest cabin | The Bears' smart speaker says "nobody's home"; porridge, chairs, beds. Gentle ending: Goldilocks says sorry and helps fix the little chair | todo | | |
 | 10 | The North Wind and the Sun | Aesop | city park, sky characters | A traveller on an e-scooter in a hoodie; Wind blusters, Sun warms (solar panels light up) | todo | | |
 | 11 | Hansel and Gretel | Brothers Grimm | forest, candy cottage | Breadcrumb trail (birds eat it) vs. Gretel's glow pebbles; a grumpy candy-house owner wants them to do all her chores forever. Gentle: no oven, no eating; the siblings outsmart her and find home together with a little map | todo | | |
