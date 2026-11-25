@@ -123,7 +123,7 @@ export const PACKAGING: Record<string, StoryPackaging> = {
       segments: [
         { scene: "bed", from: 6.3, zoom: 1, focusX: 800 },
         { scene: "teeth", zoom: 1, focusX: 760 },
-        { scene: "woodcutter", to: 16.5, zoom: 1, focusX: 640 },
+        { scene: "woodcutter", to: 15.8, zoom: 1, focusX: 640 },
         { scene: "moral", to: 10.5, zoom: 0.75, focusX: 960 },
       ],
     },
