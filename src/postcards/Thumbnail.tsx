@@ -72,3 +72,36 @@ export const PostcardsThumbnail: React.FC<ThumbnailProps> = ({ episodes, title, 
     </AbsoluteFill>
   );
 };
+
+/** YouTube channel banner (2048×1152). Only the centre 1235×338 shows on every device, so the
+ *  title sits there over the painting's open sky; the landmarks run along the bottom. */
+export const BANNER_SAFE = { width: 1235, height: 338 };
+
+export const PostcardsBanner: React.FC<{ background: string; title: string; tagline: string; showSafeArea?: boolean }> = ({
+  background,
+  title,
+  tagline,
+  showSafeArea = false,
+}) => (
+  <AbsoluteFill>
+    <Img src={staticFile(background)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+    <AbsoluteFill style={{ background: "radial-gradient(ellipse 34% 20% at 50% 50%, rgba(255,248,236,0.55) 0%, rgba(255,248,236,0) 100%)" }} />
+    <div
+      style={{
+        position: "absolute",
+        left: (2048 - BANNER_SAFE.width) / 2,
+        top: (1152 - BANNER_SAFE.height) / 2,
+        width: BANNER_SAFE.width,
+        height: BANNER_SAFE.height,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        outline: showSafeArea ? "4px dashed #00a" : "none",
+      }}
+    >
+      <div style={{ fontFamily: MARKER, fontSize: 100, lineHeight: 1, whiteSpace: "nowrap", color: RED, textShadow: "3px 4px 0 rgba(255,248,236,0.9), 0 0 24px rgba(255,248,236,0.8)" }}>{title}</div>
+      <div style={{ fontFamily: HAND, fontSize: 58, whiteSpace: "nowrap", color: INK, marginTop: 22, textShadow: "0 0 14px rgba(255,248,236,0.95)" }}>{tagline}</div>
+    </div>
+  </AbsoluteFill>
+);

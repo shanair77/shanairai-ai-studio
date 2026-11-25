@@ -55,6 +55,7 @@ import {
   NAMIBIA,
   CAPE_TOWN,
   PostcardsThumbnail,
+  PostcardsBanner,
   calculateEpisodeMetadata,
   calculateSeasonMetadata,
   seasonFrames,
@@ -240,6 +241,18 @@ export const RemotionRoot: React.FC = () => {
             "postcards/victoria-falls/plates/falls.jpg",
             "postcards/cape-town/plates/boulders.jpg",
           ],
+        }}
+      />
+      <Still
+        id="PostcardsChannelBanner"
+        component={PostcardsBanner}
+        width={2048}
+        height={1152}
+        defaultProps={{
+          background: "postcards/brand/banner-bg.jpg",
+          title: "Postcards from Africa",
+          tagline: "Hand-painted travel journals, one stop at a time",
+          showSafeArea: false,
         }}
       />
     </>
