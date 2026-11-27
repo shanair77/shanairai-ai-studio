@@ -35,11 +35,12 @@ Spanish versions done: The Country Mouse and the City Mouse (story `pVnY8KUZBig`
 Short `j1E0WRZWmFE`); The Boy Who Cried Wolf as "El Pastorcito Mentiroso (Edición 2026)" (story `nAmntqqKb90`,
 Short `ea1uye-koKw`); Little Red Riding Hood as "Caperucita Roja (Edición 2026)" (story `kbNA6509-os`, Short
 `6bbBvjtCAno`); The Crow and the Pitcher as "El Cuervo y la Jarra (Edición 2026)" (story `Zfiu5flpuiM`,
-Short `cNZgIkA_tVw`).
+Short `cNZgIkA_tVw`); Goldilocks and the Three Bears as "Ricitos de Oro y los Tres Osos (Edición 2026)" (story
+`W25Oz6h_WpM`, Short `_3-PMrqEljg`).
 
 > Compilations: **Compilation01** (stories 1–5: Country Mouse, Tortoise and Hare, Lion and Mouse, Ant and
 > Grasshopper, Three Little Pigs), 2026-11-21: English `-P1mCfn8LiA` (11:17), Spanish `eQVKrx6BOIo` (11:51).
-> The next one is due after 5 more stories (stories 6–10; 3 of 5 done: The Boy Who Cried Wolf, Little Red Riding Hood, The Crow and the Pitcher).
+> The next one is due after 5 more stories (stories 6–10; 4 of 5 done: The Boy Who Cried Wolf, Little Red Riding Hood, The Crow and the Pitcher, Goldilocks and the Three Bears).
 
 > Note (2026-11-18): The Tortoise and the Hare was remade with the 2026 spin (code in
 > `src/kids/stories/tortoise-hare/`); the old video 2QpDzio7grQ has been deleted.
@@ -54,7 +55,7 @@ Short `cNZgIkA_tVw`).
 | 6 | The Boy Who Cried Wolf | Aesop | hillside pasture, village | Young shepherd sends pretend "WOLF!" alerts on the village walkie-talkie / group chat; lesson about trust and real alerts | done (Short: fvW-_NyIFKA; code `src/kids/stories/boy-wolf/`; Toby the bear cub, gentle ending: the wolf gives up, sheep found by tracker collars) | 2026-11-23 | btYu9wyae_E |
 | 7 | Little Red Riding Hood | Brothers Grimm / Perrault | woodland path → Grandma's cottage | Red brings Grandma a get-well basket and her step-counter watch beeps the way; the wolf takes a 'shortcut'. Gentle: Grandma hides in the wardrobe, a woodcutter shoos the wolf off; moral echo: stick to the path, don't share plans with strangers | done (Short: kfBmlleVOfY; code `src/kids/stories/red-hood/`; Red is a bunny, the wolf only wants the muffins, Grandma hides in the wardrobe, a beaver woodcutter answers the watch's help button) | 2026-11-25 | 1b1Cp_06_gc |
 | 8 | The Crow and the Pitcher (2026 Edition) | Aesop | hot day at a community garden | Crow solves it like a little scientist (pebbles = an experiment); a kid's science-fair poster in the background | done (Short: KAxwIuWdzpk; code `src/kids/stories/crow-pitcher/`; Pip the crow, sprinklers on a sunset timer, science-fair poster gives the idea, the garden's delivery robot lends the pebbles, a sleepy snail and a bee share the water) | 2026-11-25 | VSBobqSHnCE |
-| 9 | Goldilocks and the Three Bears | English folk tale | forest cabin | The Bears' smart speaker says "nobody's home"; porridge, chairs, beds. Gentle ending: Goldilocks says sorry and helps fix the little chair | todo | | |
+| 9 | Goldilocks and the Three Bears (2026 Edition) | English folk tale | forest cabin | The Bears' smart speaker says "nobody's home"; porridge, chairs, beds. Gentle ending: Goldilocks says sorry and helps fix the little chair | done (Short: Ym--QZtqMMA; code `src/kids/stories/goldilocks/`; Goldilocks is a lamb with golden curls, the bears go for a bike ride while the porridge cools, the speaker announces "Visitor upstairs!", she helps glue the chair and next time rings the doorbell) | 2026-11-27 | B7_oWB1vptk |
 | 10 | The North Wind and the Sun | Aesop | city park, sky characters | A traveller on an e-scooter in a hoodie; Wind blusters, Sun warms (solar panels light up) | todo | | |
 | 11 | Hansel and Gretel | Brothers Grimm | forest, candy cottage | Breadcrumb trail (birds eat it) vs. Gretel's glow pebbles; a grumpy candy-house owner wants them to do all her chores forever. Gentle: no oven, no eating; the siblings outsmart her and find home together with a little map | todo | | |
 | 12 | The Fox and the Stork | Aesop | woodland dinner party | Invites by video call; Fox serves soup in flat trendy plates, Stork in a tall smoothie bottle | todo | | |
