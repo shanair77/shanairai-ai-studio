@@ -14,6 +14,7 @@ import { THREE_PIGS_COMPONENTS } from "./stories/three-pigs";
 import { BOY_WOLF_COMPONENTS } from "./stories/boy-wolf";
 import { RED_HOOD_COMPONENTS } from "./stories/red-hood";
 import { CROW_PITCHER_COMPONENTS } from "./stories/crow-pitcher";
+import { GOLDILOCKS_COMPONENTS } from "./stories/goldilocks";
 
 /** Playlists on the channel (YouTube playlist ids live in `docs/kids-stories/QUEUE.md`). */
 export type PlaylistKey = "fables" | "fairy-tales";
@@ -140,6 +141,20 @@ export const PACKAGING: Record<string, StoryPackaging> = {
         { scene: "poster", from: 11.3, focusX: [470, 1100], panAt: [2.5, 4] },
         { scene: "pebbles", from: 4.7, zoom: 1, focusX: [930, 700], panAt: [10.5, 11.5] },
         { scene: "drink", from: 1.8, to: 7.6, zoom: 1, focusX: 960 },
+        { scene: "moral", to: 11, zoom: 0.75, focusX: 960 },
+      ],
+    },
+  },
+  GoldilocksStory: {
+    title: { en: "Goldilocks and the Three Bears", es: "Ricitos de Oro y los Tres Osos" },
+    components: GOLDILOCKS_COMPONENTS as Record<string, React.FC<{ scene: StoryScene }>>,
+    music: "kids/goldilocks/music.mp3",
+    playlist: "fairy-tales",
+    short: {
+      segments: [
+        { scene: "chairs", from: 8.2, to: 19.5, zoom: 1, focusX: 1380 },
+        { scene: "home", from: 2.3, zoom: 0.85, focusX: [880, 1400], panAt: [12.4, 13.6] },
+        { scene: "found", from: 2.2, zoom: 1, focusX: [880, 1450], panAt: [3.6, 5] },
         { scene: "moral", to: 11, zoom: 0.75, focusX: 960 },
       ],
     },

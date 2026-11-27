@@ -22,6 +22,8 @@ import { RedHoodStory, RedHoodThumbnail, defaultRedHoodStoryProps } from "./stor
 import { SCENES as RED_HOOD_SCENES } from "./stories/red-hood/story";
 import { CrowPitcherStory, CrowPitcherThumbnail, defaultCrowPitcherStoryProps } from "./stories/crow-pitcher";
 import { SCENES as CROW_PITCHER_SCENES } from "./stories/crow-pitcher/story";
+import { GoldilocksStory, GoldilocksThumbnail, defaultGoldilocksStoryProps } from "./stories/goldilocks";
+import { SCENES as GOLDILOCKS_SCENES } from "./stories/goldilocks/story";
 
 export type KidsStory = {
   /** Composition id (letters, digits, hyphens). */
@@ -97,5 +99,13 @@ export const STORIES: KidsStory[] = [
     defaultProps: defaultCrowPitcherStoryProps,
     scenes: CROW_PITCHER_SCENES,
     Thumbnail: CrowPitcherThumbnail,
+  },
+  {
+    id: "GoldilocksStory",
+    title: "Goldilocks and the Three Bears",
+    component: GoldilocksStory,
+    defaultProps: defaultGoldilocksStoryProps,
+    scenes: GOLDILOCKS_SCENES,
+    Thumbnail: GoldilocksThumbnail,
   },
 ];
